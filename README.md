@@ -85,7 +85,7 @@ Toda la información estará como PDFs en los folderes adjuntos, además de form
 
 Agenda
 
-1. Introducción: Instalación de softwares (1 semana antes).
+0. Introducción: Instalación de softwares (1 semana antes).
 
 `Modulo I` (18h):
 
