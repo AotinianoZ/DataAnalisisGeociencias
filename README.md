@@ -92,7 +92,7 @@ Agenda
 1. **Joseps Andrade** Tema I-IA: Base de Datos Geoespacial y evolución.
 2. **Alonso Otiniano** Tema I-IIA: Conexión - importar y exportar base de datos geoespacial.
 3. **Alonso Otiniano** Tema II-A: R y Rstudio.
-4. **Alonso Otiniano** Tema IIB
+4. **Alonso Otiniano** Tema II-B
 
 `Tema II-B Detallado:`
 
