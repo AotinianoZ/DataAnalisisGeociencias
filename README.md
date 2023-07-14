@@ -97,10 +97,10 @@ Agenda
     Tema II-B Detallado:
 
 
-41. **Conectarse desde internet o base de datos -Importar y Exportar Data en R. **
-42. **Tidyverse y ggplot en el IDE Rstudio. **
-43. **Limpieza de Data – Filtros,  Transformación. **
-44. **Introducción a la estadística descriptiva en R. **
+41. **Conectarse desde internet o base de datos -Importar y Exportar Data en R.**
+42. **Tidyverse y ggplot en el IDE Rstudio.**
+43. **Limpieza de Data – Filtros,  Transformación.**
+44. **Introducción a la estadística descriptiva en R.**
 45. **Análisis Estadísticos de Datos**:
     
     * Distribución de variables aleatorias- Funciones de probabilidad – Distribución Normal
