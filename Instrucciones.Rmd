@@ -1,0 +1,40 @@
+---
+title: "Requerimientos Iniciales"
+author: "Ing. Alonso Otiniano Zavala"
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
+---
+
+## Requeriemientos Básicos
+
+Para el desarrollo del curso corto se necesita instalación de R, Rstudio y Rtools que son los básicos para el funcionamiento eficiente del tratamiento de dato.
+
+1 . Descargar el software **R** desde [aquí](https://cran.r-project.org/bin/windows/base/). Seguir los pasos de instalación por default. En caso trabajen con **linux** o **mac** ir [aquí](http://mirror.fcaglp.unlp.edu.ar/CRAN/), y seguir el proceso de instalación por default.
+
+2.  Instalar **Rstudio** desde [aquí](https://posit.co/download/rstudio-desktop/). Ir a la parte que indica :
+
+```{r}
+knitr::include_graphics(path="Figuras/Fig1.png")
+```
+
+3. Instalar **Rtools** desde [aquí](https://cran.r-project.org/bin/windows/Rtools/). `OJO` Rtools es solo necesario para sistema operativo Windows.
+
+
+## Abrir el programa
+
+Al abrir el programa tendrán un formato así:
+
+```{r}
+knitr::include_graphics(path="Figuras/Fig2.png")
+```
+
+Listo!!! Ahora podremos desarrollar el curso!!! 
+
+
+## Contacto
+
+Consultas adicionales, mandar un correo a alonso.otiniano.z@uni.pe. 
+
