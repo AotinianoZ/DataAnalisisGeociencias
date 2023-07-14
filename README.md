@@ -28,7 +28,7 @@ Este repositorio es la base para el desarrollo del curso Geodatabase, Geo-Statis
 **Instructor**
 
 * Alonso Otiniano [@OtinianoAlonso](https://twitter.com/OtinianoAlonso)
-
+* Alonso Otiniano [Web page](https://webaoz2.netlify.app)
 
 **Co-instructor**
 
