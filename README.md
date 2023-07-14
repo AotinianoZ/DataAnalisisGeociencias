@@ -94,8 +94,7 @@ Agenda
 3. **Alonso Otiniano** Tema II-A: R y Rstudio.
 4. **Alonso Otiniano** Tema IIB
 
-    Tema II-B Detallado:
-
+`Tema II-B Detallado:`
 
 41. **Conectarse desde internet o base de datos -Importar y Exportar Data en R.**
 42. **Tidyverse y ggplot en el IDE Rstudio.**
