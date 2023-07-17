@@ -20,11 +20,11 @@ by Alonso Otiniano
 
 Agenda
 
-1. Introduction: getting started and orientation
-2. Spatial data: reading, writing, packages with data
-3. Mapping: static and interactive mapping
-4. Coordinate reference systems: making sure your layers map together
-5. Vector data: a deeper dive into vectors with {sf}
+1. Base de Datos: Conceptos y evolución
+2. Base de Datos: Conexión, carga - importar y exportar data
+3. R y Rstudio: Conceptos, paquetes y funciones.
+4. Análisis I: making sure your layers map together
+5. Análisis II: a deeper dive into vectors with {sf}
 6. Raster data: a deeper dive into rasters with {raster}
 7. Geoprocessing with vectors and rasters: this section has three parts and could be considered sections 7-9
 
