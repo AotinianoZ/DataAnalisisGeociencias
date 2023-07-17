@@ -1,0 +1,822 @@
+---
+title: "Parte I - A"
+subtitle: "⚔<br/>con Branext"
+author: "A.Otiniano & J.Andrade"
+institute: "Branext And Multidisciplinary Sensing, Universal Accessibility and Machine Learning Group, National University of Engineering"
+date: "2023/01/01 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    css: [xaringan-themer.css, animate.css]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_duo_accent_inverse(primary_color = "#035AA6", secondary_color = "#03A696")
+```
+
+Image credit: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sharingan_triple.svg)
+
+---
+
+# 👋 Hola
+
+### me: **Joseps Andrade Choque**
+
+- **Research Geological Enginnering**, _Universidad Nacional de Ingenieria_
+    + twitter **@jacxter666**
+    + github **@jacxter666**
+    + email **jandradec@uni.pe**
+    
+- **Editor [INGEMMET](https://portal.ingemmet.gob.pe)**
+
+- **Co-organiser:** [SMAUML](https://www.google.com)
+
+
+### Slides: **https://github.com/AotinianoZ/Geoscience_Multiverse**
+
+
+---
+
+class: center, middle
+
+# Data Science in Geology and Machine Learning
+
+### /ʃaː.'riŋ.ɡan/
+
+---
+class: inverse, center, middle
+
+# Empecemos!!
+
+---
+class: inverse, center, middle
+
+## 1. Base de Datos
+## 2. Lenguaje de Consulta Estructurado (SQL)
+## 3. Evolución de Base de Datos
+## 4. ¿Base de Datos u Hoja de Cálculo?
+## 5. Big Data
+
+---
+class: inverse, center, middle
+
+## 6. Open Geoespacial Consortium
+## 7. Base de Datos Espaciales
+## 8. Librería simple feature (sf)
+## 9. Data Geoespacial CorePostGis
+
+
+---
+class: inverse, middle, center
+
+# Base de Datos
+
+---
+class: center
+
+# ¿Qué es una base de datos?
+
+Una **base de datos** es una recopilación organizada de información o datos estructurados, que normalmente se almacena de forma electrónica en un sistema.
+
+--
+
+.pull-left[
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD01.PNG")
+```
+
+]
+
+--
+
+.pull-left[
+```{r, out.width='70%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD02.PNG")
+```
+
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD03.PNG")
+```
+]
+
+---
+
+background-image: url("figuras/BD04.PNG")
+background-size: cover
+class: right, bottom, inverse
+
+# Una biblioteca puede considerarse una base de datos por la información que contiene en distintos libros o documentos
+
+---
+
+.pull-left[
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD05.PNG")
+```
+]
+
+--
+
+.pull-left[
+Cuando usamos nuestros *dispositivos inteligentes* para consultar algún tipo de información por un buscador web como Google aunque las bases de datos puedan contener muchos tipos de informaciones algunos de ellos se encuentran protegidos por leyes de varios países, para proteger datos privados y que no sean manipulados con ninguna persona o empresa en beneficio propio sin haber consultado obtener un permiso por el usuario o cliente.
+]
+
+--
+
+```{r, out.width='55%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD06.PNG")
+```
+
+---
+
+Una **base de datos** se puede almacenar un conjunto de datos que pueden estar categorizados en distintas maneras, pero que comparten entre sí algún tipo de vínculo o relación para ser ordenados y clasificados mutuamente.
+
+--
+
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD07.PNG")
+```
+
+---
+
+Claves:
+
+A un atributo de la entidad le asignamos una identificación que la distinga de las demás, existen varios tipos de claves las cuales son:
+
+**Clave primaria:** Identifica a un solo atributo.
+
+**Superclave:** Agrupa a varios atributos formando así una sola clave.
+
+**Clave foránea:** Es una clave que viene de otra entidad la cual sirve para relacionarse, para que esto ocurra la otra entidad debe de existir.
+
+
+```{r, out.width='60%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD08.PNG")
+```
+
+---
+
+En el mundo laboral podemos encontrarnos estos tipos de solicitudes que hacen las empresas en la primera podemos ver que nos solicitan **mysql** en la segunda nos solicitan **sqlserver, mysql** ahora si también solicitan  **mongodb**, nos están solicitando el uso general de base de datos.
+
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD09.PNG")
+```
+
+---
+
+class: middle, center
+
+La base de datos *relacional* comúnmente se utiliza **sql** teniendo sus ventajas; las bases de datos relacionales sql llevan mucho tiempo en el mercado; en el mundo laboral de seguro que se encontrarán con empresas que maneja bases de datos relacionales ya sea sqlserver o mysql. A parte de la gran ventaja de estas bases de datos relacionales, también tenemos la segunda característica que es transaccional. Por último mantiene la integridad de los datos, es decir, que cuando nosotros borramos información en *algún lugar* esa información es rectificado, lo que se le conoce como integridad; por otro lado tenemos las desventajas de una base de datos sql relacional, (1) problemas con la escalabilidad, es decir que nosotros no podemos crecer cómodamente porque posiblemente nos encontremos con dificultades del punto número 2.
+
+---
+
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD10.PNG")
+```
+
+---
+class: middle, center
+
+El punto número 2 sería la **normalización de datos** es decir, obtener información del usuario guardarla y gestionarla pero necesitamos aplicar normalización, y esto, relativamente nos lleva mucho tiempo. En concreto se puede definir que la relación que armamos debe de ser normalizada y debe ser gestionada por un grupo de personas expertas en generar este tipo de relaciones. En los ejemplos te puedes encontrar que mysql sqlserver y PostgreSQL, por otro lado estas bases de datos las podemos utilizar en aplicaciones empresariales en sitios web general. El uso en los sitios web puede variar dependiendo del problema, adicionalmente podemos utilizar las bases de datos relacionales para aplicaciones educativas.
+
+---
+
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD11.PNG")
+```
+
+---
+
+```{r, out.width='90%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD12.PNG")
+```
+
+---
+
+.left-column[
+
+* No Only SQL.
+* Compatible con el uso de cluster.
+* Orientado a documentos: (**objetos de javascript** llamados documentos).
+* **No necesita estructura** por lo que podemos guardarlos rápido.
+* Usa **JSON** como formato de dato.
+
+]
+
+.right-column[
+```{r, out.width='85%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD13.PNG")
+```
+]
+
+
+Tenemos a MongoDB se usan principalmente para aplicaciones móviles, de hecho el término escalable nos va a ayudar a resolver este tipo de situaciones y, adicionalmente lo podemos encontrar con big data o grandes cantidades de información que necesitan ser gestionadas; por último, en los sitios web pudiendo variar dependiendo del sitio que se va ha utiliza. Ahora ha llegado el momento de mostrar un sitio web donde nosotros vamos a ver las tendencias de las bases de datos.
+
+
+---
+class: middle, center
+
+# Lenguaje de Consulta Estructurado (SQL)
+
+---
+
+Empecemos por definir sql. Sql es un lenguaje estándar de cuarta generación, que se utiliza para definir, gestionar y manipular la información contenida en una base de datos relaciona; sus siglas significan *stucture query language* o en español lenguaje estructurado de consulta.
+
+```{r, out.width='70%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD14.PNG")
+```
+
+---
+
+Sql es declarativo lo que significa que tan sólo deberemos indicar el sistema de gestión de bases de datos, que es lo que queremos obtener y el sistema decidirá cómo obtenerlo. Es un lenguaje sencillo y potente que se emplea para la gestión dela base de datos a distintos niveles de utilización usuarios, programadores y administradores de bases de datos.
+
+```{r, out.width='90%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD15.PNG")
+```
+
+---
+
+class: middle, center
+
+*La disponibilidad el desarrollo de la tecnología* ha permitido que en la actualidad la gran mayoría de las bases de datos estén en formato digital.
+
+Los sistemas de gestión de bases de datos son un tipo de software muy específico dedicado a servir de interfaz entre la base de datos, el usuario y las aplicaciones que la utilizan; además proporcionan las herramientas necesarias para realizar al menos las siguientes tareas: definir las estructuras de los datos, manipular los datos, es decir insertar nuevos datos así como modificar borrar y consultar , los datos existentes, mantener la integridad de la información y proporcionar control privacidad y seguridad de los datos en la base de datos restringiendo el acceso sólo a usuarios autorizados algunos de los sistemas de gestión de base de datos más difundidos son sqlserver, mysql y oracle sql.
+
+---
+
+class: middle, center
+
+Ejemplo: la entidad *Código atributos* que son las características de la entidad como por ejemplo para la entidad Códigos serían Este, Norte, cota y valor observado (puede ser un parámetro  fisicoquímico, valor de análisis químico, pendiente, valor NDVI, granulometría, unidad litoestratigráfica, etc) que son los objetos de la base de datos en donde se almacenan los datos. En la mayoría de los casos una tabla representa una entidad, aunque puede representar una asociación de entidades; las tablas están compuestas por filas y columnas, cada fila representa una ocurrencia de la entidad, por ejemplo un código que será almacenado en la tabla códigos cada columna representa una característica de la entidad como el nombre Este, Norte, cota, etcétera.
+
+---
+
+class: middle, center
+
+Relación es la **conexión que puede existir entre dos entidades**, por ejemplo, un cliente puede realizar una orden o un cliente pertenece a una ciudad; en el primer caso la tabla cliente se relaciona con la tabla de órdenes a través de la columna **haití** que se encuentra en órdenes y se corresponde con el aire de la tabla clientes en el segundo caso la tabla clientes contiene una columna **ciudad haití** que se corresponde con la columna *haití* de la tabla ciudades. Los principales sistemas de gestión de bases de datos incorporan un motor sql, que permite enviar comandos sql para que sean procesados por el motor del servidor.
+
+
+---
+class: inverse, middle, center
+
+# Evolución de Base de Datos
+
+---
+
+# Evolución de Base de Datos I
+
+```{r, out.width='90%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD16.PNG")
+```
+
+---
+
+# Tiempo Vs. Avance Tecnológico
+
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD17.PNG")
+```
+
+---
+
+# Sistema de Base de Datos en el Tiempo
+
+```{r, out.width='70%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD18.PNG")
+```
+
+---
+
+# Evolución de Sistemas
+
+```{r, out.width='90%', fig.align='center'}
+knitr::include_graphics(path="figuras/BD19.PNG")
+```
+
+---
+class: inverse, middle, center
+
+# ¿Base de Datos u Hoja de Cálculo?
+
+---
+# Tipos de Datos
+
+```{r, out.width='70%', fig.align='center'}
+knitr::include_graphics(path="figuras/HC01.PNG")
+```
+
+---
+
+# Tabla Excel - Tabla BD
+
+```{r, out.width='90%', fig.align='center'}
+knitr::include_graphics(path="figuras/HC02.PNG")
+```
+
+---
+
+# Tabla Excel - Tabla BD
+
+```{r, out.width='90%', fig.align='center'}
+knitr::include_graphics(path="figuras/HC03.PNG")
+```
+
+---
+
+# Base de Datos - Layers - Estructuras ArcGis
+
+```{r, out.width='90%', fig.align='center'}
+knitr::include_graphics(path="figuras/HC04.PNG")
+```
+
+---
+
+# Definición del Dato
+
+No existe una definición para datos de la misma naturaleza, por ejemplo concentraciones de elementos químicos en agua.
+
+```{r, out.width='90%', fig.align='center'}
+knitr::include_graphics(path="figuras/HC05.PNG")
+```
+
+---
+
+class: inverse, middle, center
+
+# BigData
+
+---
+class: middle, center
+
+# Generalidades
+
+```{r, out.width='90%', fig.align='center'}
+knitr::include_graphics(path="figuras/BGD01.PNG")
+```
+
+---
+class: middle, center
+
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/BGD02.PNG")
+```
+
+---
+class: middle, center
+
+```{r, out.width='90%', fig.align='center'}
+knitr::include_graphics(path="figuras/BGD03.PNG")
+```
+
+---
+# Requisitos del BigData - ¡Qué pasa cada Minuto!
+
+.pull-left[
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/BGD04.PNG")
+```
+]
+
+.pull-right[
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/BGD011.PNG")
+```
+]
+---
+class: middle, center
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/BGD012.PNG")
+```
+
+---
+# Arquitectura Envolvente BigData
+
+```{r, out.width='65%', fig.align='center'}
+knitr::include_graphics(path="figuras/BGD05.PNG")
+```
+
+---
+class: middle, center
+
+# Diagrama UML DGAR:
+
+```{r, out.width='90%', fig.align='center'}
+knitr::include_graphics(path="figuras/BGD06.PNG")
+```
+
+---
+
+class: middle, center
+
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/BGD07.PNG")
+```
+
+https://dbdiagram.io/d/60402638fcdcb6230b227919
+
+---
+
+class: inverse, middle, center
+
+# Open Geospatial Consortium
+
+---
+
+class: middle, center
+El *Open Geospatial Consortium (OGC)* fue fundado en *1994* para hacer de la información geográfica una **parte integral de la infraestructura mundial de información**. Los miembros de OGC (usuarios y proveedores de tecnología) desarrollan de forma colaborativa estándares de interfaz y los estándares asociados, así como buenas prácticas, que permiten a los desarrolladores crear sistemas de información que pueden fácilmente intercambiar información geográfica e instrucciones con otros sistemas de información.
+
+En el desarrollo de aplicaciones de servicios web usando estándares OGC (y en el aprendizaje de las relaciones entre ellos) ayuda a pensar en *“publicar”*, *“encontrar”* y *“enlazar”* como las funciones clave para aplicaciones en un entorno de servicios web.
+
+**Publicar:** Proveedores de recursos publicitan sus recursos
+
+**Encontrar:** Los usuarios finales y sus aplicaciones pueden descubrir recursos que necesitan en tiempo de ejecución
+
+**Enlazar:** Los usuarios finales y sus aplicaciones pueden acceder y ejecutar los recursos en tiempo de ejecución
+
+
+---
+
+```{r, out.width='70%', fig.align='center'}
+knitr::include_graphics(path="figuras/OGC01.PNG")
+```
+
+---
+
+Los acrónimos en la figura se definen más abajo. Algunos de éstos son **“Estándares OGC”** y otros están públicamente disponibles como *Discussion Papers*, *Requests* y *Recommendation Papers*. (Cabe destacar que algunos estándares preliminares no son todavía públicos, pero están disponibles para los miembros del OGC).
+
+--
+
+.pull-left[
+* [Catalogue Service for the Web (CS-W)](https://live.osgeo.org/archive/10.5/es/standards/csw_overview.html)
+
+* [Filter Encoding (FE)](https://live.osgeo.org/archive/10.5/es/standards/fe_overview.html)
+
+* [Geography Markup Language (GML)](https://live.osgeo.org/archive/10.5/es/standards/gml_overview.html)
+
+* [KML Encoding Standard (KML)](https://live.osgeo.org/archive/10.5/es/standards/kml_overview.html)
+
+* [Sensor Model Language (SensorML)](https://live.osgeo.org/archive/10.5/es/standards/sensorml_overview.html)
+
+* [Style Layer Descriptor (SLD)](https://live.osgeo.org/archive/10.5/es/standards/sld_overview.html)
+
+* [Sensor Observation Service (SOS)](https://live.osgeo.org/archive/10.5/es/standards/sos_overview.html)
+
+* [Web Coverage Service (WCS)](https://live.osgeo.org/archive/10.5/es/standards/wcs_overview.html)
+
+* [Web Feature Service (WFS)](https://live.osgeo.org/archive/10.5/es/standards/wfs_overview.html)
+
+* [Web Map Service (WMS)](https://live.osgeo.org/archive/10.5/es/standards/wms_overview.html)
+
+* [Web Processing Service (WPS)](https://live.osgeo.org/archive/10.5/es/standards/wps_overview.html)
+
+]
+
+--
+
+.pull-right[
+
+* [Sensor Model Language (SensorML)](https://www.ogc.org/standard/sensorml/)
+
+* [Sensor Planning Service (SPS)](https://www.ogc.org/standard/sps/)
+
+* [Web Terrain Service (WTS)](https://portal.ogc.org)
+
+* [Grid Coverage Service](https://www.ogc.org/standard/wcs/)
+
+* [Coordinate Transformation Service](https://www.ogc.org/standard/ct/#:~:text=Overview,use%20on%20specified%20spatial%20data.)
+
+* [Web Coverage Processing Service (WCPS)](https://www.ogc.org/standard/wcps/)
+
+* [Web Map Tile Service (WMTS)](https://en.wikipedia.org/wiki/Web_Map_Tile_Service)
+
+* [Simple Features (SF)](https://en.wikipedia.org/wiki/Simple_Features#:~:text=Simple%20Features%20(officially%20Simple%20Feature,used%20by%20geographic%20information%20systems.)
+
+* [Sensor Web Enablement (SWE)](https://en.wikipedia.org/wiki/Sensor_Web_Enablement)
+
+* [XML for Image and Map Annotation (XIMA)]()
+]
+
+---
+
+* [CityGML](https://www.ogc.org/standard/citygml/)
+
+* [GeosciML](http://geosciml.org)
+
+* [GML in JPEG 2000](https://www.ogc.org/standard/gmljp2/)
+
+* [Observations and Measurements (O&M)](https://www.ogc.org/standard/om/)
+
+* [Symbology Encoding](https://www.ogc.org/standard/se/)
+
+* [Transducer Markup Language (TML)](http://xml.coverpages.org/ni2007-08-10-a.html)
+
+---
+# Relación clientes/servidores y protocolos OGC
+
+```{r, out.width='55%', fig.align='center'}
+knitr::include_graphics(path="figuras/OGC02.PNG")
+```
+
+---
+
+class: inverse, middle, center
+
+# Base de Datos Geoespaciales
+
+---
+
+# Base de Datos Geoespacial
+
+```{r, out.width='55%', fig.align='center'}
+knitr::include_graphics(path="figuras/DE01.PNG")
+```
+---
+
+# Base de Datos Geoespacial Real Time
+
+```{r, out.width='55%', fig.align='center'}
+knitr::include_graphics(path="figuras/DE02.PNG")
+```
+
+---
+
+# Internet de las Cosas (IoT)
+
+Número de IoT devices conectados creció 9% a 12.3 billones globalmente, celulares ahora sobrepasan 2 billones.
+
+```{r, out.width='70%', fig.align='center'}
+knitr::include_graphics(path="figuras/DE04.PNG")
+```
+
+---
+class: middle, center
+
+```{r, out.width='50%', fig.align='center'}
+knitr::include_graphics(path="figuras/DE05.PNG")
+```
+
+---
+
+# IoT
+
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/DE03.PNG")
+```
+
+---
+class: middle
+```{r, out.width='70%', fig.align='center'}
+knitr::include_graphics(path="figuras/DE06.PNG")
+```
+
+---
+
+```{r, out.width='70%', fig.align='center'}
+knitr::include_graphics(path="figuras/DE07.PNG")
+```
+
+---
+
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/DE08.PNG")
+```
+
+---
+class: middle
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/DE09.PNG")
+```
+
+---
+
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/DE010.jpg")
+```
+
+---
+
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/DE011.jpg")
+```
+
+---
+
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/DE012.PNG")
+```
+
+---
+
+```{r, out.width='100%', fig.align='center', fig.cap="Smart Construction"}
+knitr::include_graphics(path="figuras/DE013.PNG")
+```
+
+---
+class: middle
+```{r, out.width='100%', fig.align='center', fig.cap="Mining Evolution"}
+knitr::include_graphics(path="figuras/DE014.PNG")
+```
+
+---
+
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/DE015.PNG")
+```
+
+---
+
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/DE016.PNG")
+```
+
+---
+class: middle
+```{r, out.width='100%', fig.align='center', fig.cap="Smart Classification of Grain Size"}
+knitr::include_graphics(path="figuras/DE017.PNG")
+```
+
+---
+class: middle
+```{r, out.width='100%', fig.align='center', fig.cap="Construcción de Data en Sitio"}
+knitr::include_graphics(path="figuras/DE018.PNG")
+```
+
+---
+
+background-image: url('https://slides.yihui.org/gif/saw-branch.gif')
+background-size: cover
+class: left, top, inverse
+
+# Yo puedo solo!!!
+
+---
+class: middle
+
+.pull-left[
+
+**Jerarquía de clases de geometría**
+Las clases de geometría definen una jerarquía como la siguiente:
+
+* Geometry **(noninstantiable)**
+    + Point **(instantiable)**
+    + Curve **(noninstantiable)**
+        + LineString **(instantiable)**
+            + Line
+            + LinearRing
+    + Surface **(noninstantiable)**
+        + Polygon **(instantiable)**
+    + GeometryCollection **(instantiable)**
+        + MultiPoint **(instantiable)**
+        + MultiCurve **(noninstantiable)**
+            + MultiLineString **(instantiable)**
+        + MultiSurface **(noninstantiable)**
+            + MultiPolygon **(instantiable)**
+]
+
+--
+
+.pull-rigth[          
+La clase base Geometry tiene subclases para Point, Curve, Surface y GeometryCollection:
+**Point** representa objetos de dimensión cero.
+**Curve** representa objetos unidimensionales, y tiene la subclase *LineString*, con las subclases *Line* y *LinearRing.*
+**Surface** está diseñada para objetos bidimensionales y tiene la subclase Polygon.
+**GeometryCollection** tiene clases especializadas de colección de cero, una y dos dimensiones llamadas *MultiPoint*, *MultiLineString* y *MultiPolygon* para modelar geometrías correspondientes a colecciones de Puntos, LineStrings y Polígonos, respectivamente.
+ *MultiCurve* y *MultiSurface* se introducen como superclases abstractas que generalizan las interfaces de colección para manejar Curvas y Superficies.
+]
+
+---
+class: middle
+
+El conjunto de tipos de geometría propuesto por el entorno **SQL with Geometry Types** del OGC se basa en el**OpenGIS Geometry Model**. En este modelo, cada objeto geométrico tiene las siguientes propiedades generales:
+
+* Está asociado a un sistema de referencia espacial, que describe el espacio de coordenadas en el que se define el objeto.
+
+* Pertenece a alguna clase de geometría.
+
+---
+
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/dbForge01.PNG")
+```
+
+---
+
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/dbForge02.PNG")
+```
+
+---
+
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/dbForge03.PNG")
+```
+
+---
+
+```{r, out.width='100%', fig.align='center'}
+knitr::include_graphics(path="figuras/dbForge04.PNG")
+```
+
+---
+
+class: inverse, middle, center
+
+# Libreria Simple Feature (sf)
+
+---
+
+Aquí nos encontramos uno de los paquetes para manipular datos espaciales más importante: **sf** es un paquete que proporciona acceso a **Simple Features** para R. Se une a *‘GDAL’* para leer y escribir datos, a *‘GEOS’* para operaciones geométricas y a *‘PROJ’* para conversiones de proyección y transformaciones de datos.
+
+```{r, out.width='65%', fig.align='center'}
+knitr::include_graphics(path="figuras/SF01.PNG")
+```
+
+---
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/SF02.PNG")
+```
+
+
+---
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/SF03.PNG")
+```
+
+---
+class: middle
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/SF04.PNG")
+```
+
+---
+class: middle
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/SF05.PNG")
+```
+
+---
+class: middle
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/SF06.PNG")
+```
+
+---
+class: middle
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/SF07.PNG")
+```
+
+---
+
+background-image: url("https://media1.tenor.com/images/28ee6748d1e75ed138a58dfda27a0469/tenor.gif?itemid=4855087")
+background-position: center
+background-size: cover
+class: inverse, middle, right
+
+## Tengo el
+## Poder Geoespacial!!!
+
+---
+
+class: inverse, middle, center
+
+# Data Geoespatial Core PostGis
+
+---
+
+class: middle
+```{r, out.width='80%', fig.align='center'}
+knitr::include_graphics(path="figuras/CorePostGis.PNG")
+```
+
+---
+class: center
+
+# Avanzando en R y Geociencias (印)
+
+Siempre Adelante
+
+![](https://upload.wikimedia.org/wikipedia/commons/7/7e/Mudra-Naruto-KageBunshin.svg)
+
+---
+
+class: center, middle
+
+# Gracias Totales!
+
+Slides son creados via el R package [**xaringan**](https://github.com/yihui/xaringan).
+
+El chacra proviene de [remark.js](https://remarkjs.com), [**knitr**](https://yihui.org/knitr/), y [R Markdown](https://rmarkdown.rstudio.com).
+
+

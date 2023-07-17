@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Parte II - B</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="A.Otiniano &amp; J.Andrade" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="animate.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Parte II - B
+]
+.subtitle[
+## ⚔<br/>con Branext
+]
+.author[
+### A.Otiniano &amp; J.Andrade
+]
+.institute[
+### Branext And Multidisciplinary Sensing, Universal Accessibility and Machine Learning Group, National University of Engineering
+]
+.date[
+### 2021/01/01 (updated: 2023-06-06)
+]
+
+---
+
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
+
+
+
+
+
+Image credit: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sharingan_triple.svg)
+
+---
+class: center, middle
+
+# Data Science in Geology and Machine Learning
+
+### /ʃaː.'riŋ.ɡan/
+
+---
+class: inverse, center, middle
+
+# Empecemos!!
+
+---
+class: inverse, middle, center
+
+# CONEXIÓN A BASE DE DATOS
+
+---
+class: center
+
+# ¿Qué es una Base de Datos?
+
+Una base de datos es una colección organizada de información estructurada, o data, tipicamente guardad en un sistema electrónico de computación. Una database es usualmente controlado por un **database managemente system (DBMS)**. Juntos, la data y el DBMS, asociado con las aplicaciones, se conoce como un sistema de base de datos, a menudo arbreviado como *base de datos*.
+
+Hoy en día los tipos comúnes de base de datos tipicamente modelan filas y columnas en una serie de tablas para hacer precesamiento y consulta de data eficiente *tidydata*. La data puede ser fácilmente accedida, modificada, actualizada, controlada y organizda. Mayoría de bases de datos usan *structured query laguage (SQL)* para escribir y consultar data. 
+
+En ArcGis (ESRI) denominan **geodatabase** a una colecci´pn geográfica de datasets de varios tipos que tienen un sistema de folders en común, una base de datos Microsoft Access, o multiusario relacional DMBS (como Oracle, Microsoft SQL Server, PostgreSQL, Informiz, o IBM DB2).
+
+Para mayor información leer [Oracle Database](https://www.oracle.com/database/what-is-database/) y revisar diseño de geodatabase en [ArcGis Geodatabase](https://www.youtube.com/watch?v=5zUQxNDR_aw&amp;list=LL&amp;index=90&amp;t=1s).
+
+---
+
+# Small Query to Consult MySQL:
+
+    Borrar de la Base de Datos:
+
+    DELETE FROM `Dom_Tipo_Peligro` WHERE `Dom_Tipo_Peligro`.`Code_TP` = 'u'  
+    AND `Dom_Tipo_Peligro`.`Code_num_TP` = 28 
+    AND `Dom_Tipo_Peligro`.`TIPO_PELIGRO` = 'WE' 
+    AND `Dom_Tipo_Peligro`.`COD_PADRE` = 'c' 
+    AND `Dom_Tipo_Peligro`.`Riesgo_Prob` IS NULL LIMIT 1
+    
+    Agregar a la Base de Datos:
+
+    INSERT INTO `Dom_Tipo_Peligro` (`Code_TP`, `Code_num_TP`,
+    `TIPO_PELIGRO`, `COD_PADRE`, `Riesgo_Prob`) 
+    VALUES ('v', '32', 'Alumnos Uni', 'e', '0.25'); 
+    
+    Actualizar una fila:
+    
+    UPDATE `Dom_Tipo_Peligro` SET `Riesgo_Prob` = '0.35' 
+    WHERE `Dom_Tipo_Peligro`.`Code_TP` = 'e' 
+    AND `Dom_Tipo_Peligro`.`Code_num_TP` = 5 
+    AND `Dom_Tipo_Peligro`.`TIPO_PELIGRO` = 'Huaicos' 
+    AND `Dom_Tipo_Peligro`.`COD_PADRE` = '' 
+    AND `Dom_Tipo_Peligro`.`Riesgo_Prob` IS NULL LIMIT 1;
+
+---
+
+# Conexión to Database in R:
+
+
+MySQL:
+
+    SG_MySQL &lt;- dbConnect(MySQL(), user="user", password="pass", 
+                 dbname="mydb",host="localhost",client.flag=CLIENT_MULTI_STATEMENTS)
+    dbListTables(SG_MySQL)
+    yourtable &lt;- dbReadTable(SG_MySQL,"sometable")
+    # Escribir de nuevo.
+    dbWriteTable(SG_MySQL,"yourTableinMySQL",yourtable,overwrite=T)
+    # Mirar si los argumentos están sobreescritos.
+    dbDisconnect(SG_MySQL)
+
+Debemos tener en cuenta que esta conexión está realizada para **MySQL**, existe diversos tipos de base de datos (casi en su totalidad existen librerias creadas para realizar trabajos en R por las mismas compañias de desarrollo de lenguaje de consulta de base de datos). Por ejemplo, *ORACLE* creo un paquete para poder tratar información mediante R en su propia base de datos [Running R in the Oracle Database](https://www.youtube.com/watch?v=ZdHK2BWnVD4&amp;list=LL&amp;index=39&amp;t=2183s) y hasta modelos para Machine Learning [Oracle Machine Learning for R: An Introduction](https://www.youtube.com/watch?v=K6S3Za9fXFc&amp;list=LL&amp;index=38&amp;t=878s). 
+
+Para más sobre base de datos Sql pueden llevar el curso básico de  [Pildoras Informaticas](https://www.youtube.com/watch?v=iOiyJgnN71c&amp;list=PLU8oAlHdN5Bmx-LChV4K3MbHrpZKefNwn) o [php MySQL](https://www.youtube.com/watch?v=I75CUdSJifw&amp;list=PLU8oAlHdN5BkinrODGXToK9oPAlnJxmW).
+
+---
+background-image: url(http://4.bp.blogspot.com/-u1cja5eawkU/U0REsroFeLI/AAAAAAAAhfI/wupRzDa_3AI/s1600/NAMOR_ORACLE_AVENGERS_IRON-MAN-2-3_EASTER-EGGS_.jpg)
+background-position: center
+background-size: contain
+class: left, bottom, inverse
+
+# I am  
+# Iro Man, 
+# but I am 
+# Oracle!
+
+---
+class: center
+# VAMOS A PRACTICAR!
+
+[Dar click al siguiente link con el archivo R](ConeccionBaseDatosServidor.R).
+
+---
+
+background-image: url(https://static2.bigstockphoto.com/1/9/3/large1500/391264817.jpg)
+background-size: cover
+class: left, top, inverse
+
+# Terminamos a Descansar!!!
+
+---
+class: center
+
+# Avanzando en R y Geociencias (印)
+
+Siempre Adelante
+
+![](https://upload.wikimedia.org/wikipedia/commons/7/7e/Mudra-Naruto-KageBunshin.svg)
+
+
+  
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

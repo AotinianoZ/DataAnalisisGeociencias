@@ -1,0 +1,354 @@
+Codigo,pH,CE,TDS,Ca,K,Mg,Na,Cl,SO4,HCO3,CO3,Temporada,Subcuenca,Tipo_Fuente,Clase_Fuente,Codigo2,ratingcol,claseph
+1348119SW001,8.58,89.13,44.23,7.29,3.1,1.998,6.62,0.578,6.744,48.5,NA,Estiaje,Molloco,Agua superficial,Quebrada,1348119SW001,blue,Basico
+1348119SW002,8.52,165.8,81.96,14.57,2.84,3.009,12.42,11.45,17.75,57.8,NA,Estiaje,Molloco,Agua superficial,Rio,1348119SW002,blue,Basico
+1348119SW003,8.18,357.2,175.5,14.15,2.69,2.839,11.37,11.33,17.05,57,NA,Estiaje,Molloco,Agua superficial,Quebrada,1348119SW003,green,Aceptable
+1348119SW004,8.21,170.2,83.98,53.7,2.98,5,5.95,0.654,95.53,87.4,NA,Estiaje,Molloco,Agua superficial,Rio,1348119SW004,green,Aceptable
+1348119SW005,9.04,164.3,80.77,14.34,2.84,2.833,11.65,11.2,16.18,54.4,NA,Estiaje,Molloco,Agua superficial,Rio,1348119SW005,blue,Basico
+1348119SW007,9.05,148.6,73.33,11.39,3,2.33,12,1033,506.7,43.6,NA,Estiaje,Molloco,Agua superficial,Rio,1348119SW007,blue,Basico
+1348119SW008,8.61,96.99,48.03,5.61,2.73,1.397,4.4,0.451,2.097,36,NA,Estiaje,Molloco,Agua superficial,Rio,1348119SW008,blue,Basico
+1348119SW009,9.23,177.6,87.5,13.97,3.05,2.694,11.86,0.536,1.943,58.4,NA,Estiaje,Molloco,Agua superficial,Rio,1348119SW009,blue,Basico
+1348119SW011,8.5,235.8,116.1,31.62,1.33,3.978,4.67,0.338,60.91,56.6,NA,Estiaje,Molloco,Agua superficial,Quebrada,1348119SW011,green,Aceptable
+1348119SW012,4.45,724.3,354.7,96.7,2.44,12.97,13.05,1.575,358.8,5.8,NA,Estiaje,Molloco,Agua superficial,Quebrada,1348119SW012,red,Acido
+1348119SW013,8.51,83.47,41.35,3.32,2.43,0.999,3.27,0.288,1.688,23.1,NA,Estiaje,Molloco,Agua superficial,Quebrada,1348119SW013,blue,Basico
+1348119SW014,8.18,213.2,104.9,24.29,1.35,3.834,8.44,1224,419,62.2,NA,Estiaje,Molloco,Agua superficial,Quebrada,1348119SW014,green,Aceptable
+1348119SW015,8.29,259.1,127.4,33.39,1.62,4.539,6.55,0.752,67.25,62,NA,Estiaje,Molloco,Agua superficial,Quebrada,1348119SW015,green,Aceptable
+1348119SW016,8.51,176.4,86.91,18.75,2.4,3.134,7.67,0.237,1.204,83.9,NA,Estiaje,Molloco,Agua superficial,Quebrada,1348119SW016,blue,Basico
+1348119SW017,7.3,29.51,14.95,1.91,1.45,0.481,1.76,0.634,4.024,12.8,NA,Estiaje,Molloco,Agua superficial,Quebrada,1348119SW017,green,Aceptable
+1348119SW128,8.13,145,71.56,10.08,0.61,1.574,7.19,0.548,9.578,49.9,NA,Estiaje,Molloco,Agua superficial,Quebrada,1348119SW128,green,Aceptable
+1348119SW129,7.71,103.2,51.06,5.66,0.91,0.772,5.29,0.402,9.631,23.8,NA,Estiaje,Molloco,Agua superficial,Quebrada,1348119SW129,green,Aceptable
+1348119SW130,7.81,214.6,105.8,18.1,2.74,3.174,13.81,12.9,24.94,61.3,NA,Estiaje,Molloco,Agua superficial,Rio,1348119SW130,green,Aceptable
+1348119SW133,8.14,206.4,101.5,19.34,2.67,3.224,14.05,12.72,29.74,63.1,NA,Estiaje,Molloco,Agua superficial,Rio,1348119SW133,green,Aceptable
+1349119GW121,7.12,66.1,32.89,4.15,3.3,2.768,3.65,0.622,4.255,34.8,NA,Estiaje,Alto Camana,Agua subterranea,Manantial,1349119GW121,green,Aceptable
+1349119GW134,8.4,3873,1898,50.61,89.6,4.303,660.1,982.6,340.9,34.8,24.9,Estiaje,Alto Camana,Agua subterranea,Geiser,1349119GW134,green,Aceptable
+1349119GW138,7.61,349.3,171.8,28.34,4.32,16.75,16.66,1.837,71.84,120.7,NA,Estiaje,Alto Camana,Agua subterranea,Galeria,1349119GW138,green,Aceptable
+1349119GW141,7.53,874.9,429.2,89.98,9.84,33.25,43.68,2.485,274.8,202.4,NA,Estiaje,Alto Camana,Agua subterranea,Termal,1349119GW141,green,Aceptable
+1349119GW146,7.19,202.4,99.7,13.74,2.62,7.993,17.56,13.23,7.741,89.9,NA,Estiaje,Alto Camana,Agua subterranea,Manantial,1349119GW146,green,Aceptable
+1349119GW149,7.01,240,118.1,16.31,2.38,8.956,17.97,5.057,51.04,71,NA,Estiaje,Alto Camana,Agua subterranea,Manantial,1349119GW149,green,Aceptable
+1349119GW150,6.8,541.8,265.9,49.41,2.7,20.69,30.02,12.87,142.8,119.5,NA,Estiaje,Alto Camana,Agua subterranea,Manantial,1349119GW150,green,Aceptable
+1349119GW168,7.4,1441,705.5,37.39,16.6,2.671,261.7,99.65,270.5,368.3,NA,Estiaje,Alto Camana,Agua subterranea,Termal,1349119GW168,green,Aceptable
+1349119GW169,7.47,5235,2566,80.33,71.12,7.235,935.4,1187,301.3,806.6,NA,Estiaje,Alto Camana,Agua subterranea,Termal,1349119GW169,green,Aceptable
+1349119GW180,7.03,1530,751.6,41.51,27.12,9.95,250.7,255.2,133.3,302.4,NA,Estiaje,Alto Camana,Agua subterranea,Manantial,1349119GW180,green,Aceptable
+1349119GW186,6.77,1388,680.6,153.4,2.26,47.49,15.37,1.17,726.2,10,NA,Estiaje,Alto Camana,Agua subterranea,Galeria,1349119GW186,green,Aceptable
+1349119GW188,7.3,900,441.5,138.1,2.17,22.92,9.95,1.434,387.3,73.4,NA,Estiaje,Alto Camana,Agua subterranea,Galeria,1349119GW188,green,Aceptable
+1349119GW197,6.15,7188,3523,129.3,78.87,12.04,1231,1624,305.5,814.2,NA,Estiaje,Alto Camana,Agua subterranea,Termal,1349119GW197,red,Acido
+1349119GW208,6.27,6898,3383,61,36.83,9.84,1436,1306,619.6,1424,NA,Estiaje,Alto Camana,Agua subterranea,Termal,1349119GW208,red,Acido
+1349119GW211,6.8,4113,2018,125,55.66,14.8,690,847,246.4,727.1,NA,Estiaje,Alto Camana,Agua subterranea,Termal,1349119GW211,green,Aceptable
+1349119SW113,8.59,194,95.57,15.09,2.27,3.197,5.01,0.922,5.662,72.3,6,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW113,blue,Basico
+1349119SW116,5.41,169.2,83.4,6.51,3.72,0.887,11.43,0.432,60.11,5.4,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW116,red,Acido
+1349119SW117,8.18,62.8,31.28,3.38,2.9,1.577,6.39,0.253,5.769,30,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW117,green,Aceptable
+1349119SW118,7.62,95.8,47.44,5.16,3.7,1.891,8.15,0.426,11.84,35.1,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW118,green,Aceptable
+1349119SW119,7.68,198.8,97.5,7.1,3.96,2.241,9.72,0.539,23.58,31.7,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW119,green,Aceptable
+1349119SW120,6.97,85.8,42.33,5.14,2.85,2.267,6.26,0.307,15.25,28.6,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW120,green,Aceptable
+1349119SW122,8.27,512.6,251.7,54.39,8.8,14.99,20.42,6.297,37.18,243.6,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW122,green,Aceptable
+1349119SW123,8.32,164.3,80.97,11.68,3.9,4.663,9.88,0.946,24.19,63.2,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW123,green,Aceptable
+1349119SW126,8.85,192.9,94.56,15.98,4.23,6.067,10.64,1.027,25.81,76.4,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW126,blue,Basico
+1349119SW127,8.97,199.6,98.34,19.81,1.82,5.731,8.9,0.753,8.197,92.1,9.7,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW127,blue,Basico
+1349119SW131,8.81,918.3,450.5,54.65,12.07,14.21,106.2,107.9,134.6,194.9,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW131,blue,Basico
+1349119SW132,8.49,285.1,140.2,37.57,1.35,4.419,14.41,1.943,51.68,110.6,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW132,green,Aceptable
+1349119SW136,8.55,988.5,485.1,55.36,12.7,14.94,103.6,113.9,131.7,183.5,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW136,blue,Basico
+1349119SW137,8.05,1042,511.3,56.7,15.38,14.48,127.7,148.9,144.4,182.8,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW137,green,Aceptable
+1349119SW139,5,665.1,326.3,92.97,2.16,16.35,8.89,3.107,307.1,5.1,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW139,red,Acido
+1349119SW140,8.25,801.9,393.6,130.3,3.55,16.85,14.44,0.971,291.5,133,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW140,green,Aceptable
+1349119SW142,7.76,277.3,136.4,19.76,3.93,4.16,16.46,0.71,76.88,41.2,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW142,green,Aceptable
+1349119SW143,8.87,891.5,437.3,39.48,11,11.26,116.3,126,85.56,165.1,14.4,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW143,blue,Basico
+1349119SW144,8.51,834.1,409.2,41.28,12.2,12.23,103,100.1,94.03,142,23,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW144,blue,Basico
+1349119SW144A,7.81,1032,506.4,47.06,15.34,13.01,128.1,151.8,107.2,203.7,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW144A,green,Aceptable
+1349119SW145,7.43,442.4,217.8,18.08,6.85,10.67,48.33,74.74,21.39,94.2,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW145,green,Aceptable
+1349119SW147,8.67,910.2,445.7,38.32,11.5,9.313,126.2,135.9,78.32,178.3,13.2,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW147,blue,Basico
+1349119SW152,8.6,205.7,101.3,16.88,4.23,5.998,10.44,1.017,25.43,79.2,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW152,blue,Basico
+1349119SW153,8.48,471.9,232.4,18.63,4.68,4.185,63.37,88.69,22.44,70.4,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW153,green,Aceptable
+1349119SW154,8.68,196.2,96.78,15.31,3.16,4.7,7.39,1.613,22.7,85.4,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW154,blue,Basico
+1349119SW155,8.68,481.9,236.6,18.57,4.66,4.082,65.45,90.37,22.29,77.3,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW155,blue,Basico
+1349119SW156,8.78,470.4,230.7,19.73,5.19,4.315,69.59,89.12,22.91,75.8,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW156,blue,Basico
+1349119SW157,8.28,507.1,249.1,16.7,4.65,4.006,63.62,88.06,22.46,84.2,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW157,green,Aceptable
+1349119SW158,8,608.8,298.8,54.02,5.55,21.09,33,30,155.3,119.7,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW158,green,Aceptable
+1349119SW159,9.17,937.1,457.7,40.92,13.48,10.09,126.6,135.6,83.63,146.2,30.2,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW159,blue,Basico
+1349119SW160,9.26,961,471.4,38.28,12.45,8.75,142.3,143.3,78.11,123.5,37.6,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW160,blue,Basico
+1349119SW162,9.05,1062,521.1,42.83,15.15,9.766,158.4,167.7,83.14,149.3,31.5,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW162,blue,Basico
+1349119SW163,8.09,419.9,206.3,26.41,9.42,8.307,34.54,29,63.98,101.9,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW163,green,Aceptable
+1349119SW164,8.41,322.6,158.6,18.66,7.48,6.669,21.52,9.4,44.2,82.3,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW164,green,Aceptable
+1349119SW165,8.46,260.6,128.2,22.49,3.21,6.663,15.24,0.854,48.17,96.5,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW165,green,Aceptable
+1349119SW167,8.33,982.4,483.4,33.5,12.07,7.223,151.8,170.8,73.49,181.7,7.5,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW167,green,Aceptable
+1349119SW170,7.96,79,39.29,5.81,4.11,2.124,5.13,0.814,6.064,40.7,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW170,green,Aceptable
+1349119SW172,9,459.5,225.5,18.37,4.81,4.051,61.92,77.01,22.04,59.8,16.9,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW172,blue,Basico
+1349119SW173,8.05,131.8,65.12,9.49,3.41,4.333,5.87,1.095,5.452,67,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW173,green,Aceptable
+1349119SW174,9.2,490.1,241,18.17,5.05,4.572,60.08,78.3,22.4,65.7,19.3,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW174,blue,Basico
+1349119SW175,8.45,1708,837.1,45.89,18.86,8.884,279.4,363.3,75.34,258.3,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW175,green,Aceptable
+1349119SW176,9,493.4,242.3,20.19,4.8,4.946,59.05,69.68,21.21,391.6,46.8,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW176,blue,Basico
+1349119SW177,8.47,239.1,117.6,17.7,2.59,5.304,8.99,3.395,20.97,93.7,7.3,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW177,green,Aceptable
+1349119SW179,7.75,231.2,113.9,23.6,1.79,5.527,6.03,0.461,78.48,29.7,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW179,green,Aceptable
+1349119SW181,7.15,487.8,239.6,69.69,0.79,7.759,5.9,0.396,197.7,29.3,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW181,green,Aceptable
+1349119SW182,7.39,488.8,240,70.06,0.86,6.829,5.9,0.443,207.7,34.7,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW182,green,Aceptable
+1349119SW183A,4.81,627.2,308.5,78.75,1.81,14.24,7.96,0.387,294.7,NA,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW183A,red,Acido
+1349119SW184,8.22,276.3,135.9,31.78,1.14,3.516,5.75,0.715,52.84,80,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW184,green,Aceptable
+1349119SW185,7.54,715.6,351.2,90.68,1.33,13.78,8.02,2.563,261.7,44.6,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW185,green,Aceptable
+1349119SW187,4.3,804.1,394.2,79.99,1.97,15.18,8.27,0.413,308.9,NA,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW187,red,Acido
+1349119SW189,7.98,183.8,90.56,8.93,4.45,3.095,5.16,0.496,8.621,55.6,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW189,green,Aceptable
+1349119SW190,8.24,167.9,82.76,11.75,5.26,4.028,6.21,0.579,16.2,61.9,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW190,green,Aceptable
+1349119SW191,5.09,1050,502.1,82.59,1.78,14.76,8.25,0.531,313.3,4.7,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW191,red,Acido
+1349119SW193,8.79,255.7,125.8,18.47,5.03,4.744,21.86,26.01,15.19,81.5,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW193,blue,Basico
+1349119SW194,9.11,306.6,150.7,25.5,4.7,4.357,22.93,18.09,38.88,80,14.1,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW194,blue,Basico
+1349119SW195,9.14,736.9,361.6,28.37,8.65,6.705,105.5,129.2,43.17,137.9,10.7,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW195,blue,Basico
+1349119SW196,8.65,980.1,480.7,31.27,11.01,6.674,138.8,174.8,54.73,173.3,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW196,blue,Basico
+1349119SW198,8.19,672.2,320.1,29.57,12.2,7.173,82.08,73.52,70.91,143.5,NA,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW198,green,Aceptable
+1349119SW206,7.65,86.03,42.66,2.71,2.61,1.132,2,0.588,2.854,21,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW206,green,Aceptable
+1349119SW207,8.33,201.8,99.4,14.53,5.85,4.739,7.71,1.177,22.77,88.2,NA,Estiaje,Alto Camana,Agua superficial,Quebrada,1349119SW207,green,Aceptable
+1349119SW212,8.63,834.5,409.3,41.48,11.93,12.34,109.1,107.9,94.15,158.8,11.8,Estiaje,Alto Camana,Agua superficial,Rio,1349119SW212,blue,Basico
+49999119GW024,6.88,5669,2778,114.5,39.62,14.62,1120,11.42,14.77,1158,NA,Estiaje,Hornillos Alto,Agua subterranea,Termal,49999119GW024,green,Aceptable
+49999119GW088,6.52,5612,2750,295.5,28.37,19.14,904.6,0.778,48.39,813.5,NA,Estiaje,Hornillos Alto,Agua subterranea,Termal,49999119GW088,green,Aceptable
+49999119GW199,7.44,92.56,45.75,5.61,2.54,1.744,4.36,12.11,17.19,37.9,NA,Estiaje,Hornillos Alto,Agua subterranea,Manantial,49999119GW199,green,Aceptable
+49999119GW200,7.64,140.8,69.17,3.47,2.7,1.981,5.89,NA,NA,37.4,NA,Estiaje,Hornillos Alto,Agua subterranea,Manantial,49999119GW200,green,Aceptable
+49999119GW202,7,120.7,59.64,4.43,3.7,1.892,4.63,NA,NA,33.7,NA,Estiaje,Hornillos Alto,Agua subterranea,Manantial,49999119GW202,green,Aceptable
+49999119GW203,7.17,31.4,15.89,2.17,1.82,0.62,2.22,0.653,12.99,17.3,NA,Estiaje,Hornillos Alto,Agua subterranea,Manantial,49999119GW203,green,Aceptable
+49999119SW019,8.07,658.4,323.1,27.27,6.74,8.005,80.51,61.55,41.96,206.5,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW019,green,Aceptable
+49999119SW021,8.4,441,216.6,NA,NA,2297,NA,NA,3243,NA,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW021,green,Aceptable
+49999119SW022,7.65,3048,1494,65.55,25.29,9.866,599.6,599.4,305.4,623.1,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW022,green,Aceptable
+49999119SW023,8.44,241.1,118.6,27.63,2.83,2.754,14.39,4.084,3.849,126.6,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW023,green,Aceptable
+49999119SW025,8.41,354.6,174.3,18.32,2.9,2.504,11.35,4.183,2.752,37,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW025,green,Aceptable
+49999119SW026,7.46,181.3,39.05,20.45,2.73,3.136,10.25,6.479,30.16,62.4,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW026,green,Aceptable
+49999119SW027,7.49,137.6,67.3,12.49,1.56,2.572,3.55,0.259,11.57,48.6,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW027,green,Aceptable
+49999119SW028,8.57,170.1,84,20.59,0.88,4.013,7.86,0.127,18.88,84.2,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW028,blue,Basico
+49999119SW029,8.26,99.85,49.44,17.34,3.07,2.856,7.92,4.764,27.71,50.7,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW029,green,Aceptable
+49999119SW031,8.58,148.7,73.1,9.56,2.1,0.956,19.97,0.411,9.866,77.5,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW031,blue,Basico
+49999119SW032,8.95,89.85,44.53,16.25,3.01,2.772,7.66,4.227,24.29,50.4,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW032,blue,Basico
+49999119SW033,9.19,86.94,43.18,16.22,2.96,2.751,5.6,1.869,25.92,47.8,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW033,blue,Basico
+49999119SW036,8.87,1586,777.9,82.71,8.63,5.944,215.4,286.8,115.6,198.8,13.4,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW036,blue,Basico
+49999119SW037,8.23,153.5,65.67,18.89,0.82,1.287,5.23,0.632,46.2,29.9,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW037,green,Aceptable
+49999119SW039,8.7,56.59,28.23,2.69,2.79,1.307,6.4,0.499,1.339,35,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW039,blue,Basico
+49999119SW040,7.94,239.5,117.8,30.23,1.89,4.249,5.86,0.596,64.29,57.2,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW040,green,Aceptable
+49999119SW042,8.49,92.14,45.61,5.79,4.32,2.976,7.15,2.744,5.763,43.9,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW042,green,Aceptable
+49999119SW043,8.99,73.26,36.37,4.2,3.1,2.142,6.46,0.476,1.261,45.1,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW043,blue,Basico
+49999119SW044,8.61,96.59,47.83,5.35,3.58,2.522,6.08,0.741,3.957,45.9,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW044,blue,Basico
+49999119SW045,7.49,145.5,71.8,9.78,4.26,2.868,6.22,1.774,14.41,45.6,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW045,green,Aceptable
+49999119SW046,7.87,113.2,55.97,3.9,2.8,2.347,4.87,0.334,1.384,39.8,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW046,green,Aceptable
+49999119SW048,9.08,145.6,71.87,7.75,4.23,2.515,7.04,1.367,10.05,47.5,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW048,blue,Basico
+49999119SW049,8.65,126.6,62.33,11.18,3.91,3.339,7.81,2.508,16.94,49.8,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW049,blue,Basico
+49999119SW051,7.71,291.2,143.1,32.48,3.32,13.32,4.48,2.148,28.25,129.6,7.4,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW051,green,Aceptable
+49999119SW052,7.61,180.6,88.95,17.24,3.58,3.11,15.65,20.69,2.875,74.7,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW052,green,Aceptable
+49999119SW053,7.46,92.5,45.2,7.88,2.03,2.613,3.56,0.233,9.706,35.2,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW053,green,Aceptable
+49999119SW054,7.54,269.8,133.1,20.81,3.2,3.055,23.87,22.64,33.9,81.2,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW054,green,Aceptable
+49999119SW055,8.45,177.6,87.4,10.26,3.78,2.451,25.84,17.78,7.467,79.4,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW055,green,Aceptable
+49999119SW056,8.45,114.5,56.62,11.24,2.97,4.107,4.15,0.503,11.92,54.2,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW056,green,Aceptable
+49999119SW057,8.12,175.4,85.8,8.4,3.12,2.222,19.54,14.31,6.243,72.4,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW057,green,Aceptable
+49999119SW058,6.58,144.3,70.73,13.4,1.44,3.336,5.92,1.255,8.15,88.7,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW058,green,Aceptable
+49999119SW059,8.73,157.2,77.47,8.46,3.39,2.343,23.36,14.59,6.091,68.1,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW059,blue,Basico
+49999119SW061,9.25,128,63.54,7.81,3.67,3.405,8.76,0.882,2.939,59,NA,Estiaje,Hornillos Alto,Agua superficial,Arroyo,49999119SW061,blue,Basico
+49999119SW062,8.02,85.78,42.55,6.58,3.1,3.097,5.31,0.606,2.413,50.9,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW062,green,Aceptable
+49999119SW063,8.5,133.4,65.74,8.52,6.15,4.118,8.87,4.921,3.725,65.7,NA,Estiaje,Hornillos Alto,Agua superficial,Arroyo,49999119SW063,green,Aceptable
+49999119SW064,8.25,127.3,62.9,3.52,3.28,1.532,3.8,0.371,1.863,33.4,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW064,green,Aceptable
+49999119SW065,9.04,134.1,66.28,11.23,3.8,3.932,4.58,1.065,10.36,58.3,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW065,blue,Basico
+49999119SW066,8.21,141.5,69.82,11.54,2.91,4.136,4.22,0.553,14.39,54,NA,Estiaje,Hornillos Alto,Agua superficial,Arroyo,49999119SW066,green,Aceptable
+49999119SW067,9.05,95.32,47.67,7.23,2.99,2.82,5.76,1.074,5.492,45.9,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW067,blue,Basico
+49999119SW069,8.46,100,49.55,7.45,3.2,2.266,11.72,2.711,4.634,58.1,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW069,green,Aceptable
+49999119SW072,8.57,41.64,20.87,4.88,2.81,1.898,5.42,0.544,3.244,39.1,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW072,blue,Basico
+49999119SW073,6.85,86.82,43.11,9.77,1.73,2.608,3.83,0.273,16.56,62,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW073,green,Aceptable
+49999119SW074,8.31,141.9,70.2,6.11,2.97,2.121,10.27,2.508,4.057,53.1,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW074,green,Aceptable
+49999119SW075,8.98,41.12,22.11,5.49,2.79,1.968,5.64,0.588,3.596,40.9,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW075,blue,Basico
+49999119SW076,7.9,101.1,50.2,6.54,2.98,2.244,11.1,2.94,3.985,57.6,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW076,green,Aceptable
+49999119SW077,8.63,95,47.08,17.25,3.32,3.363,10.28,0.726,16.04,77.4,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW077,blue,Basico
+49999119SW079,8.93,48.3,24.19,5.87,2.89,2.071,6.64,0.696,3.545,43.8,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW079,blue,Basico
+49999119SW081,7.34,275.6,135.7,45.47,1.03,1.317,4.01,0.119,112,11.3,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW081,green,Aceptable
+49999119SW082,7.1,502.7,246.1,94.01,2.75,2.903,6.65,0.278,220.5,42.8,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW082,green,Aceptable
+49999119SW083,7.21,780.6,380.2,146.2,2.06,2.999,9.5,0.337,335.8,50.9,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW083,green,Aceptable
+49999119SW084,7.09,498.1,244.8,92.15,1.57,3.059,7.76,0.446,203.6,55.9,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW084,green,Aceptable
+49999119SW087,8.95,336.4,164.7,18.76,3.69,3.045,26.02,21.22,26.56,79.4,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW087,blue,Basico
+49999119SW089,8.43,448.1,220,53.45,2.53,2.908,24.12,16.62,119.7,69.8,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW089,green,Aceptable
+49999119SW091,7.89,495.8,246,59.37,2.73,3.033,28.71,20.93,129,78.1,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW091,green,Aceptable
+49999119SW092,6.69,39.47,19.84,3.71,1.3,0.818,2.92,0.207,2.853,21.1,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW092,green,Aceptable
+49999119SW093,6.71,46.86,23.48,4.36,1.93,0.724,1.99,0.199,5.272,18,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW093,green,Aceptable
+49999119SW094,7.75,263.9,126.4,1.89,1.69,0.42,2.32,0.298,2.503,12.7,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW094,green,Aceptable
+49999119SW095,7.13,68.8,34.54,9.54,1.71,1.077,2.05,0.163,10.81,30.9,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW095,green,Aceptable
+49999119SW096,5.96,414.4,204.9,62.56,1.91,6.923,2.03,0.316,191.4,4,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW096,red,Acido
+49999119SW097,5.65,485.9,238.6,53.66,3.92,13.09,5.77,1.521,206.1,1.4,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW097,red,Acido
+49999119SW098,7.44,84.86,42.13,11.08,1.68,1.319,1.99,0.397,14.96,34.9,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW098,green,Aceptable
+49999119SW099,9.38,418.9,205.8,61.05,5.32,6.68,4.71,1.609,170.1,36.8,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW099,blue,Basico
+49999119SW100,7.47,471.8,231.8,74.97,2.74,7.479,4.35,2.746,171.4,76,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW100,green,Aceptable
+49999119SW101,7.91,380.2,186.9,60.9,2.84,5.575,4.25,2.101,137.8,64.1,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW101,green,Aceptable
+49999119SW102,7.92,398.6,195.8,64.23,2.94,5.579,4.2,2.174,134.6,63.1,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW102,green,Aceptable
+49999119SW103,8.2,124.8,61.66,4.4,1.97,1.306,3.35,0.217,4.44,28.5,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW103,green,Aceptable
+49999119SW104,7.42,198.6,97.97,15.16,2.79,2.62,3.81,0.34,43.17,17.1,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW104,green,Aceptable
+49999119SW105,9.49,183.8,90.56,17.73,2.59,2.838,4.74,1.279,31.96,47,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW105,blue,Basico
+49999119SW106,9.39,137.9,68.68,6.61,2.08,1.715,4.28,1.412,8.828,27.9,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW106,blue,Basico
+49999119SW108,8.68,58.51,29.17,9.42,1.16,2.552,7.03,0.399,2.068,60.8,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW108,blue,Basico
+49999119SW109,7.83,81.54,40.47,13.9,2.2,3.27,7.28,0.631,3.672,81.6,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW109,green,Aceptable
+49999119SW110,8.33,151.7,74.84,17.15,3.18,2.865,22.88,20.49,25.08,79.9,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW110,green,Aceptable
+49999119SW111,8.58,148.6,73.48,17.07,3.18,2.808,22.73,20.6,26.09,79.2,NA,Estiaje,Hornillos Alto,Agua superficial,Rio,49999119SW111,blue,Basico
+49999119SW112,8.26,84.46,41.89,15.63,2.47,4.089,7.64,0.39,2.481,86.4,NA,Estiaje,Hornillos Alto,Agua superficial,Quebrada,49999119SW112,green,Aceptable
+1348119SW001,7.17,99.86,49.45,5.8,2.7,1.8,4.3,0.3,3.6,33,NA,Avenida,Molloco,Agua superficial,Quebrada,1348119SW001,green,Aceptable
+1348119SW002,8.48,103.1,51.03,10.2,1.7,1.9,5.5,3.1,13,31,NA,Avenida,Molloco,Agua superficial,Quebrada,1348119SW002,green,Aceptable
+1348119SW003,7.35,490.6,249.9,70.7,0.9,6.9,5.5,0.3,179.1,27,NA,Avenida,Molloco,Agua superficial,Quebrada,1348119SW003,green,Aceptable
+1348119SW004,8.59,136.8,67.52,9.6,1.7,1.9,6.1,3.2,10.5,31,NA,Avenida,Molloco,Agua superficial,Rio,1348119SW004,blue,Basico
+1348119SW005,8.55,111,55.07,9.7,1.8,1.9,6.4,3.3,10,31,NA,Avenida,Molloco,Agua superficial,Rio,1348119SW005,blue,Basico
+1348119SW006,8.88,82.03,40.69,3.1,2.3,1,3.2,0.4,2.7,18,NA,Avenida,Molloco,Agua superficial,Quebrada,1348119SW006,blue,Basico
+1348119SW007,7.99,134.8,65.72,8.3,1.7,1.7,5.8,3.1,8.9,27,NA,Avenida,Molloco,Agua superficial,Rio,1348119SW007,green,Aceptable
+1348119SW008,8.01,171.2,84.42,5.8,1.7,1.3,3.8,0.3,3.8,25,NA,Avenida,Molloco,Agua superficial,Rio,1348119SW008,green,Aceptable
+1348119SW009,8.73,139.7,78.61,10.1,1.8,1.9,6.1,3.6,10.5,32,NA,Avenida,Molloco,Agua superficial,Rio,1348119SW009,blue,Basico
+1348119SW011,7.35,169.4,83.48,24,1,3.3,3.7,NA,37.1,41,NA,Avenida,Molloco,Agua superficial,Quebrada,1348119SW011,green,Aceptable
+1348119SW012,4.44,440.2,216.2,46,1.6,8.6,8.1,0.6,196.2,NA,NA,Avenida,Molloco,Agua superficial,Quebrada,1348119SW012,red,Acido
+1348119SW013,8.73,45.04,22.26,1.9,1.5,0.6,3,NA,2.3,14,NA,Avenida,Molloco,Agua superficial,Quebrada,1348119SW013,blue,Basico
+1348119SW014,7.86,118.8,58.73,11.4,1,1.9,5.5,0.5,23.7,24,NA,Avenida,Molloco,Agua superficial,Quebrada,1348119SW014,green,Aceptable
+1348119SW015,7.66,279.8,137.7,23.7,1.4,3.6,5.5,0.5,55.2,31,NA,Avenida,Molloco,Agua superficial,Quebrada,1348119SW015,green,Aceptable
+1348119SW016,7.98,101.8,50.34,9.8,1.3,1.5,4.4,0.2,5.9,37,NA,Avenida,Molloco,Agua superficial,Quebrada,1348119SW016,green,Aceptable
+1348119SW017,6.96,79.71,39.64,1.3,1.2,0.3,2.1,0.3,1.4,9,NA,Avenida,Molloco,Agua superficial,Quebrada,1348119SW017,green,Aceptable
+1348119SW128,7.96,128.8,63.6,6.4,0.6,1.3,5,0.3,7.3,27,NA,Avenida,Molloco,Agua superficial,Quebrada,1348119SW128,green,Aceptable
+1348119SW129,7.3,51.17,25.57,3.4,0.9,0.6,4.6,0.4,8.3,16,NA,Avenida,Molloco,Agua superficial,Quebrada,1348119SW129,green,Aceptable
+1348119SW130,7.67,117.3,57.95,11.3,1.8,2.4,6.2,3,17.4,32,NA,Avenida,Molloco,Agua superficial,Rio,1348119SW130,green,Aceptable
+1348119SW133,8.04,124.2,61.3,12.1,1.9,2.5,7,3.3,19,33,NA,Avenida,Molloco,Agua superficial,Rio,1348119SW133,green,Aceptable
+1349119GW121,6.82,67.42,33.69,3.1,2.1,2.5,3.4,0.3,5.3,23,NA,Avenida,Alto Camana,Agua subterranea,Manantial,1349119GW121,green,Aceptable
+1349119GW134,7.6,4111,2010,41.7,80.5,1.8,614.9,850.9,341.5,53,1,Avenida,Alto Camana,Agua subterranea,Geiser,1349119GW134,green,Aceptable
+1349119GW138,7.04,336.7,165.5,26.9,4,17.9,16.7,1.4,65.9,101,NA,Avenida,Alto Camana,Agua subterranea,Galeria Filtrante,1349119GW138,green,Aceptable
+1349119GW141,7.47,823.4,404,86.1,8.5,34.8,44.3,2.4,262.7,165,2,Avenida,Alto Camana,Agua subterranea,Manantial,1349119GW141,green,Aceptable
+1349119GW146,7.18,210.2,103.5,12.6,3,8.6,17.6,16,9.2,73,NA,Avenida,Alto Camana,Agua subterranea,Manantial,1349119GW146,green,Aceptable
+1349119GW149,7.06,253.1,124.5,15.4,2.2,9.3,18.4,4.6,45.5,54,NA,Avenida,Alto Camana,Agua subterranea,Manantial,1349119GW149,green,Aceptable
+1349119GW150,7.19,607.3,298.1,48.2,2.6,21.4,30,13,146,98,NA,Avenida,Alto Camana,Agua subterranea,Manantial,1349119GW150,green,Aceptable
+1349119GW168,7,1395,682,37.8,15.7,2.8,259.1,94.6,259.4,294,7,Avenida,Alto Camana,Agua subterranea,Termal,1349119GW168,green,Aceptable
+1349119GW169,5.88,5092,2492,77.4,71.7,7.7,915.4,1018.4,225.2,632,5,Avenida,Alto Camana,Agua subterranea,Termal,1349119GW169,red,Acido
+1349119GW180,6.02,1640,805,38.5,30.5,10,286.7,257.1,128.4,286,4,Avenida,Alto Camana,Agua subterranea,Termal,1349119GW180,red,Acido
+1349119GW186,6.65,1439,705.7,182.3,2.3,47.1,14.3,1,731.7,16,NA,Avenida,Alto Camana,Agua subterranea,Galeria,1349119GW186,green,Aceptable
+1349119GW188,7.33,772.8,379.2,131.6,1.8,22.5,8.5,0.7,345.9,48,NA,Avenida,Alto Camana,Agua subterranea,Galeria,1349119GW188,green,Aceptable
+1349119GW197,6.12,6813,3339,112.1,72.9,11.4,1262.2,1012.8,232.4,673,6,Avenida,Alto Camana,Agua subterranea,Termal,1349119GW197,red,Acido
+1349119SW113,8.38,77.5,38.48,8.1,2.1,2,4.1,0.3,5.4,37,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW113,green,Aceptable
+1349119SW116,5,82.46,40.86,3.8,2.1,0.6,5.8,NA,29.3,NA,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW116,red,Acido
+1349119SW117,7.82,435.8,214.9,2.8,2.6,1.3,3.3,NA,4.7,19,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW117,green,Aceptable
+1349119SW118,7.32,63.21,31.47,4.3,2.7,1.7,4.9,0.2,8.9,22,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW118,green,Aceptable
+1349119SW119,7.22,98.5,48.77,4.2,2.6,1.5,5.2,0.3,13.6,19,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW119,green,Aceptable
+1349119SW120,7.31,99.02,49.14,3.5,2.1,1.6,3.9,NA,7.5,18,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW120,green,Aceptable
+1349119SW122,8.85,259.9,127.8,31.4,4.8,8.9,10.2,0.4,10.6,129,3,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW122,blue,Basico
+1349119SW123,7.68,129,63.5,7.2,3,3.1,6.6,0.4,12.9,35,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW123,green,Aceptable
+1349119SW124,8.57,147.6,72.83,16.8,1.7,5,6.5,0.4,9.5,70,1,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW124,blue,Basico
+1349119SW126,8.38,124.7,61.62,9.4,3,3.6,6.8,0.4,12.8,50,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW126,green,Aceptable
+1349119SW127,8.39,132.3,65.58,11.5,1.6,3.6,5.6,0.3,8.3,51,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW127,green,Aceptable
+1349119SW131,7.76,439.8,216.1,25.3,4.9,6.8,47.3,54.2,48.5,77,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW131,green,Aceptable
+1349119SW132,8.36,186.3,91.77,22.3,1.1,4,7.3,0.6,24.3,66,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW132,green,Aceptable
+1349119SW136,8.32,447.9,220,26.5,5.2,7.1,50.5,56.5,50.7,79,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW136,green,Aceptable
+1349119SW137,7.69,493.5,242.2,26.3,5.8,6.9,54.7,62.2,51.7,78,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW137,green,Aceptable
+1349119SW139,5.73,480.5,236.2,61.2,1.4,11,6.5,0.3,200.8,3,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW139,red,Acido
+1349119SW140,8.17,278.3,136.9,36.5,1.3,4.7,6.4,0.4,65.8,55,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW140,green,Aceptable
+1349119SW142,7.71,182.3,89.91,12.6,3.6,3,12.5,0.4,40.2,31,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW142,green,Aceptable
+1349119SW143,9.21,420,206.3,22.6,5.4,6.4,56.1,63.3,33,79,5,Avenida,Alto Camana,Agua superficial,Rio,1349119SW143,blue,Basico
+1349119SW144,8.68,475.6,233.4,22.5,5.4,6.6,56.6,63.9,32.2,81,3,Avenida,Alto Camana,Agua superficial,Rio,1349119SW144,blue,Basico
+1349119SW145,7.91,371.6,182.6,15.1,4.7,9.6,33.8,43.9,14.9,74,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW145,green,Aceptable
+1349119SW147,9.21,461.3,226.7,21.7,5.6,6,57.1,65.9,32.7,76,6,Avenida,Alto Camana,Agua superficial,Rio,1349119SW147,blue,Basico
+1349119SW152,8.47,144.1,71.23,14.3,2.7,4.3,6,0.4,12.5,58,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW152,green,Aceptable
+1349119SW153,8.78,442.2,217.2,20.1,4.3,4.4,53.5,76,21.3,61,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW153,blue,Basico
+1349119SW154,9.02,153.3,75.65,17.1,2.5,4.5,6.7,0.5,20.6,52,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW154,blue,Basico
+1349119SW155,8.8,438.6,215.4,20.7,4.4,4.6,55.7,76.2,21.8,64,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW155,blue,Basico
+1349119SW156,8.77,442.5,217.3,21.4,4.7,4.8,58.2,76,22.1,64,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW156,blue,Basico
+1349119SW157,8.55,432.5,212.4,21.5,4.5,4.9,55,71.4,21.6,64,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW157,blue,Basico
+1349119SW158,7.79,510.1,269.9,61.6,5.3,23.5,33.3,19.6,163.7,94,1,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW158,green,Aceptable
+1349119SW159,8.95,513.7,252.2,29,7,7.1,70.6,77.9,44.9,93,2,Avenida,Alto Camana,Agua superficial,Rio,1349119SW159,blue,Basico
+1349119SW160,8.9,537.9,264.1,28,7,6.4,77.2,89.5,40.7,91,2,Avenida,Alto Camana,Agua superficial,Rio,1349119SW160,blue,Basico
+1349119SW162,9.37,498.6,244.8,28,7.5,6.6,74.2,84.1,37.3,83,6,Avenida,Alto Camana,Agua superficial,Rio,1349119SW162,blue,Basico
+1349119SW163,8.42,293.1,144.1,22,8.5,9.1,24.5,11,45.7,80,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW163,green,Aceptable
+1349119SW164,8.42,270,132.8,21.1,8,9,20.1,3.7,44.2,80,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW164,green,Aceptable
+1349119SW165,7.8,172.2,85.2,15.9,2.8,5.4,9.9,0.4,28.1,51,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW165,green,Aceptable
+1349119SW166,8.01,234.4,115.4,12.2,6.5,3.3,28.6,38.7,14.4,45,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW166,green,Aceptable
+1349119SW167,8.51,555.6,273.1,25.4,6.9,5.8,76.8,88.9,38,95,2,Avenida,Alto Camana,Agua superficial,Rio,1349119SW167,blue,Basico
+1349119SW170,7.13,55.92,27.94,4.1,2.6,1.6,3.6,0.2,3.4,24,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW170,green,Aceptable
+1349119SW172,7.71,437.9,215.1,21.3,4.5,4.8,56.2,75.5,20,67,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW172,green,Aceptable
+1349119SW173,7.49,116.9,57.76,12.3,2.6,4.4,5.3,0.6,6.2,55,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW173,green,Aceptable
+1349119SW174,8.16,435.9,213.5,22.6,4.5,5.2,54.5,74.2,21.2,71,NA,Avenida,Alto Camana,Agua superficial,Rio,1349119SW174,green,Aceptable
+1349119SW175,7.94,502,247.5,21.7,4.9,5,65.5,90.2,22.9,77,1,Avenida,Alto Camana,Agua superficial,Rio,1349119SW175,green,Aceptable
+1349119SW176,8.04,421.5,207,22.2,4.5,5.3,53.5,71.2,20.1,69,1,Avenida,Alto Camana,Agua superficial,Rio,1349119SW176,green,Aceptable
+1349119SW177,7.9,191.3,94.24,20.4,3.2,8.1,8.5,1.3,19,77,1,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW177,green,Aceptable
+1349119SW178,8.4,285.8,140.6,33,6.6,8.2,13.8,1.5,38.8,101,2,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW178,green,Aceptable
+1349119SW179,6.86,163.7,80.74,18,2.1,5,4.9,0.2,48.1,18,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW179,green,Aceptable
+1349119SW181,7.65,402.2,197.6,69.9,0.7,7,4.9,0.3,157.3,29,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW181,green,Aceptable
+1349119SW182,7.73,387.7,190.6,62,0.7,6.6,4.7,0.2,158.9,32,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW182,green,Aceptable
+1349119SW183,7.82,62.5,31.07,7.4,1.2,1.2,2.4,0.3,6.9,24,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW183,green,Aceptable
+1349119SW184,8.08,192.2,94.67,27.7,1.1,3,5.2,0.4,35.9,55,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW184,green,Aceptable
+1349119SW185,7.65,457.9,224.8,73.3,0.9,9.3,5.3,0.3,181.7,26,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW185,green,Aceptable
+1349119SW187,4.94,510.2,250.5,69.2,1.6,12.8,6.5,0.9,219.2,51,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW187,red,Acido
+1349119SW189,7.89,117.8,58.21,8.5,3.8,3.4,4.4,0.5,22.4,24,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW189,green,Aceptable
+1349119SW190,7.97,146.3,72.21,12.3,4.6,4.9,5.4,0.5,34.5,25,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW190,green,Aceptable
+1349119SW191,5.45,472.2,231.7,79.5,1.4,12.4,6.4,0.3,208.6,3,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW191,red,Acido
+1349119SW193,8.43,231.3,113.8,22.5,4.9,6.3,12.4,10,35.3,59,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW193,green,Aceptable
+1349119SW194,8.4,114.7,56.71,11.3,4.5,2.6,7.7,1.2,13.5,41,NA,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW194,green,Aceptable
+1349119SW195,8.35,555.9,272.9,26,5.5,6.3,72.9,88.9,27.8,87,1,Avenida,Alto Camana,Agua superficial,Rio,1349119SW195,green,Aceptable
+1349119SW196,8.39,578.3,283.9,24.5,6,5.8,80,101.4,31.8,89,1,Avenida,Alto Camana,Agua superficial,Rio,1349119SW196,green,Aceptable
+1349119SW198,8.03,563.5,276.2,29.1,10.4,7.8,63.7,60.1,66.4,111,2,Avenida,Alto Camana,Agua superficial,Quebrada,1349119SW198,green,Aceptable
+49999119GW024,6.37,5636,2762,NA,NA,NA,NA,984.9,524.2,935,12,Avenida,Alto Camana,Agua subterranea,Valle,49999119GW024,red,Acido
+49999119GW038,7.55,54.35,27.13,4.5,1.9,1.2,3.1,0.4,3.6,22,NA,Avenida,Hornillos Alto,Agua subterranea,Manantial,49999119GW038,green,Aceptable
+49999119GW088,6.62,5671,2779,266.6,21.1,16.5,748,1176.4,443.7,504,2,Avenida,Hornillos Alto,Agua subterranea,Termal,49999119GW088,green,Aceptable
+49999119SW018,7.25,145.6,73.18,2.2,3.3,1,2.9,0.2,1.5,18,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW018,green,Aceptable
+49999119SW019,6.96,59.97,29.88,4.6,1.4,1.1,5.7,1.7,2.3,26,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW019,green,Aceptable
+49999119SW021,7.65,101.2,50.26,7.9,1.9,1.4,7.8,4.3,1.8,36,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW021,green,Aceptable
+49999119SW022,6.85,256.9,126.4,8.3,2.2,1.7,29.3,22.8,12.2,48,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW022,green,Aceptable
+49999119SW023,7.94,260.5,127.1,33.3,2,3,11,2,2.4,114,1,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW023,green,Aceptable
+49999119SW025,7.55,143.9,71,14.8,2,2,9.7,3,1.9,62,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW025,green,Aceptable
+49999119SW026,7.73,149.5,73.81,15.2,1.9,2.2,6,2.4,20.5,34,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW026,green,Aceptable
+49999119SW027,7.39,70.21,34.9,8.4,1.5,1.6,2.9,NA,7,27,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW027,green,Aceptable
+49999119SW028,7.62,47.8,23.92,7.6,0.5,1.2,2.1,NA,8.1,21,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW028,green,Aceptable
+49999119SW029,8.45,154.3,76.4,14.8,1.8,2.1,5.2,2.1,19,33,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW029,green,Aceptable
+49999119SW031,7.81,53.74,26.83,4.3,0.8,0.5,5.7,NA,3.6,23,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW031,green,Aceptable
+49999119SW032,7.72,150.3,74.44,16.2,2,2.3,5.1,1.1,28.2,32,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW032,green,Aceptable
+49999119SW033,7.93,152.6,75.49,16.9,2,2.4,4,1,26.6,31,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW033,green,Aceptable
+49999119SW036,7.73,293.5,147.8,21.3,1.5,1.6,32.9,38.7,29.2,53,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW036,green,Aceptable
+49999119SW037,7.72,104.9,51.8,13.4,0.5,0.9,3.1,0.2,25,21,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW037,green,Aceptable
+49999119SW039,7.47,135.2,66.9,3,2.7,1.3,4.1,0.4,2.5,24,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW039,green,Aceptable
+49999119SW040,7.76,151.2,74.78,16.3,0.8,2.1,3.3,0.2,31.5,34,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW040,green,Aceptable
+49999119SW041,7.49,46.3,23.19,3.6,1.9,1.6,2.8,0.3,2.6,22,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW041,green,Aceptable
+49999119SW042,7.57,67.26,33.47,3.8,2.4,1.7,2.9,0.6,4,23,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW042,green,Aceptable
+49999119SW043,7.72,49.83,24.91,3,2.3,1.4,3.5,0.3,3.2,24,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW043,green,Aceptable
+49999119SW044,7.95,80.56,39.97,4.8,1.8,1.7,2.9,0.5,7.7,21,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW044,green,Aceptable
+49999119SW045,8.16,97.11,48.03,9.7,2.4,2.1,3.8,0.5,16.7,29,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW045,green,Aceptable
+49999119SW046,7.83,51.03,25.51,3,2.4,1.5,3.6,0.3,1.9,24,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW046,green,Aceptable
+49999119SW047,9.49,100.9,49.94,8.7,2.9,3.1,5.1,0.8,14.2,34,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW047,blue,Basico
+49999119SW048,8.16,89.94,44.57,9.4,2.2,2.1,3.8,0.5,15,29,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW048,green,Aceptable
+49999119SW049,8.15,105.2,52.07,8.9,1.8,1.9,3.6,0.5,15.9,28,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW049,green,Aceptable
+49999119SW051,7.39,88.49,43.86,9.9,1.2,3.3,2.1,0.3,9.6,36,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW051,green,Aceptable
+49999119SW052,8.21,117.9,58.36,11.2,2.1,2.6,7.4,6.7,2.7,47,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW052,green,Aceptable
+49999119SW053,7.26,71.15,35.36,6.8,1.6,1.9,3,0.3,7.3,27,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW053,green,Aceptable
+49999119SW054,7.81,154.8,76.8,15.7,1.8,2.2,9.2,5.8,25.4,38,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW054,green,Aceptable
+49999119SW055,7.96,101.7,49.95,8.6,2.1,2.1,6.8,2.5,10,35,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW055,green,Aceptable
+49999119SW056,8.53,76.55,38.02,7.3,1.8,2.4,2.9,0.4,6.4,31,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW056,blue,Basico
+49999119SW057,7.99,102.8,50.37,8.6,2.2,2.1,6.7,2.1,11,34,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW057,green,Aceptable
+49999119SW058,7.57,77.91,39.29,8.9,1,2.1,3.9,0.2,2.4,40,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW058,green,Aceptable
+49999119SW059,8.15,91.96,46.13,8.7,1.9,2.1,5.9,2.1,9.7,33,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW059,green,Aceptable
+49999119SW061,9.35,79.83,39.62,6.2,2.2,2.2,6,0.5,3.7,35,3,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW061,blue,Basico
+49999119SW062,7.69,61.45,30.61,4.7,2.1,1.9,3.7,0.4,5.9,26,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW062,green,Aceptable
+49999119SW063,8.3,72.55,36.05,4.9,2.3,2,3.4,0.9,3.6,31,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW063,green,Aceptable
+49999119SW064,7.61,52.09,26.04,3.9,2.2,1.5,3.3,0.3,2.9,24,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW064,green,Aceptable
+49999119SW065,7.52,80.15,39.77,7.6,2.8,2.4,3.5,0.4,3.4,37,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW065,green,Aceptable
+49999119SW066,8.36,78.06,38.75,7.2,1.9,2.4,3,0.4,7.8,31,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW066,green,Aceptable
+49999119SW067,8.36,68.36,34,5.6,2.1,1.9,3.7,0.6,7.4,27,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW067,green,Aceptable
+49999119SW069,8.1,86.49,42.88,7.6,2,1.9,4.4,0.6,10.8,30,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW069,green,Aceptable
+49999119SW070,7.59,59.31,29.56,4.9,1.4,1.6,3.3,0.3,11.5,18,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW070,green,Aceptable
+49999119SW071,7.92,117.1,57.86,11.8,1.5,2.3,7.9,1.9,7.2,52,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW071,green,Aceptable
+49999119SW072,7.64,80.13,39.79,7.3,2.2,1.9,3.8,0.6,9.9,27,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW072,green,Aceptable
+49999119SW073,7.84,75.71,37.6,8.3,1.3,2,2.9,0.2,11,29,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW073,green,Aceptable
+49999119SW074,8.13,82.14,40.75,7.7,2.1,2,5,0.7,11.2,30,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW074,green,Aceptable
+49999119SW075,7.65,79.13,39.48,7.1,2,1.9,4.2,0.4,11.1,28,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW075,green,Aceptable
+49999119SW076,8.59,83.17,41.25,7.5,2.1,1.9,4.9,0.8,10.3,30,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW076,blue,Basico
+49999119SW077,8.15,84.13,42.13,7.2,1.8,1.4,6.1,0.3,11.5,29,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW077,green,Aceptable
+49999119SW079,7.88,86.73,43.07,7.7,2.2,2,4.3,0.5,11,29,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW079,green,Aceptable
+49999119SW080,7.83,97.54,48.61,11.6,1.3,2,4.8,NA,6.9,44,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW080,green,Aceptable
+49999119SW081,7.25,82.4,40.87,10.5,0.7,0.8,1.9,NA,25.1,11,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW081,green,Aceptable
+49999119SW082,7.15,135.1,66.68,17.5,1.1,1.6,2.8,NA,49.8,13,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW082,green,Aceptable
+49999119SW083,7.31,139.2,68.69,20.3,0.8,1.2,2.3,NA,41.7,19,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW083,green,Aceptable
+49999119SW084,7.76,140.9,69.56,21.3,0.9,1.2,2.8,NA,42.4,23,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW084,green,Aceptable
+49999119SW085,7.66,133.3,65.74,13.6,0.8,3.2,5.8,NA,3.7,63,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW085,green,Aceptable
+49999119SW086,7.74,45.12,22.61,6,0.5,0.4,2.2,NA,8.4,15,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW086,green,Aceptable
+49999119SW087,8.19,136,67.19,12.9,2.1,2,9.3,4.8,20,37,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW087,green,Aceptable
+49999119SW089,7.96,134.6,66.43,19.1,0.9,1.1,4.4,0.7,38.5,23,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW089,green,Aceptable
+49999119SW091,7.87,141.9,70.04,20.5,0.8,1.1,3.6,0.8,34.3,23,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW091,green,Aceptable
+49999119SW092,7.68,36.9,18.58,3.5,1,0.7,2.1,NA,1.6,17,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW092,green,Aceptable
+49999119SW093,6.76,46.23,23.15,4.8,1.4,0.9,1.6,NA,11.7,10,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW093,green,Aceptable
+49999119SW094,7.39,67.4,33.93,8.7,1.7,1,1.5,NA,18,13,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW094,green,Aceptable
+49999119SW095,7.46,59.29,29.55,6.9,1.4,1,1.7,NA,14,13,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW095,green,Aceptable
+49999119SW096,7.29,96.54,47.8,11.2,1.4,1.4,1.2,NA,30.1,10,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW096,green,Aceptable
+49999119SW097,7.44,135.8,67.35,17.3,2,2.3,2.1,0.4,40.5,16,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW097,green,Aceptable
+49999119SW098,7.35,66.69,33.18,7.4,1.4,1,1.8,NA,16,13,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW098,green,Aceptable
+49999119SW099,7.58,131.4,64.82,18.2,1.3,1.8,1.7,0.3,38.1,19,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW099,green,Aceptable
+49999119SW100,7.64,251.3,123.6,37,1.8,3.9,2.3,0.4,82.6,37,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW100,green,Aceptable
+49999119SW101,7.95,244.1,120.1,35.5,2,3.7,2.4,0.5,74.4,34,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW101,green,Aceptable
+49999119SW102,7.98,239.7,118,32.6,1.9,3.5,2.4,0.5,74,34,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW102,green,Aceptable
+49999119SW103,6.94,65.19,32.89,5.2,1.4,1.1,3.2,NA,21,7,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW103,green,Aceptable
+49999119SW104,7.55,201.9,99.45,13.4,2.2,2.1,2.8,0.4,31.8,20,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW104,green,Aceptable
+49999119SW105,8.06,205.9,101.4,19.1,2.3,3.1,3.7,0.6,36.2,32,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW105,green,Aceptable
+49999119SW106,6.21,66.85,33.14,5.3,1.9,1.2,2.6,NA,21,9,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW106,red,Acido
+49999119SW108,8.1,87.32,43.29,8.8,1.7,2.6,4.1,0.2,4.7,40,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW108,green,Aceptable
+49999119SW109,8.03,85.33,42.31,9.5,1.7,2.6,4.7,0.3,4.7,43,NA,Avenida,Hornillos Alto,Agua superficial,Quebrada,49999119SW109,green,Aceptable
+49999119SW110,8.06,132.8,65.97,13.7,2.3,2.5,9,5,19.8,40,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW110,green,Aceptable
+49999119SW111,8.37,142.2,70.18,13.5,2.2,2.3,9,5.2,19.8,40,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW111,green,Aceptable
+49999119SW112,8.21,104.3,51.6,11.1,1.8,2.9,5.5,0.5,3.8,52,NA,Avenida,Hornillos Alto,Agua superficial,Rio,49999119SW112,green,Aceptable

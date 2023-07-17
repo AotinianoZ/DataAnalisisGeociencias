@@ -1,0 +1,145 @@
+---
+title: "Parte II - B"
+subtitle: "⚔<br/>con Branext"
+author: "A.Otiniano & J.Andrade"
+institute: "Branext And Multidisciplinary Sensing, Universal Accessibility and Machine Learning Group, National University of Engineering"
+date: "2021/01/01 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    css: [xaringan-themer.css, animate.css]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_duo_accent_inverse(primary_color = "#035AA6", secondary_color = "#03A696")
+```
+
+Image credit: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sharingan_triple.svg)
+
+---
+class: center, middle
+
+# Data Science in Geology and Machine Learning
+
+### /ʃaː.'riŋ.ɡan/
+
+---
+class: inverse, center, middle
+
+# Empecemos!!
+
+---
+class: inverse, middle, center
+
+# CONEXIÓN A BASE DE DATOS
+
+---
+class: center
+
+# ¿Qué es una Base de Datos?
+
+Una base de datos es una colección organizada de información estructurada, o data, tipicamente guardad en un sistema electrónico de computación. Una database es usualmente controlado por un **database managemente system (DBMS)**. Juntos, la data y el DBMS, asociado con las aplicaciones, se conoce como un sistema de base de datos, a menudo arbreviado como *base de datos*.
+
+Hoy en día los tipos comúnes de base de datos tipicamente modelan filas y columnas en una serie de tablas para hacer precesamiento y consulta de data eficiente *tidydata*. La data puede ser fácilmente accedida, modificada, actualizada, controlada y organizda. Mayoría de bases de datos usan *structured query laguage (SQL)* para escribir y consultar data. 
+
+En ArcGis (ESRI) denominan **geodatabase** a una colecci´pn geográfica de datasets de varios tipos que tienen un sistema de folders en común, una base de datos Microsoft Access, o multiusario relacional DMBS (como Oracle, Microsoft SQL Server, PostgreSQL, Informiz, o IBM DB2).
+
+Para mayor información leer [Oracle Database](https://www.oracle.com/database/what-is-database/) y revisar diseño de geodatabase en [ArcGis Geodatabase](https://www.youtube.com/watch?v=5zUQxNDR_aw&list=LL&index=90&t=1s).
+
+---
+
+# Small Query to Consult MySQL:
+
+    Borrar de la Base de Datos:
+
+    DELETE FROM `Dom_Tipo_Peligro` WHERE `Dom_Tipo_Peligro`.`Code_TP` = 'u'  
+    AND `Dom_Tipo_Peligro`.`Code_num_TP` = 28 
+    AND `Dom_Tipo_Peligro`.`TIPO_PELIGRO` = 'WE' 
+    AND `Dom_Tipo_Peligro`.`COD_PADRE` = 'c' 
+    AND `Dom_Tipo_Peligro`.`Riesgo_Prob` IS NULL LIMIT 1
+    
+    Agregar a la Base de Datos:
+
+    INSERT INTO `Dom_Tipo_Peligro` (`Code_TP`, `Code_num_TP`,
+    `TIPO_PELIGRO`, `COD_PADRE`, `Riesgo_Prob`) 
+    VALUES ('v', '32', 'Alumnos Uni', 'e', '0.25'); 
+    
+    Actualizar una fila:
+    
+    UPDATE `Dom_Tipo_Peligro` SET `Riesgo_Prob` = '0.35' 
+    WHERE `Dom_Tipo_Peligro`.`Code_TP` = 'e' 
+    AND `Dom_Tipo_Peligro`.`Code_num_TP` = 5 
+    AND `Dom_Tipo_Peligro`.`TIPO_PELIGRO` = 'Huaicos' 
+    AND `Dom_Tipo_Peligro`.`COD_PADRE` = '' 
+    AND `Dom_Tipo_Peligro`.`Riesgo_Prob` IS NULL LIMIT 1;
+
+---
+
+# Conexión to Database in R:
+
+
+MySQL:
+
+    SG_MySQL <- dbConnect(MySQL(), user="user", password="pass", 
+                 dbname="mydb",host="localhost",client.flag=CLIENT_MULTI_STATEMENTS)
+    dbListTables(SG_MySQL)
+    yourtable <- dbReadTable(SG_MySQL,"sometable")
+    # Escribir de nuevo.
+    dbWriteTable(SG_MySQL,"yourTableinMySQL",yourtable,overwrite=T)
+    # Mirar si los argumentos están sobreescritos.
+    dbDisconnect(SG_MySQL)
+
+Debemos tener en cuenta que esta conexión está realizada para **MySQL**, existe diversos tipos de base de datos (casi en su totalidad existen librerias creadas para realizar trabajos en R por las mismas compañias de desarrollo de lenguaje de consulta de base de datos). Por ejemplo, *ORACLE* creo un paquete para poder tratar información mediante R en su propia base de datos [Running R in the Oracle Database](https://www.youtube.com/watch?v=ZdHK2BWnVD4&list=LL&index=39&t=2183s) y hasta modelos para Machine Learning [Oracle Machine Learning for R: An Introduction](https://www.youtube.com/watch?v=K6S3Za9fXFc&list=LL&index=38&t=878s). 
+
+Para más sobre base de datos Sql pueden llevar el curso básico de  [Pildoras Informaticas](https://www.youtube.com/watch?v=iOiyJgnN71c&list=PLU8oAlHdN5Bmx-LChV4K3MbHrpZKefNwn) o [php MySQL](https://www.youtube.com/watch?v=I75CUdSJifw&list=PLU8oAlHdN5BkinrODGXToK9oPAlnJxmW).
+
+---
+background-image: url(http://4.bp.blogspot.com/-u1cja5eawkU/U0REsroFeLI/AAAAAAAAhfI/wupRzDa_3AI/s1600/NAMOR_ORACLE_AVENGERS_IRON-MAN-2-3_EASTER-EGGS_.jpg)
+background-position: center
+background-size: contain
+class: left, bottom, inverse
+
+# I am  
+# Iro Man, 
+# but I am 
+# Oracle!
+
+---
+class: center
+# VAMOS A PRACTICAR!
+
+[Dar click al siguiente link con el archivo R](ConeccionBaseDatosServidor.R).
+
+---
+
+background-image: url(https://static2.bigstockphoto.com/1/9/3/large1500/391264817.jpg)
+background-size: cover
+class: left, top, inverse
+
+# Terminamos a Descansar!!!
+
+---
+class: center
+
+# Avanzando en R y Geociencias (印)
+
+Siempre Adelante
+
+![](https://upload.wikimedia.org/wikipedia/commons/7/7e/Mudra-Naruto-KageBunshin.svg)
+
+
+  
+
+
