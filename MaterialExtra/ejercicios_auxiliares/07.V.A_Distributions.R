@@ -1,7 +1,6 @@
 # Probabilidad_Variable_Aleatoria_y_Distribuciones #
-.libPaths(c("D:/R_Packages",.libPaths()))
 
-#VALORES DISCRETOS Y CONTINUOS:
+#### VALORES DISCRETOS Y CONTINUOS: ####
 
 #spike plot:
 # Muestra las probabilidades para cada valor en el rango de X como
@@ -58,7 +57,7 @@ names(ps)=as.character(seq(0,200,by=20))
 ps
 qunif(ps, min=0,max=1)
 
-#Ejemplo de distribución Binomial:
+#### distribución Binomial: ####
 
 #Lanzar una moneda 10 veces. X:numero de caras.
 #Si la moneda es justa. #X tienen una distribución binomial
@@ -86,7 +85,7 @@ points(0:10,heights,pch=16,cex=0.5)
 #Muestra de 100 que tan probable es que respondan 60% o menos.
 pbinom(60, size=100, prob=0.62)
 
-#Distribucion Exponencial: Exponential(lambda)
+#### Distribucion Exponencial: Exponential(lambda) ####
 res=rexp(50,rate=1/5)
 #boxplot:
 par(fig=c(0,1,0,0.50))
@@ -107,7 +106,7 @@ hist(res,ylim=c(0,y.max),prob=TRUE,
 curve(dexp(x,rate = 1/5),lwd=2,add=TRUE)
 rug(res)
 
-#Distribucion Normal:
+#### Distribucion Normal: ####
 #Normal(µ,σ)
 pnorm(q=1.5,mean=0, sd=1)
 pnorm(q=4.75, mean=0,sd=1/2)
@@ -122,9 +121,50 @@ pnorm(1)-pnorm(-1)
 #tres desviaciones estandar:
 diff(pnorm(c(-3,3)))
 
-#LogNormal: log(x)
+require(graphics)
 
-res=rlnorm(n=50, meanlog=0,sdlog=1)
+dnorm(0) == 1/sqrt(2*pi)
+dnorm(1) == exp(-1/2)/sqrt(2*pi)
+dnorm(1) == 1/sqrt(2*pi*exp(1))
+
+## Using "log = TRUE" for an extended range :
+par(mfrow = c(2,1))
+plot(function(x) dnorm(x, log = TRUE), -60, 50,
+     main = "log { Normal density }")
+curve(log(dnorm(x)), add = TRUE, col = "red", lwd = 2)
+mtext("dnorm(x, log=TRUE)", adj = 0)
+mtext("log(dnorm(x))", col = "red", adj = 1)
+
+
+#Ejemplo1:
+# a
+pnorm(70, mean=80, sd=10) - pnorm(60, mean=80, sd=10)
+# b 
+# media poblacional = media muestral/sqrt(n)
+
+media_nueva <- 10/sqrt(60)
+
+1 -  pnorm(90, mean = 80, sd = media_nueva)
+
+# Ejemplo:
+#a
+pnorm(30, mean = 42000, sd=12000)
+#b
+# u_tot <- ux+uy+uz
+# phi_tot <- rootsquare(phi_x^2, phi_y^2 + phi_z^2)
+u = 42000+60000+78000
+phi = sqrt(12000^2+18000^2+10000^2)
+#
+1- pnorm(120000, mean= u, sd = phi)
+#c
+# tarea
+
+# practicar de : https://r02pro.github.io/normal-distribution.html
+
+
+#### LogNormal: log(x) ####
+
+res= rlnorm(n=50, meanlog=0,sdlog=1)
 #boxplot:
 par(fig=c(0,1,0,0.5))
 boxplot(res, horizontal=TRUE, bty="n",xlab="lognormal")
