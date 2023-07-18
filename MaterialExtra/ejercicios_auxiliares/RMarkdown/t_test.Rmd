@@ -1,0 +1,149 @@
+---
+title: "T-test"
+author: "Estudiantes de UNI"
+date: "10/1/2021"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+library(plot3D)
+library(chron)
+library(psych)
+library(nortest)
+library(ggplot2)
+library(ggmap)
+library(NADA)
+library(MASS)
+library(readxl)
+library(plotly)
+library(tibble)
+library(ggridges)
+library(dplyr)
+library(ggrepel)
+library(gridExtra)
+library(ggpubr)
+library(car)
+library(plyr)
+library(ggpmisc)
+
+library(caret)
+library(mlbench)
+library(AppliedPredictiveModeling)
+library(e1071)
+library(lattice)
+library(Rcpp)
+library(corrplot)
+library(Amelia)
+library(RCurl)
+library(tidyverse)
+library(klaR)
+library(rpart)
+library(randomForest)
+library(glmnet)
+library(kernlab)
+library(C50)
+library(caretEnsemble)
+library(profvis)
+library(Cubist)
+
+
+library(knitr)
+library(knitLatex)
+library(tinytex)
+library(rmarkdown)
+```
+
+
+# T-test
+
+Ejemplo Practico:
+
+Con `Ctrl+Alt+I` se abre un nuevo R chunk (Rcode). Vamos a usar la funcion `t.test(x,y)`.
+
+```{r}
+x = rnorm(10)
+y = rnorm(10)
+ttest = t.test(x,y)
+ttest
+ts = replicate(1000, t.test(rnorm(10),rnorm(10))$p.value)
+
+#Nosotros podemos replicar (simular) 1000 veces el proceso para obtener un
+#p-valor con mas potencia.
+```
+
+```{r}
+mean(replicate(1000, t.test(rnorm(10),rnorm(10))$p.value))
+```
+
+Los grados de libertad tiene la siguiente formula $n1+n2-2$ . En nuestro calculo
+seria $$10+10-2$$, le quitamos 2 valores porque tenemos que estimar la media de
+cada seccion.
+
+
+One way:
+
+```{r}
+range(ts)
+```
+
+Se supone que es simetrica, vamos a crear algo simetrico.
+
+```{r}
+pts = seq(-4.5,4.5,length=100)
+plot(pts, dt(pts,df=18), col="red",type="l")
+#Agregar una linea para mostrar la densidad de la simulacion:
+lines(density(ts))
+
+```
+Otra forma de comparar: Q-Qplot
+
+```{r}
+qqplot(ts,rt(100,df=18))
+abline(0,1)
+```
+
+Usando la funcion cuantil:
+
+```{r}
+probs = c(.90,.95,.99)
+quantile(ts,probs)
+qt(probs,df=18)
+```
+
+T-test lo realizaremos usando el argumento `var.equal=TRUE`.
+
+```{r}
+t.test(x,y)
+t.test(x,y,var.equal = TRUE)
+```
+
+
+Probemos con la distribucion Normal:
+
+```{r}
+tps = replicate(1000, t.test(rnorm(10),rnorm(10))$p.value)
+plot(density(tps))
+#Sacamos qqplot:
+qqplot(tps,runif(1000))
+abline(0,1)
+```
+Cuantiles:
+
+```{r}
+tps = replicate(1000, t.test(rnorm(10),rnorm(10),var.equal=TRUE)$p.value)
+probs = c(.50,.70,.90,.95,.99)
+quantile(tps,probs)
+```
+
+```{r}
+tps = replicate(1000,t.test(rnorm(10),rnorm(10,sd=5),var.equal = TRUE)$p.value)
+probs = c(.50,.70,.90,.95,.99)
+quantile(tps,probs)
+```
+
+
+
+

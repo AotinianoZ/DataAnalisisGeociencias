@@ -8,11 +8,11 @@
 # Servidor con MySQL version 
 
 mycon <- dbConnect(RMySQL::MySQL(),
-                 dbname = "branextc_Geochemical",
+                 dbname = "branext_desarrollos",
                  host = "dallas166.arvixeshared.com",
                  port = 3306,
-                 user = "branextc",
-                 password = "gdhB0a2X38")
+                 user = "branext_alonso",
+                 password = "@lonso12345")
 
 mycon
 

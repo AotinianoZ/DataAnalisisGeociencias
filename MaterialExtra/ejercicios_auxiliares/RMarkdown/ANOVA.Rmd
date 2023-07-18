@@ -1,0 +1,16 @@
+---
+title: "ANOVA"
+author: "Alonso Otiniano Zavala"
+date: "17/1/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggpubr)
+library(rstatix)
+```
+
+## One-Way ANOVA test
+
