@@ -184,7 +184,7 @@ rug(res)
 #chi-distrbution
 
 
-# Trabajo:
+#### Trabajo: ####
 
 # Hacer una lista de todas las distribuciones usadas y sus aplicacioes en las geociencias:
 
