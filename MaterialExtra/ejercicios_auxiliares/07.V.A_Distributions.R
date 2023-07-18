@@ -141,9 +141,7 @@ mtext("log(dnorm(x))", col = "red", adj = 1)
 pnorm(70, mean=80, sd=10) - pnorm(60, mean=80, sd=10)
 # b 
 # media poblacional = media muestral/sqrt(n)
-
 media_nueva <- 10/sqrt(60)
-
 1 -  pnorm(90, mean = 80, sd = media_nueva)
 
 # Ejemplo:
@@ -157,8 +155,7 @@ phi = sqrt(12000^2+18000^2+10000^2)
 #
 1- pnorm(120000, mean= u, sd = phi)
 #c
-# tarea
-
+# tarea la c.
 # practicar de : https://r02pro.github.io/normal-distribution.html
 
 
@@ -187,7 +184,13 @@ rug(res)
 #chi-distrbution
 
 
+# Trabajo:
 
+# Hacer una lista de todas las distribuciones usadas y sus aplicacioes en las geociencias:
+
+# ejemplo: 
+
+# lognormal: General distribucion de elementos metalicos en aguas ... y seguir listando.
 
 
 
