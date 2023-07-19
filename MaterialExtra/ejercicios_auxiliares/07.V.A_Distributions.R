@@ -184,6 +184,18 @@ rug(res)
 #chi-distrbution
 
 
+#### Chi-cuadrado ####
+
+qchisq(p=0.05, df=12)
+qchisq(p=0.95, df=12)
+
+
+#### T-student ####
+
+
+
+
+
 #### Trabajo: ####
 
 # Hacer una lista de todas las distribuciones usadas y sus aplicacioes en las geociencias:
