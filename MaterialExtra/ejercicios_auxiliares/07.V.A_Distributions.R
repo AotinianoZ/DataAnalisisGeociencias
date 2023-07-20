@@ -467,6 +467,7 @@ data <- data.frame(x = seq(x_min, x_max, length.out = 1000))
 data$weibull_density <-
   dweibull(data$x, shape = shape_param, scale = scale_param)
 
+
 # Generate and plot the Weibull distribution using ggplot2
 ggplot(data, aes(x = x, y = weibull_density)) +
   geom_line(color = "blue", size = 1) +
