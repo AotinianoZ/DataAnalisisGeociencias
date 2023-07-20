@@ -179,6 +179,127 @@ CV <- (phi/media)*100
 
 dbinom(x = 4, size = 6, prob = 0.5)
 
+# Ejemplo2: Calcular la probabilidad de obtener como mucho cuatro caras al lanzar seis veces una moneda perfecta.
+# Nos poden P[X<=4] con -> B(6, 0.5)
+
+pbinom(q=4, size = 6, prob = 0.5)
+
+# Ejemplo3: Calcular el valor tal que P[X<=x] = 0.89, y generar 10 valores pseudoaleatorios de una B(6, 0.5)
+qbinom(p = 0.89, size = 6, 0.5) # area bajo la curva (integral de a -> b por diferencial de x)
+rbinom(n = 10, size = 6, prob = 0.5)
+
+# Ejemplo3: Supongamos que el 10% de los tubos de core en logeo son defectuosos y supongamos que # 
+# produce 15 tubos cada hora.
+# Cada tubo es independiente de los otros. Se juzga que el proceso está fuera de control cuando se producen más de
+# 4 tubos defectuosos en una hora concreta. Simular el número de tubos defectuosos producidos por la máquina en cada
+# hora a lo largo de un periodo de 24 horas y determinar si el proceso está afuera de control en algún momento.
+
+TD <- rbinom(n = 24, size = 15, prob = 0.1)
+TD
+
+which(TD > 4)
+help(any)
+any(TD>4)
+sum(TD>4)
+
+# Ejemplo4:Supongamos que en un proceso de voladura, la proporción de roca triturada es 0.15. 
+# Simular el número de rocas trituradas
+# por hora en un periodo de 24 horas si se supone que se explotan 25 unidades hora. Revisar si el número
+# de triturados exccede en alguna ocasión a 5. Repetir el procedimiento con proporciones 0.20 y 0.25.
+
+D <- rbinom(n = 24, size = 25, prob = 0.15)
+D
+id <- which(D>5)
+D[id]
+any(D>5)
+sum(D>5)
+
+rbinom(n = 24, size = 25, prob = 0.2)
+rbinom(n = 24, size = 25, prob = 0.25)
+
+# Ejemplo 5: Usar simulación para estimar la media y la varianza de una variable aleatoria B(18, 0.76) y
+# comparar dichos valores con los teóricos.
+
+Bi <- rbinom(n = 100, size = 18, prob = 0.76)
+mean(Bi)
+var(Bi)
+
+mean_t <- 18*0.76
+var_t <- 18*0.76*(1-0.76)
+
+# Adicional: Metodo de inversion de la funcion distribucion Binomial
+
+ranbin <- function(n, size, prob){
+  cumbinom <- pbinom(0:(size-1), size, prob)
+  singlenumber <- function(){
+    x <- runif(1)
+    N <- sum(x <- cumbinom)
+  }
+  replicate(n, singlenumber())
+}
+
+# Ejemplo: Usar ranbin() para similar vectores de longitud 1000, 10000 y 1000000 de una distribucion
+# B(10, 0.5). Usar system.time() para compara tiempo de ejecucion entre simulaciones.
+
+system.time(expr = ranbin(n = 100, size = 10, prob = 0.5))
+system.time(expr = ranbin(n = 10000, size = 10, prob = 0.5))
+system.time(expr = ranbin(n = 1000000, size = 10, prob = 0.5))
+
+# ¿Es importante el tiempo de procesamiento en la simulación?
+
+#### Distribucion Poisson: ####
+
+# Ejemplo 1: Las perforaciones de un taladro se hacen a arazón de 4 metros por cada 5 minutos.
+# Si se elige al azar en un intervalo de 2 minutos, hallar la probabilidad que se taladro al menos 2m de perforacion.
+
+ # P[X>=2] = 1 - P[X<2]
+
+1 - (dpois(x = 0, lambda = 1.6) + dpois(x = 1, lambda = 1.6))
+
+# Forma 2:
+ppois(q = 1, lambda = 1.6, lower.tail = FALSE)
+
+
+# Ejemplo2: Suponga que el 5% de las rocas de la Fm. Ananea contienen oro. Si se elige al azar y con reemplazo
+# 90 rocas, hallar la probabilidad de que en al menos 3 rocas encuentren oro.
+
+
+ppois(q = 2, lambda = 4.5, lower.tail = FALSE)
+
+#### Distribucion Geometrica: ####
+
+# Ejemplo1: Suponga que el mejor geologo del mundo tiene una probabilidad de 0.04 de no encontrar un yacimiento (fallar)
+# ,y que cuando ello ocurre es necesario reemplazarlo por uno nuevo. Determinar la media y el coeficiente de variabilidad
+# del número de veces que puede ser usado el geologo para descubrir yacimientos, ademas del coeficiente de variacion.
+
+mean_g <- 1/0.04
+var_g <- (1-0.04)/(0.04^2)
+cv <- (sqrt(var_g)/mean_g)*100
+
+# Calcule la probabilidad de que en 10 yacimientos el geologo falle.
+
+dgeom(x = 10, prob = 0.04)
+
+
+#### Distribucion Hipergeometrica: ####
+
+#### Distribucion Cauchy ####
+
+# Ver:
+# https://www.vrcbuzz.com/cauchy-distribution-probabilities-using-r/
+
+#### Distribucion Uniforme: ####
+
+
+
+
+
+
+
+
+
+
+
 
 
 
