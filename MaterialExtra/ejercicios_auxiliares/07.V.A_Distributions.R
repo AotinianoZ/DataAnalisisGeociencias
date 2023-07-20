@@ -1,8 +1,85 @@
 # Probabilidad_Variable_Aleatoria_y_Distribuciones #
 
-#### VALORES DISCRETOS Y CONTINUOS: ####
+#### Generacion de numeros aleatorios y toma de muestra aleatoria ####
 
-#spike plot:
+# Generdor aleatorio por: método de congruencia multiplicativo
+
+# xn = 171xn-1 (mod 30269)
+# un = xn/30269
+# semilla 27218
+
+random.number <- numeric(50)
+random.seed <- 27218
+for (j in 1:50){
+  # construimos el vector de random.number elemento a elemento
+  random.seed <- (171*random.seed) %% 30269
+  random.number[j] <- random.seed/30269
+}
+
+random.number
+plot(random.number)
+
+# Otra forma
+
+x <- numeric(50)
+semilla <- 27218
+x[1] = (171*semilla) %% 30269
+for (i in 2:50){x[i] = (171*x[i-1]) %% 30269}
+NumerosAleatorios <- x/30269
+NumerosAleatorios
+plot(NumerosAleatorios)
+
+# Generdor aleatorio por: método de congruencia multiplicativo 2
+
+# xn = 69069xn-1 (mod 2^37)
+# un = xn/(2^37)
+
+random.number <- numeric(50)
+random.seed <- 1
+for (j in 1:50){
+  random.seed <- (69069*random.seed) %% (2^(37))
+  random.number[j] <- random.seed/(2^(37))
+}
+random.number
+plot(random.number)
+
+# Toma de muestra aleatoria 
+?sample
+sample(c(3,5,7), size = 2, replace = FALSE)
+sample(c(3,5,7), size = 2, replace = TRUE)
+
+# Ejemplo1: Generar 50 números pseudoaleatorios del 1 al 100, sin y con reemplazo.
+sample(1:100, size= 50, replace = FALSE)
+sample(1:100, size= 50, replace = TRUE)
+
+# Ejemplo2: Simular el lanzamiento de un dado
+sample(1:6, 1)
+
+# Ejemplo3: Simular el lanzamiento de cuatro dados o de un mismo dado cuatro veces
+sample(1:6, 4, replace = TRUE)
+
+# Ejemplo4: Simular la distribución suma de los números que salen al lanzar cuatro dados
+
+set.seed(111)
+t <- sapply(1:10000, function(x){sum(sample(1:6, 4, replace = TRUE))})
+table(t)
+plot(table(t))
+barplot(table(t))
+
+# Ejemplo5: Supongamos una urna con 3 bolas blancas y 7 negras, simular
+# la extracción de una bola (asignar codigo binario, 1 a blanca y 0 a negra)
+
+sample(c(1,0), 1, prob = c(0.3, 0.7))
+
+# Si queremos simular 8 extracciones con reemplazo:
+sample(c(1,0), size = 8, replace = TRUE, prob = c(0.3, 0.7))
+
+
+#### Distribuciones de variables aleatorias discretas y continuas: ####
+
+# Package stats (principal paquete a usar)
+
+# spike plot:
 # Muestra las probabilidades para cada valor en el rango de X como
 # un "spike", enfatizando lo discreto de la distrubción.
 
@@ -25,7 +102,7 @@ sample (1:6,size=10, replace=TRUE) #lanzar un
 #dado 10 veces.
 #suma de lanzar el dado 10 veces
 sample(1:6,size=10,replace=TRUE)+ 
-  sample(1:6,size=10,replace=TRUE)
+sample(1:6,size=10,replace=TRUE)
 #Asumir que 10000 personas se les pregunta
 #si les gusta comer pollo o no y 6200 dicen si.
 #Luego si elegimos una muestra de 10:
@@ -40,7 +117,7 @@ sample(0:1, size=10, replace=T, prob=c(1-.62,.62))
 # c.d.f:cummulative density function
 
 # q: retorna los cuantiles.
-# r: retorna una muestra aleatoria desde la distribucion.
+# r: retorna una muestra aleatoria desde la distribucion = Area bajo la curva
 
 #Cada familia de distribución tiene sus parámetros pero
 # las funciones son similares en funcionamiento.
@@ -55,9 +132,8 @@ runif(n=10,min=0,max=10)
 ps<-seq(0,2,by=0.2)
 names(ps)=as.character(seq(0,200,by=20))
 ps
-qunif(ps, min=0,max=1)
 
-#### distribución Binomial: ####
+#### Distribución Binomial: ####
 
 #Lanzar una moneda 10 veces. X:numero de caras.
 #Si la moneda es justa. #X tienen una distribución binomial
@@ -65,12 +141,12 @@ qunif(ps, min=0,max=1)
 # La probabilidad que X=5
 choose(10,5)*(1/2)^5*(1/2)^(10-5)
 # usando d function
-dbinom(5,size=10, prob=1/2)
+dbinom(5, size=10, prob=1/2)
 #La probabilidad de obtener 6 o menos caras
 sum(dbinom(0:6,size=10,prob=1/2))
 
 #Spike plot producido por binomial:
-heights=dbinom(0:10, size=10,prob=1/2)
+heights=dbinom(0:10, size=10, prob=1/2)
 plot(0:10,heights,
      type="h",
      main="Spike plot de X",xlab="k",ylab="p.d.f")
@@ -84,6 +160,27 @@ points(0:10,heights,pch=16,cex=0.5)
 #Si la población favorable que eligió si es 62%,calcule de una
 #Muestra de 100 que tan probable es que respondan 60% o menos.
 pbinom(60, size=100, prob=0.62)
+
+# Ejemplo de Diapositivas:
+# El 10% de fragmentos de roca obtenidos por un taladro son defectuosos (polvo).
+# Si elige una muestra aleatoria con reemplazo de 6 articulos y se define la variabl X como
+# el numero de articulos defectuosos elegidos.
+# a) Determinar la probabilidad que al menos un framento sea defectuoso
+ # Nos piden P[X>=1] = 1 - P[X<1] = 1 - P[X=0]
+1 - dbinom(x = 0, size = 6, prob = 0.1)
+
+# b) Hallar el coeficiente de variabilidad
+media <- (6)*(0.1)  # ux = n*pi
+phi <- sqrt((6)*(0.1)*(1-0.1))  # phi^2 = n*pi*(1-pi)
+CV <- (phi/media)*100
+
+# Ejemplo1: Calcular la probabilidad de obtener cuatro caras al lanzar seis veces una 
+# moneda perfecta
+
+dbinom(x = 4, size = 6, prob = 0.5)
+
+
+
 
 #### Distribucion Exponencial: Exponential(lambda) ####
 res=rexp(50,rate=1/5)
