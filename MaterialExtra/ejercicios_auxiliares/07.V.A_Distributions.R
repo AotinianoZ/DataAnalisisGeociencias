@@ -339,8 +339,17 @@ hist(res,ylim=c(0,y.max),prob=TRUE,
 curve(dexp(x,rate = 1/5),lwd=2,add=TRUE)
 rug(res)
 
+# Suponga que el tiempo de duración de un articulo (horas) es una variable con valor beta  = 0.5
+# y sigue una distribucion exponencial. Calcular la probabilidad de que un articulo elegido al azar tenga
+# un tiempo de vida mayor a 3h.
+
+ # P[X>3]
+
+pexp(q = 3, rate = 0.5, lower.tail = FALSE)
+
 
 #### Distribucion Normal: ####
+
 #Normal(µ,σ)
 pnorm(q=1.5,mean=0, sd=1)
 pnorm(q=4.75, mean=0,sd=1/2)
@@ -393,6 +402,23 @@ phi = sqrt(12000^2+18000^2+10000^2)
 # practicar de : https://r02pro.github.io/normal-distribution.html
 
 
+
+# Dist. normal estandar
+# Suponga que los gastos semanales de movilidad realizados por los mineros
+# de Antamina tienen una distribucion normal con una media de 50 nuevos soles
+# y una desviación de 12 nuevos soles. Si se elige al azar un habitante de dicho distrito minero,
+# halle la probabilidad que su gasto semanal en movilidada sea mayor de 58 nuevos soles.
+
+ # X = vac ~ N(50, 12^2)
+ # P[X>58] = ??
+
+# Usamos transformacion estandar:
+# Z = (x-u)/phi ≈ N(0, 1) -> uz = 0 ; phi_z^2=1
+
+# P[X>58] = P[Z>0.67] = 1 - P[Z<=0.67]  
+
+1 - pnorm(q = 0.67)
+
 #### LogNormal: log(x) ####
 
 res= rlnorm(n=50, meanlog=0,sdlog=1)
@@ -414,11 +440,73 @@ curve(dlnorm(x,meanlog=0,sdlog=1),
       add=TRUE)
 rug(res)
 
-#t-distribution, F-distribution and
-#chi-distrbution
+#### Distribucion Weibull ####
+
+# Set shape and scale parameters for the Weibull distribution
+shape_param <- 2
+scale_param <- 5
+x_min <- 0
+x_max <- 20
+# Plot the Weibull distribution using the curve() function
+curve(
+  dweibull(x, shape = shape_param, scale = scale_param),
+  from = x_min,
+  to = x_max,
+  main = "Weibull Distribution",
+  xlab = "x",
+  ylab = "Density",
+  col = "blue",
+  lwd = 2
+)
+
+# Create a data frame with a sequence of x values
+data <- data.frame(x = seq(x_min, x_max, length.out = 1000))
+
+# Add a column for the probability density 
+# function of the Weibull distribution
+data$weibull_density <-
+  dweibull(data$x, shape = shape_param, scale = scale_param)
+
+# Generate and plot the Weibull distribution using ggplot2
+ggplot(data, aes(x = x, y = weibull_density)) +
+  geom_line(color = "blue", size = 1) +
+  ggtitle("Weibull Distribution") +
+  xlab("x") +
+  ylab("Density") +
+  theme_minimal()
+
+library(ggplot2)
+# Set seed for reproducibility
+set.seed(42)
+# Generate random numbers from Weibull distribution
+shape <- 2
+scale <- 1
+n <- 1000
+weibull_sample <- rweibull(n, shape, scale)
+# Create a data frame with the Weibull sample
+weibull_data <- data.frame(values = weibull_sample)
+# Plot the Weibull distribution using ggplot2
+ggplot(weibull_data, aes(x = values)) +
+  geom_histogram(aes(y = ..density..),
+                 bins = 30,
+                 color = "black",
+                 fill = "lightblue") +
+  labs(title = "Weibull Distribution",
+       x = "Values",
+       y = "Density") +
+  theme_minimal()
+
+# Ver!!
+
+# https://www.alphacodingskills.com/r/r-weibull-distribution.php
+
 
 
 #### Chi-cuadrado ####
+
+# Ejemplo1: Teoria
+
+# gl = 12 y P[a<=X<=b] = 0.90 , P[X<=a] = 0.05
 
 qchisq(p=0.05, df=12)
 qchisq(p=0.95, df=12)
@@ -426,9 +514,23 @@ qchisq(p=0.95, df=12)
 
 #### T-student ####
 
+# Ejemplo1: Teoria
 
+pt(q = 2.228, df = 10, lower.tail = TRUE) - pt(q = -1.812, df = 10, lower.tail = TRUE) 
 
+### Fisher ####
 
+set.seed(53535)   # Set seed for reproducibility
+N <- 10000  
+y_rf <- rf(N, df1 = 3, df2 = 5)          # Draw N F-distributed values
+y_rf 
+
+hist(y_rf,                            # Plot of randomly drawn f density
+     breaks = 500,
+     main = "Random Numbers Generated According to F Distribution",
+     xlim = c(0, 15))
+
+qf(.95, df1=5, df2=2) 
 
 #### Trabajo: ####
 
