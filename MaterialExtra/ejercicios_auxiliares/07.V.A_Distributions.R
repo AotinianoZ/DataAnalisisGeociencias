@@ -283,12 +283,26 @@ dgeom(x = 10, prob = 0.04)
 
 #### Distribucion Hipergeometrica: ####
 
+# Ejemplo 1: Suponga que en un proceso de control de calidad de base de datos geológico se inspecciona 10 tablas
+# de base de datos, de los cuales 4 son defectuosos. Si se eligen 5 base de datos al azar y sin reemplazo
+# hallar la probabilidad de elegir no mas de 2 bases de datos defectuosos.
+
+
+hiper <- phyper(q = 1, m = 4, n = 6, k = 5, lower.tail = TRUE) # P[X<=1]
+
+# generando simulacion para aproximaciones.
+hiper_random <- rhyper(nn = 100, m = 4, n = 6, k = 5)
+mean(hiper_random)
+var(hiper_random)
+
 #### Distribucion Cauchy ####
 
 # Ver:
 # https://www.vrcbuzz.com/cauchy-distribution-probabilities-using-r/
 
-#### Distribucion Uniforme: ####
+
+
+#### Distribucion Uniforme (VAC): ####
 
 
 
@@ -304,6 +318,7 @@ dgeom(x = 10, prob = 0.04)
 
 
 #### Distribucion Exponencial: Exponential(lambda) ####
+
 res=rexp(50,rate=1/5)
 #boxplot:
 par(fig=c(0,1,0,0.50))
@@ -323,6 +338,7 @@ hist(res,ylim=c(0,y.max),prob=TRUE,
      main="", col=gray(0.9))
 curve(dexp(x,rate = 1/5),lwd=2,add=TRUE)
 rug(res)
+
 
 #### Distribucion Normal: ####
 #Normal(µ,σ)
