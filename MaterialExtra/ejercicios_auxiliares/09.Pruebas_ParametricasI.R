@@ -1,5 +1,3 @@
-.libPaths(c("D:/R_Packages",.libPaths()))
-
 #### Librerias ####
 library(plot3D)
 library(chron)
@@ -52,22 +50,29 @@ library(rmarkdown)
 
 #Calculo de valor de chi-cuadrado:
 
-qchisq(0.96,df=5)
-qchisq(0.95,df=4)
+qchisq(0.96, df=5)
+qchisq(0.95, df=4)
 qchisq(0.95, df=100000)
 
 
-#Example 1: Case equal proportions (distribución uniforme)
+# Ejemplo1: Case equal proportions (distribución uniforme)
 
-valores<-c(1:6)
-observed<-c(57,46,68,52,72,65)
-uniform<-rep(1/6,6)
+valores <- c(1:6)
+observed <- c(57,46,68,52,72,65)
+uniform <- rep(1/6,6)
 
-test<-chisq.test(observed,p=uniform)
+test <- chisq.test(observed,p=uniform)
 
-# p-valor<alpha (Se RH0)
+# chi-cuadrado_c = 8.3667 = formula 
+qchisq(0.96, df=5) # calculo del valor critico
+1-pchisq(q = 8.3667, df = 5) # calculo del p-valor
+
+
+# p-valor < alpha (Se RH0)
 # alpha=0.04 y p-valor=0.1372
-# Conclusion: No se RH0.
+# Conclusion: Con un NS 0.004, no puedo afirmar que los datos de la muestra 
+# se ajustan a una distribucion distinta a la uniforme (o que el dado evidencia
+# estar desequilibrado).
 
 test$statistic
 test$parameter
@@ -103,7 +108,7 @@ barplot(Matriz,
         xlab="Dice Value",
         ylab="Foraging Proportion")
 
-#Ejemplo 2: Caso de proporciones distintas.
+#Ejemplo 2: Caso de proporciones distintas )Resolucio en clase de alumnos)
 
 valores_name<-c("ABC","CBS","NBC","Otros")
 valores<-c(1:4)
@@ -135,7 +140,8 @@ test<-chisq.test(observed, p=dif_prop)
 #Se rechaza que los datos de la muestra se distribuyen en proporciones
 #2:4:6:5:3 con una confiabilidad de 95%.
 
-#Poisson ejemplo (ratios):
+
+# Ejemplo 4: Poisson (ratios):
 
 Solicitudes<-c(0,1,2,3,4,5)
 Dias<-c(50,77,81,48,31,13)
@@ -146,7 +152,8 @@ table(x)
 #Debemos calcular por aproximacion de la media de la distribucion 
 #muestral:
 
-mean(x) #Significa que estimo un parametro de la distribucion poisson.
+mean(x) #Significa que estimo un parametro de la distribucion poisson
+# el cual es lambda λ; en este caso x̄=λ.
 
 #Calcular para cada valor 0,1,2,3,4,5 la probabilida teorica 
 #asumiendo la distribucion Poisson.
@@ -156,14 +163,29 @@ comp = 1-sum(probs)
 comp
 
 #Sumarle el complemento al valor 5 (que ocupa la posicion 6):
-probs[6] = probs[6]+comp
+probs[6] = probs[6] + comp
 probs
 
-test<-chisq.test(x=c(50,77,81,48,31,13), p=c(probs))
-test_mej<-chisq.test(x=c(50,77,81,48,31,13), p=c(probs),
-                     simulate.p.value = TRUE)
+test <- chisq.test(x=c(50,77,81,48,31,13), p=c(probs))
+test
 
-####Independencia de Variables (chi-square) cualitativa####
+test_mej <- chisq.test(x=c(50,77,81,48,31,13), p=c(probs),
+                       simulate.p.value = TRUE)
+
+# calculo del valor critico
+qchisq(p = 0.95, df = 4)
+
+# calculo del p-valor
+1 - pchisq(q = 9.48773, df = 4)
+
+# VC > EP: RH0
+# p-valor < alpha: RH0
+
+# Conclusion: Con un NS 0.5, no se puede afirmar que las solicitudes de credito
+# diarias se ajustan a una distribucion diferente a la de Poisson.
+
+
+####Independencia de Variables (chi-square) cualitativa ####
 
 Deficiente<-c(51,254,391,340)
 Buena<-c(103,240,153,119)
@@ -238,5 +260,11 @@ contrib<-100*chisq$residuals^2/chisq$statistic
 round(contrib,3)
 #Visualizar la contribucion:
 corrplot(contrib, is.cor=FALSE)
+
+#### Prueba de Homogenidad de Proporciones ####
+
+
+
+
 
 

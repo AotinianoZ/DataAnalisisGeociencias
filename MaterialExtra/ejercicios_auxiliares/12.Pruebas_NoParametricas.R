@@ -1,4 +1,3 @@
-.libPaths(c("D:/R_Packages",.libPaths()))
 
 ####WILCOXON####
 library(plotly)
