@@ -87,7 +87,7 @@ summary(my_data$weight)
 
 library(ggpubr)
 ggboxplot(my_data$weight, 
-          ylab = "Weight (g)", xlab = FALSE,
+          ylab = "Weight (kg)", xlab = FALSE,
           ggtheme = theme_minimal())
 
 #¿Es la muestra grande? - No, porque n < 30.
@@ -107,7 +107,7 @@ shapiro.test(my_data$weight)
 #en otras palabras asumimos la normalidad.
 
 library("ggpubr")
-ggqqplot(my_data$weight, ylab = "Men's weight",
+ggqqplot(my_data$weight, ylab = "Rock's weight",
          ggtheme = theme_minimal())
 
 #Del plot de normalidad se concluye que la data proviene de una 
@@ -123,18 +123,21 @@ res <- t.test(my_data$weight, mu = 25)
 # Ver resultados
 res 
 
+pt(q = 0.975, df = 9)
+
 #Si queremos que sea menor que 25 (one tailed test) usamos "less"
 t.test(my_data$weight, mu=25, alternative = "less")
 
 #Si queremos que sea mayor que 25 (one tailed test) usamos "greater"
+
 t.test(my_data$weight, mu=25, alternative = "greater")
 
 #Resultados
 
 #The p-value of the test is 7.95310^{-6}, 
-#which is less than the significance level alpha = 0.05.
-#We can conclude that the mean weight of the mice is 
-#significantly different from 25g with a p-value = 7.95310^{-6}
+# which is less than the significance level alpha = 0.05.
+# Podemos concluir que la media de pesos de roca que pasa a dilucion
+# es significativamente diferente de 25kg con un p-value = 7.95310^{-6}
 
 # printing the p-value
 res$p.value
@@ -182,11 +185,9 @@ ggboxplot(my_data, x = "group", y = "weight",
 #2. La data de los dos grupos viene de una distribucion normal:
 
 # Shapiro-Wilk test de normalidad para pesos de banda1
-
 with(my_data, shapiro.test(weight[group == "Banda2"]))# p = 0.11
 
 # Shapiro-Wilk test de normalidad para pesos de banda2
-
 with(my_data, shapiro.test(weight[group == "Banda1"])) # p = 0.61
 
 #Como podemos ver las salidas de los p-valor son mayores que 0.05 implica que la 
@@ -297,9 +298,7 @@ shapiro.test(d) # => p-value = 0.6141
 #diferencias  (d) no son significativamente diferentes de la normal. En otras palabras, podemos asumir
 #normalidad.
 
-
 #Computar t-test metodo 1:
-
 res <- t.test(before, after, paired = TRUE)
 res
 

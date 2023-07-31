@@ -1,5 +1,3 @@
-.libPaths(c("D:/R_Packages",.libPaths()))
-
 ####Librerias####
 library(tidyverse)
 library(ggpubr)

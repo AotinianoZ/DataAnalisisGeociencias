@@ -219,8 +219,17 @@ library(vcd)
 
 assoc(head(dt,5),shade=TRUE,las3)
 
-chisq<-chisq.test(Data)
+chisq <- chisq.test(Data)
 chisq
+
+qchisq(p = 0.97, df = 6)
+
+
+pchisq(q = 0.97, df = 6)
+
+
+# RHO: chisq > qchisq ( estadistico de prueba > valor critico)
+# p-valor (0.01256313) <0.05.
 
 #Las filas y las columnas de las variables presentan
 #asociacion significativa p-valor<-2.2e-16
@@ -260,6 +269,12 @@ contrib<-100*chisq$residuals^2/chisq$statistic
 round(contrib,3)
 #Visualizar la contribucion:
 corrplot(contrib, is.cor=FALSE)
+
+
+# Ejemplo 6:
+
+# Tarea
+
 
 #### Prueba de Homogenidad de Proporciones ####
 
