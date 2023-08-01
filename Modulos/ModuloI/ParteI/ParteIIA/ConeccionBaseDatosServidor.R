@@ -8,7 +8,7 @@
 # Servidor con MySQL version 
 
 mycon <- dbConnect(RMySQL::MySQL(),
-                 dbname = "branext_desarrollos",
+                 dbname = "branext_test",
                  host = "dallas166.arvixeshared.com",
                  port = 3306,
                  user = "branext_alonso",
@@ -51,38 +51,38 @@ DBI::dbGetQuery(con, "EXEC  [Employee Sales by Country]
 
 df <- DBI::dbReadTable(mycon, "intrusivo")
 
-sdf <- readxl::read_xlsx(path="ParteI/ParteIIA/GQ_Colca_corregido2.xlsx", col_names = TRUE)
+sdf <- readxl::read_xlsx(path="Modulos/ModuloI/ParteI/ParteIIA/GQ_Colca_corregido2.xlsx", col_names = TRUE)
 
 #### Analisis exploratorio de datos (AED) basico #### 
 
-View(df)
-str(df)
-character_vals <- lapply(df,class)=="character"
-df[ ,character_vals] <- lapply(df[ ,character_vals],as.factor)
-colnames(df)
-str(df)
-head(df)
-tail(df)
-summary(df)
+View(sdf)
+str(sdf)
+character_vals <- lapply(sdf,class)=="character"
+sdf[ ,character_vals] <- lapply(sdf[ ,character_vals],as.factor)
+colnames(sdf)
+str(sdf)
+head(sdf)
+tail(sdf)
+summary(sdf)
 
 #### Cobre:
 
-hist(df$Cu_ppm)
-plot(density(df$Cu_ppm))
-boxplot(df$Cu_ppm)
-plot(ecdf(df$Cu_ppm))
+hist(sdf$Cu_ppm)
+plot(density(sdf$Cu_ppm))
+boxplot(sdf$Cu_ppm)
+plot(ecdf(sdf$Cu_ppm))
 
 #### Oro:
 
-hist(df$Au_ppb_com)
-plot(density(df$Au_ppb_com))
-boxplot(df$Au_ppb_com)
-plot(ecdf(df$Au_ppb_com))
+hist(sdf$Au_ppb_com)
+plot(density(sdf$Au_ppb_com))
+boxplot(sdf$Au_ppb_com)
+plot(ecdf(sdf$Au_ppb_com))
 
 
 ## Bivariante Plot:
 
-ggplotly(ggplot(data=df, 
+ggplotly(ggplot(data=sdf, 
                 aes(x=Cu_ppm, y=Au_ppb_com, color= ROCA))+
   geom_point(size=5))
 
@@ -90,7 +90,7 @@ ggplotly(ggplot(data=df,
 
 # Cluterizacion de Variables continuas:
 
-df2 <- df[ ,9:ncol(df)]
+df2 <- sdf[ ,9:ncol(sdf)]
 pairs(df2[ ,1:10])
 
 
@@ -150,7 +150,7 @@ fviz_cluster(km.res, data = kmedias)
 
 #### DEMO Real Time Table ####
 
-df <- DBI::dbReadTable(mycon, "DIP_Strong")
+df <- DBI::dbReadTable(mycon, "gq_colca_corregido2")
 
 ui <- fluidPage(
   numericInput("nrows", "Enter the number of rows to display:", 5),
@@ -161,14 +161,14 @@ server <- function(input, output, session) {
   output$tbl <- renderTable({
     conn <- dbConnect(
       drv = RMySQL::MySQL(),
-      dbname = "branextc_Geochemical",
+      dbname = "branext_test",
       host = "dallas166.arvixeshared.com",
       port = 3306,
-      username = "branextc",
-      password = "gdhB0a2X38")
+      username = "branext_alonso",
+      password = "@lonso12345")
     on.exit(dbDisconnect(conn), add = TRUE)
     dbGetQuery(conn,
-               "SELECT * FROM DIP_Strong", n = input$nrows)
+               "SELECT * FROM gq_colca_corregido2", n = input$nrows)
   })
 }
 
