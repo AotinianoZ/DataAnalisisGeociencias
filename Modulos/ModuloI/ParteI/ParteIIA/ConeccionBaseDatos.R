@@ -68,7 +68,13 @@ server <- function(input, output, session) {
 
 shinyApp(ui,server)
 
-
+#### Insert a new value:
+# SET IDENTITY_INSERT dbo.Alteraciones ON
+# INSERT INTO dbo.Alteraciones
+# (IDAlteracion, NAlteracion, SAlteracion)
+# VALUES
+# (55, 'Silice margosa', 'SMP');
+# SET IDENTITY_INSERT dbo.Alteraciones OFF
 
 
 
