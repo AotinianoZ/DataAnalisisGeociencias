@@ -1,4 +1,3 @@
-
 ####WILCOXON####
 library(plotly)
 library(ggplot2)
@@ -61,7 +60,6 @@ my_data <- data.frame(
   weight = c(women_weight,  men_weight)
 )
 
-
 #Queremos saber si la mediana de los pesos de mujeres difiere de la mediana de los pesos de hombres.
 
 print(my_data)
@@ -107,14 +105,14 @@ res$p.value
 
 # El p-valor del test es 0.02712 el cual es menor que el nivel
 # de significancia alfa=0.05. Nosotros podemos concluir que
-# la mediana del peso es significantemente diferente de la
-# mediana del peso con un p-valor = 0.02712.
+# la mediana del peso de hombres es significantemente diferente de la
+# mediana del peso de mujeres con un p-valor = 0.02712.
 
 
 # Nota:
 
 # Si quieres ver el test si la mediana del peso  de hombres es menor que
-# la mediana de hombres:
+# la mediana de mujeres:
 
 wilcox.test(weight ~ group, data = my_data,exact = FALSE, alternative = "less")
 
