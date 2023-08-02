@@ -131,7 +131,7 @@ ggplotly(ggplot(data=data_final, aes(x=Au_ppb_com, y =Cu_ppm, shape=clust, color
 
 ###  CLUSTER ALGORITMOS
 
-df2 <- df[ ,9:ncol(df)]
+df2 <- sdf[ ,9:ncol(sdf)]
 pairs(df2[ ,1:10])
 
 

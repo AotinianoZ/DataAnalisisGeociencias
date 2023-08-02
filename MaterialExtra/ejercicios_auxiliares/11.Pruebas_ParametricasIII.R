@@ -26,7 +26,7 @@ levels(my_data$group)
 
 #Si los niveles no están autimaticamente en el orden correcto, reordenar:
 
-my_data$group<-ordered(my_data$group,
+my_data$group <- ordered(my_data$group,
                        levels=c("ctrl","trt1","trt2"))
 
 #Computamos el sumario estadistico por grupos - cantidad, media, sd:

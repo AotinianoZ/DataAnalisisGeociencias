@@ -1,5 +1,3 @@
-.libPaths(c("D:/R_Packages",.libPaths()))
-
 install.packages("MASS") 
 install.packages("NADA")   #Nondetects and Data Analysis for Enviromental Data.
 install.packages("ggmap")  #Spatial Visualization with ggplot2.
@@ -21,7 +19,7 @@ library(nortest)
 library(readxl)
 library(MASS)
 
-EHA_D50=read_xlsx("EHA_D50.xlsx", col_names = TRUE)
+EHA_D50=read_xlsx("Modulos/ModuloI/ParteII/B/data_compilada/EHA_D50.xlsx", col_names = TRUE)
 View(EHA_D50)
 
 
@@ -34,7 +32,7 @@ View(EHA_D50)
 View(EHA_D50) #Poner cada vez que se corre una linea por se el codigo complejo.
 
 #Preparando la data para analisis:
-val0<- "< 0.003"
+val0 <- "< 0.003"
 EHA_D50$var0<- EHA_D50$Al_dis
 EHA_D50$ND_var0<- rep(0, length(EHA_D50$var0))
 indcero0<-which(EHA_D50$var0==val0)
