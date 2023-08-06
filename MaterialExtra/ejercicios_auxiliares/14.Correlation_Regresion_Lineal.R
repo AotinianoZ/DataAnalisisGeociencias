@@ -1,6 +1,4 @@
-.libPaths(c("D:/R_Packages",.libPaths()))
-
-grasas<-read.table("data/age_weight_fat.txt", header = TRUE)
+grasas <- read.table("MaterialExtra/ejercicios_auxiliares/data/age_weight_fat.txt", header = TRUE)
 View(grasas)
 colnames(grasas)
 length(grasas)
@@ -23,11 +21,50 @@ plot(grasas$peso)
 id<-which(grasas$peso<31)
 View(grasas[id, ])
 
-correl<-cor(grasas, y = NULL, use = "everything",method = c("pearson"))
+correl <- cor(grasas, y = NULL, use = "everything",method = c("pearson"))
 
 #Plot de la matriz de correlación
 library(corrplot)
 corrplot(correl, method = "circle", order="hclust")
+
+
+cor.test(x = grasas$peso, y = grasas$edad, method = "pearson")
+
+# Verificacion de Fisher
+# ¿puede esta correlacion deberse a errores aleatorios o ser espurea?
+# ¿Puede que los datos no excluyen que la poblacion tenga una correlacion alta?
+
+# 1) calculamos r
+correlacion <- cor(x = grasas$peso, y = grasas$edad, method = "pearson")
+
+# Transformada de Fisher ZFisher = 0.5ln(1+r/1-r)
+# phi_Fisher = sqrt(1/n-3)
+
+Zfisher = 0.5*log((1+correlacion)/(1-correlacion))
+phi_Fisher = sqrt(1/22)
+
+Zfisher
+
+# correlacion fuese 0
+
+Zfisher_null = 0
+
+z_fisher = (0.24-0)/phi_Fisher
+
+
+# 2) verificamos si la correlacion es alta
+ 
+# Intervalo de confianza (95%) poblacional 
+# IC = ZFisher(r) +- 1.96*phi_Fisher
+
+IC_low = Zfisher - phi_Fisher
+IC_upper = Zfisher + phi_Fisher
+
+phi_minus = (exp(2*IC_low)-1)/(exp(2*IC_low)+1) # coeficiente cor pobla min
+
+phi_max = (exp(2*IC_upper)-1)/(exp(2*IC_upper)+1) # coeficiente cor pobla max
+
+# Indica que la correlacion poblacional va de 0.0316 hasta 0.458
 
 ####Regresion Lineal####
 
@@ -38,6 +75,7 @@ corrplot(correl, method = "circle", order="hclust")
 # y ~ x : y <- variable dependiente
 #         x <- variable independiente
 regresion <- lm(grasas ~ edad, data = grasas)
+summary(regresion)
 regresion
 regresion$coefficients
 regresion$residuals
