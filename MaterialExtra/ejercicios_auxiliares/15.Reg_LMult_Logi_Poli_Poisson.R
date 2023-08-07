@@ -97,11 +97,11 @@ df_nuevo
 # Conjunto de datos de Kaggle
 # Para este ejemplo se han seleccionado 200 registros:
 
-datos<-read.csv("data/HumanResourcesAnalytics.csv", header = TRUE)
+datos<-read.csv("MaterialExtra/ejercicios_auxiliares/data/HumanResourcesAnalytics.csv", header = TRUE)
 str(datos)
-muestra<-dim(datos)[1]
+muestra <- dim(datos)[1]
 
-datos<-datos[sample(muestra,200, replace=TRUE), ]
+datos <- datos[sample(muestra,200, replace=TRUE), ]
 class(datos)
 str(datos)
 head(datos)
@@ -116,7 +116,7 @@ colnames(datos)
 # Un estudio de interes puede ser intentar explicar/predecir si un empleado abandonara o no la empresa en funcion de las
 # puntuaciones de las variables *nivel_satisfaccion  ultima_evaluacion". Seleccionaremos esas variables del modelo:
 
-datos.modelo<- subset(datos, select = c(abandona, nivel_satisfaccion, ultima_evaluacion))
+datos.modelo <- subset(datos, select = c(abandona, nivel_satisfaccion, ultima_evaluacion))
 datos.modelo$abandona <- factor(datos.modelo$abandona)
 head(datos.modelo)
 plot(datos.modelo$nivel_satisfaccion, datos.modelo$abandona)
@@ -137,7 +137,7 @@ ggplot(datos.modelo, aes(x=nivel_satisfaccion, y=ultima_evaluacion, color =aband
 # En r los GLMs se ajustan a la funcion glm. La principal diferencia con la funcion lm para ajustar modelos lineales
 # es que tenemos que proporcionar la familia de la distribucion. En nuestro caso variable dicotomica:
 
-modelo.logit<-glm(abandona~ultima_evaluacion+nivel_satisfaccion, data=datos.modelo,
+modelo.logit <- glm(abandona~ultima_evaluacion+nivel_satisfaccion, data=datos.modelo,
                   family = "binomial")
 summary(modelo.logit)
 
@@ -149,22 +149,23 @@ summary(modelo.logit)
 # de enlace. η = ln(p/1-p) siendo p la probabilidad que el individuo tome el valor de 1 en la variable dicotomica.
 # Al cociente (p/1-p) se le conoce como odds ratio. Por lo tanto, los coeficientes del modelo logit se interpretan
 # como el logaritmo de odds ratio. Si nos fijamos en el coeficiente de la variable nivel_satisfaccion (-3.00984), nos
-# esta indicando que el logaritmo de odds ratio de abandonar la empresa disminuye 2.163 unidades por cada unidad que 
+# esta indicando que el logaritmo de odds ratio de abandonar la empresa disminuye -3.00987 unidades por cada unidad que 
 # aumenta la puntuacion en el nivel de satisfaccion.
 
 # Una forma de facilitar de los coeficientes es evaluando en la exponencial
 exp(coefficients(modelo.logit))
 
 # Que corresponde al modelo : odds=(e^β0)*(e^β1x1)*(e^β2x2) lo interpretamos de la siguiente manera:
-# al aumentar en la ultima evaluacion un punto aumenta un 5.91% las posibilidades de abandonar la empresa, mientras
-# que aumentar un punto en el nivel de satisfaccion las reduce a casi 96%.
+# al aumentar en la ultima evaluacion un punto dismnuye un 68% las posibilidades de abandonar la empresa, mientras
+# que aumentar un punto en el nivel de satisfaccion las reduce a casi 96%. (lo que le falta a las variables para llegar
+# a 100 se interpreta como el porcentaje o de aumento o disminucion)
 
 
 # Interpretacion probabilista seria estimar la probabilidad p de que un individuo abandone la empresa
 # p = e^η/1-e^η, asi podemos predecir la funcion η para un individuo, por ejemplo una evaluacion de 0.75 y nivel
 # de satisfaccion de 0.6.
 
-log.odds<-predict(modelo.logit, data.frame(nivel_satisfaccion=0.6, ultima_evaluacion=0.75))
+log.odds <- predict(modelo.logit, data.frame(nivel_satisfaccion=0.6, ultima_evaluacion=0.75))
 log.odds
 
 # la probabilidad de abandonar la empresa seria:
@@ -173,6 +174,7 @@ exp(log.odds)/(1-exp(log.odds))
 
 
 #### Regresion Polinomial ####
+
 library(ISLR)
 data(Wage)
 View(Wage)
@@ -187,11 +189,14 @@ View(Wage)
 # 
 # lm(wage ~ poly(age , 4 , raw = TRUE) , data = Wage )
 
-### MOdelo polinomial de grado 4 ###
+
+### Modelo polinomial de grado 4 ###
 modelo_poli4 <- lm(wage ~ poly(age,4), data = Wage)
 summary(modelo_poli4)
+
 #  En funcion de los resultados obtenidos , podemos obviar los coeficientes 
 # de grado 4 y de grado : Utilizar es un polinomio de grado 2 
+
 modelo_poli2 <- lm(wage ~ poly(age,2), data = Wage)
 summary(modelo_poli2)
 
@@ -199,15 +204,17 @@ modelo_lineal <- lm(wage ~ age , data = Wage)
 summary(modelo_lineal)
 
 ### Otro Modelo Polinomial ###
-q<-seq(from=0, to=20, by=0.1)
-y<-500+0.4*(q-10)^3
-noise<-rnorm(length(q), mean=10, sd=80)
-noisy.y<- y + noise
+
+q <- seq(from=0, to=20, by=0.1)
+y <- 500+0.4*(q-10)^3
+noise <- rnorm(length(q), mean=10, sd=80)
+noisy.y <- y + noise
 plot(q, noisy.y, col="deepskyblue4", xlab="q",main="Observed data")
 lines(q,y, col="firebrick1",lwd=3)
-model<-lm(noisy.y ~ poly(q,3))
+model <- lm(noisy.y ~ poly(q,3))
 model
 
+summary(model)
 # Usando la funcion confint podemos obtener los intervalos de confianza de los parametros de nuestro modelo:
 
 confint(model, level=0.95)
@@ -216,12 +223,12 @@ confint(model, level=0.95)
 
 # Datos de recuento - revisar la distribucion poisson!
 
-# Datos de recuento aquella que toman valores positivos enteross (incluyendo el cero)
+# Datos de recuento aquella que toman valores positivos enteros (incluyendo el cero)
 
 # Dado que los modelos de regresion lineal y eleccion binaria fallan en estos casos.
 
 # En una regresion logistica se predice una respuesta (como ya hemos visto) que viene en una de las formas, cara o sello,
-# varon o mujer, hubo terremoto o no hubo.  La generalizacion a un tip de respuesta que viene en varios eventos discretos
+# varon o mujer, hubo terremoto o no hubo.  La generalizacion a un tipo de respuesta que viene en varios eventos discretos
 # que pueden ser mas de dos se llama regresion de Poisson.
 
 # Analicemos los datos de una clase, dado que nuestra tarea es predecir la nota, que puede tomar valore de 1,2,3,4,5
