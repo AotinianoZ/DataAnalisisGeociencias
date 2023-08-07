@@ -91,10 +91,10 @@ regresion$terms
 regresion$model
 
 regresion
-#Obtenemos los coeficientes del modelo:
+#Obtenemos los coeficientes del modelo (parametros del modelo estimados):
 #b_0 <- 102.575
 #b_1 <- 5.321
-# grasas <- 5.321 (edad) + 102.575
+# grasas_i <- 5.321 (edad_i) + 102.575
 
 regresion$residuals
 
@@ -139,12 +139,12 @@ reg_lin
 plot(edad_roca,conc_cobre)
 abline(reg_lin)
 
-# edad_roca(i)=-43.5440+0.6774*conc_cobre (asumiendo que sigue esa logica)
+# edad_roca(i)=-43.5440+0.6774*conc_cobre(i) (asumiendo que sigue esa logica)
 
 summary(reg_lin)
 
 
-#Respecto a estos valores mientras mas peque?os 
+#Respecto a estos valores mientras mas pequenos 
 #sean mejor se ajustan al modelo de prediccion los valores futuros.
 
 # Coefficients:
@@ -171,11 +171,11 @@ summary(reg_lin)
 #se conoce como la F de Snedecor, se conoce como contraste omnibus.En nuestro
 #caso el modelo lineal es adecuado (p-value<0.05)
 
-#Suposiciones asociadas a los residuos:
+#### Suposiciones asociadas a los residuos:   ####
 
 #**Normalidad de residuos**:
 
-#Aplicaremos el test de normalidad Kolmogorov-Smirnov
+#Aplicaremos el test de normalidad Kolmogorov-Smirnov y Shapiro-Wilk
 #con ks.test(x, distrib)
 
 ks.test(reg_lin$residuals, "pnorm")
@@ -197,8 +197,12 @@ shapiro.test(reg_lin$residuals)
 
 #Segun estos resultados tenemos que aun 10% de significacion los residuos siguen una
 #distribucion normal, puesto que el p-valor (0.06608) es mayor que 0.05.
+
 #El test de Shapiro-Wilk por lo general es mas potente y tambien nos indican
 #que los residuos siguen una distribucion normal.
+# Desde la salida, el p-value > 0.05 implica que la distribucion de la data 
+# no difiere significativamente de la distribucion normal. 
+#En otras palabras, podemos asumir normalidad.
 
 #**Independencia de los residuos**:
 
@@ -218,8 +222,8 @@ dwtest(edad_roca ~ conc_cobre)
 # alternative hypothesis: true autocorrelation is greater than 0
 
 
-#Para un p-valor de 0.5879 no podemos rechazar la hipotesis de que los residuos son
-#independientes.
+#Para un p-valor de 0.5879 no podemos rechazar la hipotesis nula
+#de que los residuos son independientes.
 
 #Homocedasticidad (igualdad de las varianzas de los residuos)
 #Linealidad de los residuos
