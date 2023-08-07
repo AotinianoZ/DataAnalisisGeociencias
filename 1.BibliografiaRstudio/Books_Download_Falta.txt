@@ -1,0 +1,5 @@
+http://www.sthda.com/english/download/3-ebooks/6-complete-guide-to-3d-plots-in-r/
+https://www.datanovia.com/en/product/practical-statistics-in-r-for-comparing-groups-numerical-variables/
+https://www.datanovia.com/en/product/machine-learning-essentials-practical-guide-in-r/?url=/5-bookadvisor/54-machine-learning-essentials/
+https://www.datanovia.com/en/product/ggplot2-essentials-for-great-data-visualization-in-r/
+https://www.springer.com/la/book/9789811305528

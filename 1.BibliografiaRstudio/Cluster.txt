@@ -1,0 +1,29 @@
+
+http://www.stat.columbia.edu/~madigan/W2025/notes/clustering.pdf
+https://www-users.cs.umn.edu/~kumar001/dmbook/ch8.pdf
+https://www.umass.edu/landeco/teaching/multivariate/schedule/cluster1.pdf
+Asi como una lista de algoritmos que considero son los mas usados/estudiados en este campo de investigacion:
+
+K-Means Clustering
+Mean-Shift Clustering
+Density-Based Spatial Clustering of Applications with Noise (DBSCAN)
+Expectation–Maximization (EM) Clustering using Gaussian Mixture Models (GMM)
+Agglomerative Hierarchical Clustering
+Con respecto a usar estas tecnicas con R, te recomiendo lo siguiente :
+
+https://www.r-bloggers.com/k-means-clustering-in-r/
+https://uc-r.github.io/kmeans_clustering
+https://www.statmethods.net/advstats/cluster.html
+Ademas, nunca esta de más ver el task view :
+
+https://cran.r-project.org/web/views/Cluster.html
+
+
+http://www.sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/118-principal-component-analysis-in-r-prcomp-vs-princomp/
+http://www.sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/112-pca-principal-component-analysis-essentials/#data-standardization
+https://rstudio-pubs-static.s3.amazonaws.com/585948_abd70a6fc3e24d4fad8944197bc5dd25.html
+http://rstudio-pubs-static.s3.amazonaws.com/14702_e498ca35771c4a29899c0c1cdef688c1.html
+http://www.sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/118-principal-component-analysis-in-r-prcomp-vs-princomp/
+http://www.sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/117-hcpc-hierarchical-clustering-on-principal-components-essentials/
+https://rpubs.com/Cristina_Gil/PCA
+https://statsandr.com/blog/clustering-analysis-k-means-and-hierarchical-clustering-by-hand-and-in-r/#hierarchical-clustering
