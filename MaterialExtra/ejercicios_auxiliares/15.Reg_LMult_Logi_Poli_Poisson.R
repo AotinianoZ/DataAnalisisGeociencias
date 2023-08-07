@@ -1,6 +1,6 @@
 ##### Regresion Lineal Multiple ####
 
-BostonHousing = read.table(file = "data/Boston.txt", header = TRUE)
+BostonHousing = read.table(file = "MaterialExtra/ejercicios_auxiliares/data/Boston.txt", header = TRUE)
 
 View(BostonHousing)
 
@@ -24,11 +24,8 @@ colnames(BostonHousing)
 # medv : valor medio de las viviendas ocupadas 
 
 housing <- BostonHousing
-
 class(housing)
-
 str(housing)
-
 head(housing)
 summary(housing)
 
@@ -44,12 +41,12 @@ model
 summary(model)
 
 # Segundo modelo : Eliminar la variable categorica 
-model <- lm(medv ~ crim + zn + indus +nox + rm + age+dis+rad+tax+ptratio + b +lstat , data = housing)
+model <- lm(medv ~ crim + zn + indus +nox + rm + age+dis+rad+tax+ptratio + black +lstat , data = housing)
 summary(model)
 
 
 # tercer modelo 
-model <- lm(medv ~ crim + zn + nox + rm +dis+rad+tax+ptratio + b +lstat , data = housing)
+model <- lm(medv ~ crim + zn + nox + rm +dis+rad+tax+ptratio + black +lstat , data = housing)
 summary(model)
 
 
@@ -62,14 +59,43 @@ summary(model)
 
 plot(model)
 
+library(NADA2)
+
+attach(housing)
+mejor <- bestglm(Xy = housing, family = gaussian, IC="BIC", method = "exhaustive" )
+#El rango optimo para q
+mejor$Bestq
+#Los posibles modelos a ser escogidos
+mejor$qTable
+#El mejor modelo para cada subset
+mejor$Subsets
+#El model generalizado
+mejor$BestModels
+
+
+model_mejor <- lm(medv ~  crim+zn+chas+nox+rm+dis+rad+tax+ptratio+black+lstat , data = housing)
+model_mejor
+attach(housing)
+newdata <- data.frame(crim=mean(crim), zn= mean(zn), chas=mean(chas) , nox=mean(nox),
+                      rm = mean(rm), dis = mean(dis), rad= mean(rad), tax = mean(tax),
+                      ptratio=mean(ptratio), black = mean(black), lstat = mean(lstat) )
+
+# Prediccion del modelo de regresion multiple:
+med_model <- predict(model_mejor, newdata, type="response")
+
+df_nuevo <- cbind(newdata, med_model)
+df_nuevo
+
+# Ejercicio 
+# (elegir de su base de datos un valor a modelar mediante regresion lineal multiple)
+
+
 #### Regresion Logistica####
 
 
 # Es un modelo de regresion no lineal, pero es lineal en escala logaritmica.
-
-#Conjunto de datos de Kaggle
-
-#Para este ejemplo se han seleccionado 200 registros:
+# Conjunto de datos de Kaggle
+# Para este ejemplo se han seleccionado 200 registros:
 
 datos<-read.csv("data/HumanResourcesAnalytics.csv", header = TRUE)
 str(datos)
