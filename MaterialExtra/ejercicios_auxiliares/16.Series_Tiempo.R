@@ -1,23 +1,48 @@
-.libPaths(c("D:/R_Packages",.libPaths()))
+# Data AirPassengers
 
+data("AirPassengers")
+class(AirPassengers)
+start(AirPassengers)
+end(AirPassengers)
+
+frequency(AirPassengers)
+summary(AirPassengers)
+
+plot(AirPassengers)
+abline(reg = lm(AirPassengers~time(AirPassengers)))
+
+cycle(AirPassengers)
+plot(aggregate(AirPassengers, FUN=mean))
+boxplot(AirPassengers~cycle(AirPassengers))
+
+
+# 1) La tendencia year tras year muestra claramente que
+# los pasajeros han ido aumentando de manera continua
+
+# La varianza y el valor medio en julio y agosto es mucho mayor
+# que el resto de los meses
+
+# Aunqueel valor medio de cada mes es bastante diferente, su varianza
+# es pequena. Por lo tanto, se tiene un fuerte efecto estacional con un 
+# ciclo de 12 meses.
 
 #### Ejemplo1 ####
+
 library(quantmod)
 help(quantmod)
-
-getSymbols("FB")
-str(FB)
-head(FB)
-tail(FB)
-plot(FB$FB.Open)
-chartSeries(FB$FB.Open)
+getSymbols("TSLA")
+str(TSLA)
+head(TSLA)
+tail(TSLA)
+plot(TSLA$TSLA.Open)
+chartSeries(TSLA$TSLA.Open)
 
 #Calculo de los retornos
 
 # r[t] = log(P[t]) - log(P[t-1])
 # r[t] = log(P[t]/P[t-1])
 
-r = diff(log(FB[,1])) #vector de retornos
+r = diff(log(TSLA[,1])) #vector de retornos
 chartSeries(r)
 
 summary(r)
@@ -31,6 +56,7 @@ quantile(r, probs=0.01, na.rm=TRUE)
 
 
 #### Ejemplo2 ####
+
 # "Introductory time series with R" Cowperwait,Metcalfe (2009)
 # "Time series analysis with R" Mcleod,Mahdi (2012)
 # "Time series analysis with applications"  Cryer (2008)
@@ -61,7 +87,7 @@ plot(r_oilf)
 
 # Analisis cbe
 
-CBE<- read.table("cbe.dat", header =TRUE)
+CBE<- read.table("MaterialExtra/ejercicios_auxiliares/data/cbe.dat", header =TRUE)
 head(CBE)
 
 #Informacion mensual, capturada desde 1958
@@ -73,7 +99,7 @@ plot(Beer.ts)
 plot(Choc.ts)
 plot(cbind(Elec.ts, Beer.ts, Choc.ts))
 
-# Descomponer: ts = tendencial + estacional + errror
+# Descomponer: ts = tendencial + estacional + error
 
 # Aritmetica:
 
