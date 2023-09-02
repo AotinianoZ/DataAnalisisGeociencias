@@ -1,7 +1,7 @@
 con <- DBI::dbConnect(odbc::odbc(), 
                       Driver = "SQL Server", 
                       Server = "DESKTOP-0MGEA6E", 
-                      Database = "Hydro_Yanacocha", 
+                      Database = "Hydro_Data", 
                       Trusted_Connection = "True")
 
 con@ptr
@@ -58,7 +58,7 @@ server <- function(input, output, session) {
     conn <- DBI::dbConnect(odbc::odbc(), 
                            Driver = "SQL Server", 
                            Server = "DESKTOP-0MGEA6E", 
-                           Database = "Hydro_Yanacocha", 
+                           Database = "Hydro_Data", 
                            Trusted_Connection = "True")
     on.exit(dbDisconnect(conn), add = TRUE)
     dbGetQuery(conn,
