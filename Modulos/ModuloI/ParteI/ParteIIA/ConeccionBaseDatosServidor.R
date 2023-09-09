@@ -65,7 +65,7 @@ sdf <- readxl::read_xlsx(path="Modulos/ModuloI/ParteI/ParteIIA/GQ_Colca_corregid
 View(sdf)
 str(sdf)
 character_vals <- lapply(sdf,class)=="character"
-sdf[ ,character_vals] <- lapply(sdf[ ,character_vals],as.factor)
+sdf[ ,character_vals] <- lapply(sdf[ ,character_vals], as.factor)
 colnames(sdf)
 str(sdf)
 head(sdf)
@@ -86,12 +86,13 @@ plot(density(sdf$Au_ppb_com))
 boxplot(sdf$Au_ppb_com)
 plot(ecdf(sdf$Au_ppb_com))
 
-
 ## Bivariante Plot:
 
 ggplotly(ggplot(data=sdf, 
                 aes(x=Cu_ppm, y=Au_ppb_com, color= ROCA))+
   geom_point(size=5))
+
+sdf %>% dplyr::filter(Au_ppb_com > 2500)
 
 ##### Analisis Multivariable Basico #### 
 

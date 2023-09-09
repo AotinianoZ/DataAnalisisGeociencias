@@ -4,6 +4,8 @@ loadlibs <- function(x =0){
   require(DBI)
   require(odbc)
   require(RMySQL)
+  # data upload
+  require(readxl)
   # data wrangle, tidy and transformation, also visualization
   require(tidyverse)
   # interactive visualization
@@ -20,7 +22,7 @@ loadlibs <- function(x =0){
 }
 
 loadlibs()
-cat(" R libraries loaded for Data Analysis in FIGMM","\n", " written by A. Otiniano & J.Andrade.",'\n')
+cat(" R libraries loaded for Data Analysis ","\n", " written by A. Otiniano.",'\n')
 
 
 

@@ -15,6 +15,7 @@ loadlibs <- function(x =0){
   #visualizacion y tratamiento espacial
   require(rgdal)
   require(leaflet)
+  require(mapview)
   
   # tratamiento de rasters
   require(raster)
