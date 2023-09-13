@@ -1,0 +1,1550 @@
+---
+title: "Análisis Exploratorio de Datos en Aguas Superficiales (Subcuenca Alto Camaná - Arequipa)"
+author: "Alonso Otiniano Zavala"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+    code_folding: show
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+    theme: flatly
+    highlight: "espresso"
+---
+
+# Análisis de Base de Datos (estructura y revisión general).
+
+Se recomienda revisar el [Cheetsheet Rstudio](https://www.rstudio.com/resources/cheatsheets/) que continene muchas funciones que se usarán para el análisis. Comenzaremos por cargar las librerias principales (*antes se debió instalar como se ha enseñado*).
+
+```{r, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message=FALSE, fig.align = 'center')
+#### Librerias a Cargar ####
+library(MASS)
+library(NADA)
+library(ggmap)
+library(nortest)
+library(psych)
+library(chron)
+library(readxl)
+library(tidyverse)
+library(knitr)
+dir() #verificacion del directorio
+```
+
+## Carga de la data:
+
+Para cargar la data recurrimos a la función `read_xlsx()`:
+
+```{r,echo = TRUE}
+AC <- read_xlsx("data_IIC_1/BD_AC.xlsx", col_names = TRUE)
+#View(AC)   Permite visualizar data.
+dim(AC)
+colnames(AC) 
+str(AC, list.len = ncol(AC))
+head(AC, n = 10)
+tail(AC, n = 10)
+```
+
+* Revisamos los datos nulos:
+
+Para analizar los datos nulos usaremos la función `sapply()` y `is.na()` además de la libreria **Amelia** para dibujar el mapa de nulos.
+
+```{r, out.width="80%",echo = TRUE}
+Vacios <- sapply(AC, function(x) sum(is.na(x)))
+Vacios
+#Con mapa:
+library(Amelia)
+missmap(AC,col=c("black","grey"),legend = FALSE)
+```
+
+ * Eliminamos información que no posee la variable Temporada
+
+Identificamos los nulos por Temporada con la función `which()` e `is.na()`, luego retiramos esos valores del dataframe.
+
+```{r,echo = TRUE}
+id <- which(is.na(AC$Temporada)) 
+id
+AC[id, ]
+AC <- AC[-id, ]
+AC$Temporada
+is.na(AC$Temporada)
+which(is.na(AC$Temporada))
+```
+
+# Errores - Balance Iónico
+
+La revisión de los analitos mayoritarios (considerados para el balance iónico) se realiza en elementos disueltos debido a que se necesita un **estado casi coloidal**, si los filtros de muestra son pequeños es mejor. 
+
+La ecuación de Error de Balance Iónico es:
+
+$$Error = \frac{Totales Cationes - Totales Aniones}{Totales Cationes+Totales Aniones}$$
+* Primero convertiremos a meq/l:
+
+```{r, eval=FALSE, echo = TRUE}
+#Codigo para generar los equivalentes (no se usará solo se indicará):
+# debido a que aun se debe hacer limpieza de datos.
+colnames(AC)
+AC$Ca_meq.l<-(AC$Ca_tot*2)/40.08
+AC$Mg_meq.l<-(AC$Mg_tot*2)/24.32
+AC$Na_meq.l<-(AC$Na_tot*1)/23.00
+AC$K_meq.l<-(AC$K_tot*1)/39.10
+AC$Cl_meq.l<-(AC$Cl*1)/35.56
+AC$SO4_meq.l<-(AC$SO4_menos_2*2)/96.06
+AC$HCO3_meq.l<- (AC$HCO3_menos*1)/61.01
+AC$CO3_meq.l <- (AC$CO3_menos_2_mg_L*2)/60
+
+AC$Tot_Cat <- rowSums(AC[ ,c("Ca_meq.l","Mg_meq.l","Na_meq.l","K_meq.l")])
+AC$Tot_Ani <- rowSums(AC[ ,c("Cl_meq.l","SO4_meq.l","HCO3_meq.l", "CO3_meq.l")])
+AC$Err_Rel <- 100*((AC$Tot_Cat-AC$Tot_Ani)/(AC$Tot_Cat+AC$Tot_Ani))
+```
+
+Renombramos algunas variables del dataframe y calculamos el Error porcentual siguiendo la fórmula anteriormente mencionada.
+
+```{r, echo = TRUE}
+AC <- AC %>% rename(Tot_Cat="Total_meq_l.1", Tot_Ani="Total_meq_l.2")
+AC$Error <- 100*((AC$Tot_Cat-AC$Tot_Ani)/(AC$Tot_Cat+AC$Tot_Ani))
+AC$Error
+range(AC$Error, na.rm=TRUE)
+
+```
+
+* Analisis de Errores con Normalidad y QQ-Plot:
+
+Para el análisis de normalidad y uso de QQ-Plot nos basaremos en el análisis estadísitico asociado a los gráficos que serán generados con la libreriía **ggplot2**
+
+```{r, out.width="80%", echo = TRUE}
+library(ggpubr)
+par(mfrow=c(1,2))
+qq<-ggplot(AC, aes(sample=Error))+
+  geom_qq_line(line.p = c(0.25, 0.75), col = "steelblue")+
+  stat_qq()+
+  xlab("Cuantiles Teoricos Normales") + ylab("Valores de Error Reales")+
+  labs(caption = "Basado en Data del Laboratorio de INGEMMET")+
+  scale_colour_manual()
+
+dh <- ggplot(AC, aes(x=Error)) +
+  geom_histogram(aes(y = stat(density)), color="black",fill="steelblue") +
+  stat_function(
+    fun = dnorm, 
+    args = list(mean = mean(0), sd = sd(AC$Error)), 
+    lwd = 2, 
+    col = 'red')+
+  geom_vline(xintercept = c(-10,10), linetype="longdash",color="blue",size=1.5)+
+  annotate("text", x=2, y=0.12, label="Normal Distribution", color="red", fontface=2,
+           size=4)+
+  geom_segment(x = 6.4, y = 0.115, xend = 2.2, yend = 0.09,
+               arrow = arrow(length = unit(0.5, "cm")))+
+  annotate("text",x=-7.5,y=0.13,label="Limite Inferior",color="black", fontface=2,
+           size=4)+
+  annotate("text",x=+6.0,y=0.13,label="Limite Superior",color="black", fontface=2,
+           size=4)
+
+figure <- ggarrange(dh, qq,
+                    labels = c("Distribucion de Errores", "QQplot-Errores"),
+                    ncol = 2, nrow = 1)
+figure
+```
+
+* Identificación de valores fuera del límite:
+
+Verificaremos los valores que son mejores al 10% en valor absoluto y veremos que código tienen esas muestras.
+
+```{r, echo = TRUE}
+id <- which(AC$Error>=10 | AC$Error<=-10)
+AC[id, ] %>% select(Codigo)
+```
+
+Pasamos ahora a la imputación de valores :D!!
+
+# Imputación de Datos debajo del límite de detección (<L.D.).
+
+Para imputar los datos debajo del límite de detección usaremos el método semiparamétrico **ROS(Robust Regression Orden in Statistics)** usando el paquete `NADA` *(Not Available Data Analysis)* para completar los datos debajo del límite de detección con solo un valor debajo del límite de detección, en este caso nos centraremos por temporadas en la subcuenca **Alto Camaná**. Usaremos la variable **As** como ejemplo para completar la data. La librería `DT` nos ayudará a visualizarlo como una tabla interactiva html.
+
+```{r, results='asis', echo = TRUE}
+library(DT)
+#Filtramos por temporada debido a que existen distintos limites de detección.
+datatable(AC[ ,c("As_dis", "Cu_dis")], filter = "top") 
+z <- AC[AC$Temporada=="Avenida", ] #Hacer lo mismo para estiaje
+#Preparing Data for Analysis:
+val0 <- unique(grep("<", z$As_dis, value = TRUE))
+z$var0 <- z$As_dis
+z$ND_var0 <- rep(0, length(z$var0))
+indcero0 <- which(z$var0==val0)
+z$var0[indcero0] <- substr(val0,2,nchar(val0))
+z$var0 <- as.numeric(z$var0)
+z$ND_var0[indcero0] <- 1
+z$ND_var0 <- as.logical(z$ND_var0)
+#Sort the Data Acorder to Study:
+indna0 <- is.na(z$var0)
+yn0 <- z$var0[which(indna0==FALSE)]
+cyn0 <- z$ND_var0[which(indna0==FALSE)]
+yn0 <- sort(yn0,index.return=TRUE)
+cyn0 <- cyn0[yn0$ix]
+#Apply the ROS (REGRESSION IN ORDER STATISTICS)
+elemento <- ros(yn0$x,cyn0,forwardT = "log", reverseT = "exp")
+elemento <- as.data.frame(elemento)
+id <- which(elemento$censored==TRUE)
+elemento <-  elemento[id, ]
+
+#HACER CON CUIDADO!!!!
+AC$As_com <- AC$As_dis #obviar este paso para la otra temporada
+
+#Loop para Imputar Valores:
+id <- which(AC$As_com==val0)
+
+for(i in 1:length(id)){
+      replace <- elemento$modeled[i]
+      AC[id, ]$As_com[i] <-  replace
+}
+
+#Haciendo lo mismo solo cambio temporada:
+z <- AC[AC$Temporada=="Estiaje", ] #
+#Preparing Data for Analysis:
+val0 <- unique(grep("<", z$As_dis, value = TRUE))
+z$var0 <- z$As_dis
+z$ND_var0 <- rep(0, length(z$var0))
+indcero0 <- which(z$var0==val0)
+z$var0[indcero0] <- substr(val0,2,nchar(val0))
+z$var0 <- as.numeric(z$var0)
+z$ND_var0[indcero0] <- 1
+z$ND_var0 <- as.logical(z$ND_var0)
+#Sort the Data Acorder to Study:
+indna0 <- is.na(z$var0)
+yn0 <- z$var0[which(indna0==FALSE)]
+cyn0 <- z$ND_var0[which(indna0==FALSE)]
+yn0 <- sort(yn0,index.return=TRUE)
+cyn0 <- cyn0[yn0$ix]
+#Apply the ROS (REGRESSION IN ORDER STATISTICS)
+elemento <- ros(yn0$x,cyn0,forwardT = "log", reverseT = "exp")
+elemento <- as.data.frame(elemento)
+id <- which(elemento$censored==TRUE)
+elemento <-  elemento[id, ]
+
+#Loop para Imputar Valores:
+id <- which(AC$As_com==val0)
+
+for(i in 1:length(id)){
+      replace <- elemento$modeled[i]
+      AC[id, ]$As_com[i] <-  replace
+}
+
+#Despues de correr Avenida y Estiaje:
+AC$As_com <- as.numeric(AC$As_com)
+knitr::kable(AC[ ,c("As_dis","As_com")])  #comprobar funcionamiento
+```
+
+# Análisis Exploratorio mediante estadísticos descriptivos.
+
+Para hacer el análisis exploratorio necesitamos primero entender que debemos tener los `caracters` `convertidos` `en` `factores`, además de *seleccionar las columnas que son importantes* para realizar el análisis (esto último depende mucho del **criterio geológico** y el **objetivo** que se desea alcanzar), aunque es un análisis exploratorio así que *vamos sin miedo :D!!*.
+
+* Cargaremos la data ya con los elementos completos:
+
+```{r, echo = TRUE}
+AC_final <- read.csv(file = "data_IIC_1/BD_AC_final.csv", header = TRUE)
+# sapply(AC, class) ver clases de las variables.
+```
+
+## Conversion a factores de caracters:
+
+Seleccionamos las variables que convertiremos a caracter:
+
+```{r, echo = TRUE}
+cols <- c("Proyecto","Temporada","Codigo","Codigo_Corto","Nombre",
+          "Nombre_Completo","Zona","Lugar","Distrito","Provincia",
+          "Vertiente","Cuenca","Subcuenca","Microcuenca",
+          "Tipo_Fuente","Clase_Fuente","Uso","Asp_Geologico","Desc_Litologica",
+          "Morfologia","Color","Olor","Precipitados","Algas_plantas","Basurales",             "Animales","Letrinas_Sítios","Poblacion","Pasivos_Ambientales","Act_Antropica",         "Alt.Geo.Nat","Ev.Meteo","Viento","Foto","Observaciones","Realizado_por")
+AC_final[cols] <- lapply(AC_final[cols], factor) 
+```
+
+## Sumario de la Información:
+
+```{r, echo = TRUE}
+summary(AC_final[ ,-1]) #La primera columna se creo automáticamente (la omitimos)
+```
+
+Para realizar el análisis preliminar se usaran 4 factores principales los cuales son:
+
+* *Temporada*.
+* *Microcuenca*.
+* *Tipo Fuente*.
+* *Clase Fuente*.
+
+Y dentro de las variables cuantitativas:
+
+* Los elementos completos de *As_com, B_com, Cu_com, Fe_com, Mn_com, Ti_com, Ni_com* con *T_Fuente, pH, ORP_mv, CE_uS_cm, TDS_mg_L, Salinidad_PSU*.
+
+Se pueden considerar más variables, más secciones pero en este caso nos remetiremos a estas para presentar el análisis preliminar. Usaremos el potente conjunto de paquetes del `tidyverse()`.
+
+## Estructura ggplot:
+
+```r
+ggplot(data=<DATA>)+
+  <GEOM_FUNCTION>(
+    mapping=aes(<MAPPINGS>),
+    stat=<STAT>,
+    position=<POSITION>
+  )+
+  <COORDINATE_FUNCTION>+
+  <FACET_FUNCTION>
+```
+
+## Filtraremos una variable para analizar (pH o CE):
+
+```{r, echo = TRUE}
+library(DT)
+id <- which(is.na(AC_final$pH))
+AC_final <- AC_final[-id, ]
+```
+
+### Analisis ph grafo-numérico:
+
+```{r, echo = TRUE}
+# Librerias Extras para graficar:
+library(ggpubr)
+library(ggrepel)
+library(ggExtra)
+library(plotly)
+library(ggridges)
+library(GGally)
+qplot(sample=pH, data=AC_final)
+qplot(sample=pH, data=AC_final, color=Temporada)
+qplot(sample=pH, data=AC_final, facets = .~Temporada, color=Tipo_Fuente)+
+  labs(title="pH por Temporada Y Tipo de Fuente",
+       y="pH (adimensional)")
+
+ggplot(data = AC_final, aes(sample = pH))+
+  stat_qq()+
+  geom_qq_line()
+
+ggqqplot(AC_final, x="pH",
+         color="Microcuenca", 
+         ggtheme=theme_pubclean())
+
+#Ver ECDF de pH:
+m <- ggplot(AC_final, aes(x=pH))+
+  stat_ecdf(aes(color=Microcuenca, linetype=Microcuenca),
+            geom ="step",size=1.2)
+m
+#Scatter e Histograma
+ggscatterhist(AC_final, x="pH", y="CE_uS_cm",color="Microcuenca",
+              margin.plot = "boxplot",
+              ggtheme = theme_bw())
+#Library Ridges:
+ggplot(AC_final, aes(x=pH, y=Microcuenca))+
+  geom_density_ridges(aes(fill=Microcuenca))
+
+#Graficar Cu acorde a valor:
+p <- ggplot(AC_final, aes(x=pH, y=CE_uS_cm, color=Microcuenca))+
+  geom_point(aes(size=TDS_mg_L))
+ggplotly(p)
+
+## Grafica:
+q <- ggplot(AC_final, aes(x=Microcuenca, y=pH, color=Temporada))+
+  geom_boxplot(position = position_dodge(0.8))+
+  geom_jitter(position = position_dodge(0.8),size=2)+
+  scale_color_manual(values = c("steelblue","red"))
+ggplotly(q)
+
+#Ver donde se concetra el pH por CE y categorias (Temporada, Microcuenca, Fuente):
+r <- ggplot(AC_final, aes(x=pH, y=CE_uS_cm, shape = Temporada, color =Microcuenca ))+
+  geom_point(size=3.5)+
+  facet_grid(.~ Tipo_Fuente)+
+  geom_rug()+
+  labs(title = "Analisis pH Vs. CE y Categorias (Temporada,Microcuenca,Fuente)")
+ggplotly(r)
+```
+
+```{r, echo = TRUE}
+w <- ggplot(AC_final, aes(x=pH, y=As_com , color=Temporada))+
+  geom_point()+
+  scale_fill_manual(values = c("steelblue","red"))+
+  labs(title = "Boxplot de As_dis por Microcuenca en Alto Camana")+
+  facet_grid(Temporada~Microcuenca)
+ggplotly(w)
+```
+
+```{r, echo = TRUE}
+p <- ggplot(AC_final, aes(x=Microcuenca, y=pH, fill=Temporada))+
+  geom_boxplot()+
+  labs(title = "Boxplot de pH por Microcuenca en Alto Camana")+
+  facet_grid(.~ Tipo_Fuente )
+ggplotly(p)
+```
+
+```{r, echo = TRUE}
+#Generando nube de puntos.
+pH_Plot <- ggplot(AC_final, aes(x=Microcuenca, y=pH, color=Temporada))+
+  geom_jitter(position=position_jitter(0.2), size=2)+
+  facet_grid(.~Temporada)+
+labs(title = "Boxplot de pH ")+
+  scale_color_manual(values = c("steelblue","red"))+
+  theme_minimal()
+data_summary<-function(x){
+  m <- mean(x)
+  ymin <- m-sd(x)
+  ymax <- m+sd(x)
+  return(c(y=m, ymin=ymin, ymax=ymax))
+}
+pH_Plot + stat_summary(fun.data = data_summary, color="red")
+```
+
+```{r, echo = TRUE}
+#Usaremos GGPLOT(solo demostracion basica ustedes deben probar mas!
+library(plotly)
+plot_ly(x=AC_final$Este, y=AC_final$Norte, z=AC_final$Cota, type="scatter3d", mode="markers",
+        color=AC_final$Fe_com)
+```
+
+* Boxplot Interactivo Simple:
+
+```{r, echo = TRUE}
+##Boxplot :
+nom_element <- "pH" # Solo cambiar este!
+temporada <- "Avenida"
+w <- AC_final[AC_final$Temporada=="Avenida", ]
+#z <- w[-which(is.na(w$pH)), ]$pH #Si existe NA.
+z <- w$pH #Si no existe NA
+
+yeti <- paste(nom_element,"(mg/l)")
+princi <- paste("Boxplot de Concentracion de", yeti, "en", temporada)
+
+annotation <- data.frame(
+  x = c(0.55,1.10,0.65,1.32,0.65,0.90,1.10), 
+  y = c(median(z),min(z),quantile(z, prob = c(0.25)),
+        median(z),quantile(z, prob = c(0.75)),((quantile(z, prob = c(0.75))+max(z))/2), max(z)),
+  label = c("RIC","Concentracion Minima =","Q1(25%) =","Mediana(50%) =","Q3(75%) =","Atipicos",
+            "Concentracion Maxima =")
+)
+annotation2<-data.frame(
+  x=c(0.55,0.50),
+  y=c(max(z),max(z)/2),
+  label=c("*Valores obtenidos en campo","")
+)
+pp <- ggplot(w, aes(x=factor("pH"), y=pH))+
+  geom_boxplot(outlier.colour="steelblue",outlier.shape =19,outlier.size = 4,
+               notch=FALSE,width=0.5, fill="gray")+
+  stat_summary(fun=mean, geom="point",shape=23, fill= "black",size=4)+
+  labs(title = princi, x="", y = yeti[1], outer=TRUE)+
+  stat_summary(geom="text", fun = quantile,
+               aes(label=sprintf("%.4f", ..y..)),
+               position=position_nudge(x=c(0.21,-0.29,0.40,-0.29,0.21)), size=3)+
+  geom_text(data=annotation, aes( x=x, y=y, label=label),
+            color="black", 
+            size=3 , angle=0, fontface="bold" )+
+  geom_text(data=annotation2, aes( x=x, y=y, label=label),
+            color="black", 
+            size=3 , angle=0, fontface="bold" )+
+  annotate("pointrange", x = 0.60, y = median(z), ymin = quantile(z, prob = c(0.25)), ymax = quantile(z, prob = c(0.75)),
+           colour = "black", size = 0.5)+
+  annotate("pointrange", x = 0.95, y = ((quantile(z, prob = c(0.75))+max(z))/2), ymin = quantile(z, prob = c(0.85)), ymax = max(z),
+           colour = "steelblue", size = 0.5)+
+  theme_gray()
+ggplotly(pp)
+```
+
+### Generación Clasificación Cualitativa TDS:
+
+```{r, echo = TRUE}
+AC_final$TDS_cla <- with(AC_final,ifelse(TDS_mg_L >= 0 & TDS_mg_L < 200, "Agua Dulce",
+                           ifelse(TDS_mg_L >= 200 & TDS_mg_L < 500, "Agua Ligeramente Salada"
+                                  ,(ifelse(TDS_mg_L>=500 & TDS_mg_L<1500,"Agua Salobre","Agua Salada")))))
+AC_final$TDS_cla <- factor(AC_final$TDS_cla, ordered = TRUE)
+summary(AC_final$TDS_cla)
+```
+
+
+## Realizaremos algunos filtros multivariables:
+
+```{r, echo = TRUE}
+library(tidyverse)
+# Sumario de Media Aritmética de Valores seleccionados por Temporada
+Filtro1 <- AC_final %>%
+  select(Temporada, As_com, B_com, Cu_com, Fe_com, Mn_com, Ti_com, Ni_com, pH, CE_uS_cm, T_Fuente) %>%
+  group_by(Temporada) %>%
+  summarise_if(is.numeric, mean, na.rm = TRUE) 
+Filtro1
+```
+
+```{r, echo = TRUE}
+# Sumario de Media Aritmética de Valores seleccionados por Temporada
+Filtro2 <- AC_final %>%
+  select(Microcuenca, As_com, B_com, Cu_com, Fe_com, Mn_com, Ti_com, Ni_com, pH, CE_uS_cm, T_Fuente) %>%
+  group_by(Microcuenca) %>%
+  summarise_if(is.numeric, mean, na.rm = TRUE)
+Filtro2
+```
+
+```{r, echo = TRUE}
+# Sumario de Media Aritmética de Valores seleccionados por Temporada
+Filtro3 <- AC_final %>%
+  select(Tipo_Fuente, As_com, B_com, Cu_com, Fe_com, Mn_com, Ti_com, Ni_com, pH, CE_uS_cm, T_Fuente) %>%
+  group_by(Tipo_Fuente) %>%
+  summarise_if(is.numeric, mean, na.rm = TRUE)
+Filtro3
+```
+
+```{r, echo = TRUE}
+# Sumario de Media Aritmética de Valores seleccionados por Temporada
+Filtro4 <- AC_final %>%
+  select(Clase_Fuente, As_com,Cu_com) %>%
+  group_by(Clase_Fuente) %>%
+  summarise_if(is.numeric, funs(n(),mean, sd, median))
+Filtro4
+```
+
+
+```{r, echo = TRUE}
+Filtro5 <- AC_final %>%
+  select(Temporada, As_com, B_com, Cu_com, Fe_com, Mn_com, Ti_com, Ni_com, pH, CE_uS_cm, T_Fuente) %>%
+  group_by(Temporada) %>%
+summarise_at(.vars = c("pH", "CE_uS_cm"),
+               .funs = c(Mean="mean", Median="median", Sd="sd"))
+Filtro5
+```
+
+
+```{r, echo = TRUE}
+Filtro6 <- AC_final %>% 
+  select(Temporada, Microcuenca, Tipo_Fuente,Clase_Fuente, As_com, B_com, Cu_com, Fe_com, Mn_com, Ti_com, Ni_com, pH, CE_uS_cm, T_Fuente) %>%
+  filter(pH > 6.5) %>%
+  group_by(Temporada, Microcuenca, Tipo_Fuente, Clase_Fuente) %>%
+  summarise(
+    n = n(),
+    mean_As = round(mean(As_com, na.rm = TRUE),4),
+    mean_Cu = round(mean(Cu_com, na.rm = TRUE),4)
+) %>%
+  arrange(desc(n))
+datatable(Filtro6, filter = "top") 
+```
+
+## Sumario Estadístico Completo:
+
+Generaremos funciones y exportaremos como archivo con extensión **.csv**.
+
+```{r, echo = TRUE}
+library(psych)
+#Aplicamos a pH y CE la media aritmetica:
+apply(AC_final[ ,c("pH","CE_uS_cm")],2, mean)
+
+estadisticos <- function(x){
+Valores <- c(length(x),sum(is.na(x)),min(x, na.rm = TRUE),
+             quantile(x,probs = 0.25, na.rm = TRUE)-1.5*IQR(x, na.rm = TRUE) ,
+             quantile(x,probs = 0.25, na.rm = TRUE),
+             median(x, na.rm = TRUE),mean(x, na.rm = TRUE),mean(x,trim = 0.025, na.rm = TRUE),
+             quantile(x,probs=0.75, na.rm = TRUE),max(x, na.rm = TRUE),
+             quantile(x,probs = 0.25, na.rm = TRUE)+1.5*IQR(x, na.rm = TRUE),
+             IQR(x, na.rm = TRUE), mad(x, na.rm = TRUE),sd(x, na.rm = TRUE),
+             skew(x, na.rm = TRUE),kurtosi(x, na.rm = TRUE),
+             CV_CE=(sd(x, na.rm = TRUE)/mean(x, na.rm = TRUE))*100)
+}
+
+subset_data <- AC_final %>% 
+  select(Temporada, pH, CE_uS_cm, As_com, B_com, Cu_com, Fe_com, Mn_com, Ni_com) %>%
+  filter(Temporada=="Estiaje")
+colnames(subset_data)
+
+es <- sapply(subset_data[ ,2:9], estadisticos) # 2:9 O -1 funciona igual.
+Nombres <- c("n","Vacios","Minimo","LI","Q1","Me:diana","Media","Media Cortada","Q3","Maximo","LS",
+             "IQR","MAD", "Sd", "As","k", "CV")
+rownames(es) <- Nombres
+f <- data.frame(es)
+f
+write.csv(f, file = "Sumario_Estiaje.csv") #Exportar como .csv
+```
+
+## Gráficos Exploratorios:
+
+### Cualitativas:
+
+```{r, out.width="80%", echo = TRUE}
+AC_Ex1 <- AC_final %>%
+  select(Temporada, Microcuenca, Tipo_Fuente, Clase_Fuente, pH, CE_uS_cm, T_Fuente, As_com, B_com, Cu_com, Fe_com, Mn_com, Ti_com, Ni_com) 
+
+head(AC_Ex1)
+dim(AC_Ex1)
+
+par(mfrow = c(2,2))
+
+for (i in 1:4){
+  count <-table(AC_Ex1[ ,i])
+  name  <-names(AC_Ex1)[i]
+  barplot(count, main = name)
+}
+```
+
+```{r, echo = TRUE}
+ggplot(data=AC_Ex1)+
+  geom_bar(mapping=aes(x=Temporada, fill=Clase_Fuente))
+
+ggplot(data=AC_Ex1)+
+  geom_bar(mapping=aes(x=Microcuenca, color=Clase_Fuente)) # Coloreamos el borde de la barra según variable "Clase_Fuente".
+
+ggplot(data = AC_Ex1)+
+  geom_bar(mapping=aes(x=Microcuenca, fill=Clase_Fuente)) # Rellamos la barra según la variable "Clase_Fuente".
+
+ggplot(data=AC_Ex1, mapping = aes(x=Temporada, fill=Clase_Fuente))+
+  geom_bar(alpha=1/5,position="identity")
+
+ggplot(data = AC_Ex1, mapping = aes(x = Microcuenca, colour = Clase_Fuente)) + 
+  geom_bar(fill = NA, position = "identity")
+
+ggplot(data = AC_Ex1) + 
+  geom_bar(mapping = aes(x = Microcuenca, fill = Clase_Fuente), position = "identity")
+
+ggplot(data = AC_Ex1) + 
+  geom_bar(mapping = aes(x = Microcuenca, fill = Clase_Fuente), position = "fill")
+
+ggplot(data = AC_Ex1) + 
+  geom_bar(mapping = aes(x = Microcuenca, fill = Clase_Fuente), position = "dodge")
+```
+
+### Scatterplot:
+
+```{r, echo = TRUE}
+AC_Ex1 <- AC_final %>%
+  select(Temporada, Microcuenca, Tipo_Fuente, Clase_Fuente, pH, CE_uS_cm, T_Fuente, As_com, B_com, Cu_com, Fe_com, Mn_com, Ti_com, Ni_com)
+b <- ggplot(AC_Ex1, aes(x=pH, y=As_com))
+b + geom_point()+
+  geom_smooth(method="lm")
+```
+
+```{r, echo = TRUE}
+ggplot(data = AC_Ex1) + 
+  geom_point(mapping = aes(x = pH, y = CE_uS_cm))
+ggplot(data = AC_Ex1) + 
+  geom_point(mapping = aes(x = pH, y = CE_uS_cm), position = "jitter") # Cuando se solapan muchos puntos.
+```
+
+```{r, echo = TRUE}
+ggscatterhist(AC_Ex1, x="As_com", y="Fe_com", color="Temporada", shape = "Microcuenca",
+              margin.plot = "boxplot",
+              ggtheme = theme_bw())
+
+```
+
+
+```{r, echo = TRUE, out.width="100%", out.height="120%"}
+#Matriz de Dispersion
+pairs(AC_Ex1)
+
+# Reseleccionamos:
+AC_Ex2 <- AC_Ex1 %>% 
+  select(Temporada, Microcuenca, Tipo_Fuente, pH, CE_uS_cm, As_com, B_com, Cu_com, Fe_com, Mn_com)
+
+#Matriz de Dispersión Por Clase
+attach(AC_Ex2)
+pairs(Temporada~., data=AC_Ex2, col=AC_Ex2$Temporada)
+pairs(Microcuenca~., data=AC_Ex2, col=AC_Ex2$Microcuenca)
+plot(AC_Ex2[4:5], pch=21, bg=c("red","green3","blue"))
+pairs(AC_Ex2[4:ncol(AC_Ex2)], main = "Alto Camana Microcuencas", pch=21,
+      bg = c("red","green3","blue"))
+
+```
+
+* Analizamos las relaciones de Variables Scatter:
+
+```{r, echo = TRUE}
+#Relaciones
+b <- ggplot(AC_Ex2, aes(x=pH, y=CE_uS_cm))
+c <- b + geom_point(aes(color=Temporada, shape=Microcuenca))+
+  stat_ellipse(aes(color=Temporada),type = "t")
+plotly::ggplotly(c)
+#Color por Fe_com:
+b + geom_point(aes(color=Fe_com), size=4)+
+  scale_color_gradientn(colors = c("red","blue","green"))+
+  theme(legend.position = "top")
+
+#Create a scatter plot
+p <- ggplot(AC_Ex2, aes(Fe_com, pH))+
+  geom_point(aes(shape=Microcuenca),size=3, alpha=0.6)+
+  scale_color_manual(values = c("brown","red","green","pink","black","gray","blue"))
+ggplotly(p)
+
+#Add density distribution as marginal plot:
+#First install package ggExtra, then load the package:
+library("ggExtra")
+ggMarginal(p, type="density")
+```
+
+```{r, echo = TRUE, out.width="80%"}
+#Change the marginal plot type
+ggMarginal(p, type = "densigram")
+```
+
+```{r, echo = TRUE, out.width="80%"}
+ggMarginal(p, type="boxplot")
+
+#For multiple groups in the scatter plot and the marginal plots:
+library(ggpubr)
+#Grouped Scatter plot with marginal density plots
+ggscatterhist(AC_Ex2, x="Fe_com",y="CE_uS_cm",
+              color="Temporada",size=3,alpha=0.6,
+              palette = c("brown","red","green","pink","black","gray","blue"),
+              margin.params = list(fill="Temporada",color="black",size=0.2))
+#Use box plot as marginal plots:
+ggscatterhist(AC_Ex2, x="Fe_com",y="CE_uS_cm", color="Temporada",
+              palette = c("brown","red","green","pink","black","gray","blue"),
+              margin.plot = "boxplot",
+              ggtheme = theme_bw())
+
+#Polynomial regression. Sow equation and adjusted R2. (descubranlo)
+#devtools::install_github("einarhjorleifsson/ggmisc")
+library(ggpmisc)
+formula2<- CE_uS_cm ~ poly(pH, 3, raw = TRUE)
+p <- ggplot(AC_Ex2, aes(pH, CE_uS_cm, color=Temporada))+
+  geom_point()+
+  geom_smooth(aes(fill=Temporada),method="lm",formula=formula2)+
+  stat_poly_eq(
+    aes(label=paste(..eq.label.., ..adj.rr.label..,sep="~~~~")),
+    formula= formula2, parse=TRUE
+)
+ggpar(p, palette = "jco")
+```
+
+
+```{r, eval=FALSE, echo = TRUE}
+#FALTA:
+t <- ggplot(data = AC_Ex2) + 
+  geom_point(mapping = aes(x = As_com, y=CE_uS_cm, color=Temporada, 
+                           shape=Tipo_Fuente, size=pH)) + #falto alpha = transparencia.
+  facet_wrap(~Microcuenca, nrow=2) #podemos usar tmb facet_grid(Temporada~Microcuenca)
+t
+```
+
+### Boxplot:
+
+```{r, echo = TRUE, out.height="120%"}
+AC_Ex3 <- AC_final %>%
+  select(pH, CE_uS_cm, T_Fuente, As_com, B_com, Cu_com, Fe_com, Mn_com, Ti_com, Ni_com)
+par(mfrow=c(3,4))
+for (i in 1:ncol(AC_Ex3)){
+  boxplot(AC_Ex3[ ,i], main=names(AC_Ex3)[i])
+}
+```
+
+```{r, echo = TRUE}
+AC_Ex1 <- AC_final %>%
+  select(Temporada, Microcuenca, Tipo_Fuente, Clase_Fuente, pH, CE_uS_cm, T_Fuente, As_com, B_com, Cu_com, Fe_com, Mn_com, Ti_com, Ni_com)
+t <- ggplot(AC_Ex1, aes(pH, Microcuenca, color=Clase_Fuente, fill=Temporada))+
+  geom_boxplot(outlier.colour = "green", outlier.shape = 8 )+ #probar  notch = TRUE
+  geom_jitter(width = 0.2)+ theme_classic()
+  # coord_flip() rotar el plot x por y.
+t
+```
+
+```{r, echo = TRUE}
+library(plyr)
+p <- ggplot(AC_final, aes(x=factor(round_any(pH, 0.5)), y=Fe_com, fill=Clase_Fuente))+
+    geom_boxplot()+
+    facet_grid(.~Temporada)+
+    labs(x="pH (binned)")+
+    theme(axis.text.x=element_text(angle=-90, vjust=0.4,hjust=1))
+fig <- ggplotly(p)
+fig
+```
+
+```{r, echo = TRUE}
+p <- ggplot(AC_Ex1, aes(Microcuenca, pH, fill = Microcuenca)) + 
+  geom_boxplot(outlier.shape = 8, outlier.colour = "green") + 
+  ggtitle("Outlier con Opacidad según Microcuenca")
+
+# Need to modify the plotly object and make outlier points have opacity equal to 0
+fig <- plotly_build(p)
+
+fig$data <- lapply(fig$data, FUN = function(x){
+  x$marker = list(opacity = 0.25)
+  return(x)
+})
+
+fig
+```
+
+```{r, echo = TRUE}
+library(caret)
+AC_Ex4 <- AC_final %>%
+  select(Temporada, Microcuenca, Tipo_Fuente, Clase_Fuente, pH, CE_uS_cm, T_Fuente, As_com, B_com, Cu_com, Fe_com, Mn_com, Ti_com, Ni_com)
+#Boxplot por Clase
+x <- AC_Ex4[ ,5:ncol(AC_Ex4)]
+y <- AC_Ex4[ ,1]
+featurePlot(x=x, y=y, plot="boxplot")
+```
+
+### Histogram:
+
+```{r, echo = TRUE, out.height="120%"}
+AC_Ex1 <- AC_final %>%
+  select(Temporada, Microcuenca, Tipo_Fuente, Clase_Fuente, pH, CE_uS_cm, T_Fuente, As_com, B_com, Cu_com, Fe_com, Mn_com, Ti_com, Ni_com)
+par(mfrow=c(4,3))
+for (i in 5:ncol(AC_Ex1)){
+  hist(AC_Ex1[ ,i], main = names(AC_Ex1)[i])
+}
+```
+
+### Densidad:
+
+```{r, echo = TRUE, out.height="120%"}
+#install.packages("lattice")
+library(lattice)
+par(mfrow=c(4,3))
+for (i in 5:12){
+  plot(density(AC_Ex1[ ,i]), main=names(AC_Ex1)[i]) 
+}
+```
+
+```{r, echo = TRUE, out.height="120%"}
+#Matriz de Densidad por Clase
+x <- AC_Ex1[ ,5:12]
+y <- AC_Ex1[ ,1]
+scale<-list(x=list(relation ="free"),y=list(relation="free"))
+featurePlot(x=x, y=y, plot="density", scales=scale)
+```
+
+### Histograma, Densidad y Q-QPlot:
+
+```{r, echo = TRUE}
+library(nortest)
+library(car)
+#Inputs:
+w <- AC_final[AC_final$Temporada=="Avenida", ]
+#z <- w[-which(is.na(w$As_com)), ]$As_com #Si existe NA.
+z <- w$As_com #Si no existe NA.
+nom_element <- "As" # Cambiar
+temporada <- "Avenida" # Cambiar
+colores <- "red" # steelblue avenida, red estiaje.
+
+# Automatic Inputs:
+yeti <- paste(nom_element,"(mg/l)")
+st <- shapiro.test(z)     #Si el p-valor es mayor que 0.05 podemos decir que nuestros siguen un distribucion normal.
+nt <- paste("Prueba de Normalidad Shapiro-Wilk:","W=", st$statistic, "p-value=", st$p.value)
+nt <- paste(strwrap(nt, width = 35), collapse = "\n")
+pr <- paste("Histograma de", yeti, "y Curvas de Densidad Real y Teorica (", temporada, ")")
+xeti <- paste("Valores de",yeti)
+pr2 <- paste("Q-Q plot", nom_element, "Confianza 95% (", temporada, ")")
+
+
+#Para visualizar los graficos de manera conjunta modifique el layout de la siguiente forma:
+# dev.off() # Desactivamos todas las ventanas graficas o dispositivos
+# x11() # Abrimos el primer dispositivo
+#l ayout(matrix(c(1:2), ncol=2, byrow=FALSE))
+# layout.show(2) # Muestra las 6 particiones que escogio
+
+hist(z, freq = FALSE, ylim=c(0,5),border = "gray50", xlab = xeti,
+     ylab="Densidad", main = pr)
+lines(density(z), ylim=c(0,2), xlim=c(0,0.040), lwd=2, col=colores)
+curve(dnorm(x,mean(z),sd(z)), lwd=2, col="black", add=TRUE)
+legend("topright",c("Curva observada","Curva (normal) teorica"),
+       lty=1,lwd=2,col = c(colores,"black"), bty="n",cex=0.8)
+```
+
+```{r, echo = TRUE}
+qqPlot(z, main = pr2, distribution = "norm", id=TRUE,
+       xlab = "Cuantiles Normales", col.lines = colores, col = "black", pch=19,
+       ylab = "Cuantiles de Data")
+legend("topleft",c("Linea de Ajuste Normal","Limite de Confianza"), y.intersp = 0.50,
+       lty=c(1,2),lwd=2,col=c(colores,colores), bty="n",cex=0.8)
+legend("left", nt,
+       y.intersp = 0.50, col=c("black"), bty="n",cex=0.8)
+
+#Encontrar valores raros:
+
+# datatable(w[c(13,2),c(3:20)])
+```
+
+### Correlation Plot:
+
+#### Pearson Correlation: 
+
+```{r, echo = TRUE}
+#Grafico de Correlacion
+library(corrplot)
+Filtro01 <- AC_final %>%
+  select(Temporada, As_com, B_com, Cu_com, Fe_com, Mn_com, pH, CE_uS_cm, T_Fuente) %>%
+  filter(!is.na(pH))
+corr <- cor(Filtro01[ ,2:ncol(Filtro01)], method = "pearson")
+corrplot(corr, method ="circle")
+args(corrplot)
+```
+
+```{r, echo = TRUE}
+testRes = cor.mtest(Filtro01[ ,2:ncol(Filtro01)], conf.level = 0.95)
+res1 = cor.mtest(Filtro01[ ,2:ncol(Filtro01)], conf.level = 0.95)
+res2 = cor.mtest(Filtro01[ ,2:ncol(Filtro01)], conf.level = 0.99)
+
+#Plot de la matriz de correlación
+corrplot(corr, method = "circle", p.mat = testRes$p, sig.level = 0.05, order = 'hclust', addrect = 2)
+corrplot(corr, method = "circle", p.mat = testRes$p, type = 'lower', insig='blank', addCoef.col ='black', number.cex = 0.8, order = 'AOE', diag=FALSE)
+corrplot(corr, method = "circle", order="hclust", p.mat = testRes$p, insig = 'p-value')
+corrplot(corr, low = res1$uppCI, upp = res1$uppCI,
+         plotCI = 'circle', addg = 'grey20', cl.pos = 'n')
+corrplot(corr, method = "circle", order="hclust")
+```
+
+```{r, echo = TRUE}
+par(ask = FALSE)
+for (i in seq(0.1, 0, -0.005)) {
+  tmp = cor.mtest(Filtro01[ ,2:ncol(Filtro01)], conf.level = 1 - i)
+  corrplot(corr, p.mat = tmp$p, low = tmp$lowCI, upp = tmp$uppCI, order = 'hclust',
+           pch.col = 'red', sig.level = i, plotCI = 'rect', cl.pos = 'n',
+           mar = c(0, 0, 1, 0),
+           title = substitute(alpha == x,
+                              list(x = format(i, digits = 3, nsmall = 3))))
+  Sys.sleep(0.15)
+}
+```
+
+#### Spearman Rank Correlation:
+
+```{r, echo = TRUE}
+corr <- cor(Filtro01[ ,2:ncol(Filtro01)], method = "spearman")
+corrplot(corr, method ="circle")
+args(corrplot)
+```
+
+```{r, echo = TRUE}
+testRes = cor.mtest(Filtro01[ ,2:ncol(Filtro01)], conf.level = 0.95)
+res1 = cor.mtest(Filtro01[ ,2:ncol(Filtro01)], conf.level = 0.95)
+res2 = cor.mtest(Filtro01[ ,2:ncol(Filtro01)], conf.level = 0.99)
+
+#Plot de la matriz de correlación
+corrplot(corr, method = "circle", p.mat = testRes$p, sig.level = 0.05, order = 'hclust', addrect = 2)
+corrplot(corr, method = "circle", p.mat = testRes$p, type = 'lower', insig='blank', addCoef.col ='black', number.cex = 0.8, order = 'AOE', diag=FALSE)
+corrplot(corr, method = "circle", order="hclust", p.mat = testRes$p, insig = 'p-value')
+corrplot(corr, low = res1$uppCI, upp = res1$uppCI,
+         plotCI = 'circle', addg = 'grey20', cl.pos = 'n')
+corrplot(corr, method = "circle", order="hclust")
+```
+
+#### Multiple Graphs Correlation:
+
+```{r, echo = TRUE}
+library(GGally)
+Filtro02 <- AC_final %>%
+  filter(Temporada=="Avenida") %>%
+  select(Microcuenca, As_com, Cu_com, Fe_com, Mn_com, pH) %>%
+  filter(!is.na(pH)) 
+p <- ggpairs(Filtro02, aes(color = Microcuenca))+ theme_bw()
+ggplotly(p) %>% 
+  highlight("plotly_selected")
+# Change color manually.
+# Loop through each plot changing relevant scales
+for(i in 1:p$nrow) {
+  for(j in 1:p$ncol){
+    p[i,j] <- p[i,j] +
+      scale_fill_manual(values=c("#00AFBB", "#E7B800", "#FC4E07")) +
+      scale_color_manual(values=c("#00AFBB", "#E7B800", "#FC4E07"))
+  }
+}
+p
+
+pairs(Filtro02)
+library("PerformanceAnalytics")
+my_data <- Filtro02[ ,-1]
+chart.Correlation(my_data, histogram=TRUE, pch=19, method = "pearson")
+chart.Correlation(my_data, histogram=TRUE, pch=19, method = "spearman")
+chart.Correlation(my_data, histogram=TRUE, pch=19, method = "kendall")
+
+library(pca3d)
+library(factoextra)
+library(FactoMineR)
+data_nueva <- Filtro02[ ,2:ncol(Filtro02)]
+nrow(data_nueva)
+summary(data_nueva)
+
+pca3d(prcomp(data_nueva), group=Filtro02$Microcuenca, 
+      show.ellipses=TRUE,
+      ellipse.ci=0.75, show.plane=FALSE)
+
+pairs.panels(
+  data_nueva,
+  main = "Subcuenca Alto Camana - Sumario de Correlacion",
+  gap = 0, # set to zero for no gap between plot panels
+  lm = TRUE, # draw linear regression lines for pairs
+  stars = TRUE, # display significance
+  bg = c("red", "blue","green")[Filtro02$Microcuenca], # color based on sex 
+  pch = 21) # data point shape
+
+ggcorr(data_nueva,
+       nbreaks = 6,
+       low = "steelblue",
+       mid = "white",
+       high = "darkred",
+       geom = "circle")
+```
+
+### Comparaciones
+
+```{r, echo = TRUE}
+AC$As_ran <- NA
+
+#NO OLVIDAR CAMBIAR ELEMENTO!!!
+AC[AC$Temporada=="Avenida", ]$As_ran <- with(AC[AC$Temporada=="Avenida", ], ifelse(As_com >= 0 & As_com < quantile(AC$As_com,probs = 0.25, na.rm = TRUE), "Bajo",
+                                                      ifelse(As_com >= quantile(AC$As_com,probs = 0.25, na.rm = TRUE) & As_com < quantile(AC$As_com,probs = 0.50, na.rm = TRUE), "Moderado",
+                                                             ifelse(As_com>=quantile(AC$As_com,probs = 0.50, na.rm = TRUE) & As_com<quantile(AC$As_com,probs = 0.75, na.rm = TRUE),"Alto","Muy Alto"))))
+
+AC[AC$Temporada=="Estiaje", ]$As_ran <- with(AC[AC$Temporada=="Estiaje", ], ifelse(As_com >= 0 & As_com < quantile(AC$As_com,probs = 0.25, na.rm = TRUE), "Bajo",
+                                                                                       ifelse(As_com >= quantile(AC$As_com,probs = 0.25, na.rm = TRUE) & As_com < quantile(AC$As_com,probs = 0.50, na.rm = TRUE), "Moderado",
+                                                                                              ifelse(As_com>=quantile(AC$As_com,probs = 0.50, na.rm = TRUE) & As_com<quantile(AC$As_com,probs = 0.75, na.rm = TRUE),"Alto","Muy Alto"))))
+summary(as.factor(AC$As_ran))
+```
+
+### Comparaciones Estadisticas:
+#### Comparaciones Muestras no Apareadas:
+
+* Unpaired Two-Sample T-test (Dos muestras no apareadas T-test)
+
+```{r, echo = TRUE}
+####Unpaired Two-Sample T-test (Ejemplo aplicado en R:)####
+#Sumario estadistico por temporadas de pH:
+AC_final %>%
+group_by(Temporada) %>%
+  dplyr::summarise(
+    count = n(),
+    mean = mean(pH, na.rm = TRUE),
+    sd = sd(pH, na.rm = TRUE)
+  )
+# Ploteamos los pesos por grupo y color por grupo:
+library("ggpubr")
+ggboxplot(AC_final, x = "Temporada", y = "pH", 
+          color = "Temporada", palette = c("#00AFBB", "#E7B800"),
+          ylab = "pH", xlab = "Temporadas")
+```
+
+Verificamos los supuestos de independencia del t-test:
+
+1. ¿Son las dos muestras independientes?
+
+Esto asumiremos que se cumple debido a que son temporadas distintas y no estan relacionadas directamente.
+
+2. La data de los dos grupos viene de una distribucion normal:
+
+
+```{r, echo = TRUE}
+# Shapiro-Wilk test de normalidad para Avenida pH
+with(AC_final, shapiro.test(pH[Temporada == "Avenida"]))# p-value = 0.0003555
+
+# Shapiro-Wilk test de normalidad para Estiaje pH
+
+with(AC_final, shapiro.test(pH[Temporada == "Estiaje"])) # p-value = 2.275e-06
+```
+
+Como podemos ver las salidas de los p-valor son menores que 0.05 implica que la distribucion de los datos no proviene de una data que no difiere de la normal, sin embargo asumiremos normalidad (se debe realizar la *transformación*).
+
+3. ¿La poblacion tiene igual varianza?
+
+```{r, echo = TRUE}
+# Usaremos el F-test para la homogenidad de varianzas:
+
+res.ftest <- var.test(pH ~ Temporada, data = AC_final)
+res.ftest
+
+```
+
+El *p-valor de F-test es p-value = 0.3132*. Es mayor que el nivel de significancia 0.05. En conclusion, **no existe diferencia significativa entre las varianzas de los sets de data**. Por lo tanto, usaremos el t-test clasico asumiendo iguales las dos varianzas.
+
+```{r, echo = TRUE}
+# Haremos el t-test:
+
+# Forma 1:
+
+res <- t.test(AC_final[AC_final$Temporada=="Avenida", ]$pH , AC_final[AC_final$Temporada=="Estiaje", ]$pH, var.equal = TRUE)
+res
+
+# Forma 2:
+res <- t.test(pH ~ Temporada, data = AC_final, var.equal = TRUE)
+res
+
+# Acceder a los datos:
+res$p.value
+res$estimate
+res$conf.int
+```
+
+```{r, echo = TRUE}
+#Para complementar en caso deseamos saber si el promedio de la Avenida es menor que Estiaje de pH
+
+t.test(pH ~ Temporada, data = AC_final,
+       var.equal = TRUE, alternative = "less")
+
+#Si queremos saber que el promedio de la Avenida es mayor que Estiaje de pH
+t.test(pH ~ Temporada, data = AC_final,
+       var.equal = TRUE, alternative = "greater")
+```
+
+* One-way ANOVA (Análisis de Varianza de una vía)
+
+Usaremos la camparación del pH para las microcuencas para la temporada de avenida.
+
+```{r, echo = TRUE}
+#### One-Way ANOVA####
+AC_final %>%
+group_by(Microcuenca, Temporada) %>%
+  filter(Temporada=="Avenida") %>%
+  dplyr::summarise(
+    count=n(),
+    mean=mean(pH, na.rm=TRUE),
+    sd = sd(pH, na.rm=TRUE)
+)
+
+#Visualizamos la data:
+
+library(ggpubr)
+#Realizaremos Box plots:
+#Ploteamos peso por grupo y color por grupo
+AC_final %>%
+  filter(Temporada=="Avenida") %>%
+ggboxplot(x="Microcuenca", y="pH",
+          color="Microcuenca", palette=c("#00AFBB","#E7B800","#FC5E07"),
+          order = c("Cabanaconde","Maca","Tuti"),
+          ylab="pH", xlab="Microcuenca")
+
+#Medianas de Plots:
+#Plot de peso por grupos y agregamos barras de error (mean_se),
+#otros valores pueden ser, mean_cim mean_iqr,.....
+AC_final %>%
+  filter(Temporada=="Avenida") %>%
+ggline(x="Microcuenca", y="pH",
+       add=c("mean_se","jitter"),
+       order=c("Cabanaconde","Maca","Tuti"),
+       ylab="pH",xlab="Microcuenca")
+
+#Si deseamos usar los graficos convencionales de R:
+
+# Box plot
+boxplot(pH ~ Microcuenca, data = AC_final[AC_final$Temporada=="Avenida", ],
+        xlab = "Microcuenca", ylab = "pH",
+        frame = FALSE, col = c("#00AFBB", "#E7B800", "#FC4E07"))
+# plotmeans
+library("gplots")
+plotmeans(pH ~ Microcuenca, data = AC_final[AC_final$Temporada=="Avenida", ],
+          frame = FALSE,
+          xlab = "Microcuenca", ylab = "pH",
+          main="Mean Plot with 95% CI") 
+```
+
+Nosotros deseamos saber si existe una diferencia significativa entre el promedio de pH entre las 3 Microcuencas.
+
+La funcion en r `aov()` puede ser usarada para responder esta pregunta. La función `summary.aov()` es usada para sumarizar el analisis del modelo de varianza.
+
+```{r, echo = TRUE}
+# Compute el analisis de varianza:
+res.aov <- aov(pH ~ Microcuenca, data = AC_final[AC_final$Temporada=="Avenida", ])
+```
+
+```{r, echo = TRUE}
+# Resumir el analisis
+summary(res.aov)
+```
+
+La salida incluye la columna F valor y Pr(>F) correspondiente al p-valor del test. 
+
+Interpretando el resultado de One-Way Anova Test:
+
+Como el p-valor es menor que el nivel de significancia 0.10 (estamos considerando este para el ejemplo), nosotros podemos concluir que existe diferencias significativas entre los grupos resaltado con "*" en el modelo del sumario.
+
+** *Multiples pares de comparaciones entre las medias de los grupos*.
+
+En un One-Way Anova Test, un significante p-valor indica que algunos de los grupos son de medias diferentes, pero nosotros no conocemos cual de grupos es. 
+
+Es posible llevar a cabo una comparación multiple de pares, para determinar si la media diferente entre pares de grupo es es estadisticamente significativa.
+
+**Tukey** para comparación multiple de pares:
+
+omo el test de ANOVA es significante, nosotros podemos usare el **Tukey HSD** (Tukey Honest Significant Differences) en R la función es **TukeyHSD()** para llevar a cabo la comparación multiple de grupos por pares entre las medias de grupos.
+
+La función `TukeyHD()` toma el ajuste de ANOVA como argumento:
+
+```{r, echo = TRUE}
+TukeyHSD(res.aov)
+
+#diff: diferencia entre medias de dos grupos.
+#lwr, upr: el menor y superior final del punto del intervalo de confianza al 95% (default)
+#p adj: p-valor después del ajuste de multiple comparacion.
+```
+
+#### Analisis Comparaciones:
+
+Probar y evaluar.
+
+```{r, echo = TRUE}
+id <- which(AC[AC$Temporada=="Estiaje", ]$As_ran == "Muy Alto")
+AC2 <- AC[AC$Temporada=="Estiaje", ]
+AC2 <- AC2[id, ] %>% select(Codigo_Corto)
+AC2$Codigo_Corto
+
+AC3 <- AC[AC$Temporada=="Estiaje", ]
+ACX <- AC3[!is.na(AC3$As_ran), ]
+
+plot(ACX$As_com)
+# identify(ACX$As_com,
+#          labels = ACX$Codigo_Corto,
+#          pos=TRUE,
+#          font=2)
+
+```
+
+
+# Diagramas generales (parámetros FICO).
+
+```{r, echo = TRUE}
+AC_final$HCO3_menos <- as.numeric(AC_final$HCO3_menos)
+AC_final$Cl <- as.numeric(AC_final$Cl)
+AC_plot <- AC_final %>% 
+  select("Codigo_Corto", "Cota","Este","Norte", "Ca_tot", "Mg_tot", "Na_tot", "HCO3_menos", 
+         "SO4_menos_2", "Cl") %>%
+  pivot_longer(cols = c("Ca_tot", "Mg_tot", "Na_tot", "HCO3_menos", "SO4_menos_2", "Cl") ,
+               names_to = "elemento", values_to = "concentracion")
+
+AC_plot %>%
+ggplot(aes(x = Codigo_Corto, y = concentracion, color = elemento))+
+  geom_point()+
+  theme(axis.text.x = element_text(angle = 90))+
+  scale_y_continuous(breaks = c(0.001, 0.01, 0.1, 1, 10, 100, 1000),
+                     labels = c("0.001", "0.01", "0.1", "1", "10", "100", "1000"))
+library(scatterplot3d)
+colors <- c("#999999", "#E69F00", "#56B4E9", "blue","green","yellow")
+AC_plot$elemento <- as.factor(AC_plot$elemento)
+colors <- colors[as.numeric(AC_plot$elemento)]
+
+scatterplot3d(AC_plot[ ,c("Este","Norte","concentracion")], pch =16, type="h",
+              color = colors, angle = 70,
+              xlab = "Este (m)",
+              ylab = "Norte (m)",
+              zlab = "Concentracion (mg/l)",
+              main = " Concentración de Elementos Mayoritarios en Alto Camana")
+# legend(s3d$xyz.convert(190000, 8295000, 2500), legend = levels(AC_plot$elemento),
+#       col =  colors, pch = 16)
+```
+
+```{r, echo = TRUE}
+
+####pH:####
+RR <- ggplot(data = AC_final, aes(x = reorder(Codigo_Corto, desc(Cota)), y = pH, color = Temporada))+
+  geom_point(size=2.5)+
+  theme(axis.text.x = element_text(angle = 90))+
+  ggtitle(label = "pH en el Alto Camaná")+
+  xlab(label = "Codigo de Muestra")+ ylab(label = "Potencial de Hidrogeno (pH)")+
+  geom_hline(yintercept = 6.5, colour = "turquoise")+
+  geom_text(aes(8,6.5,label = 6.5, vjust = +1, colour = "purple"), 
+            label = "ECA. Cat1-A1 - Limite Inferior", show.legend = FALSE)+
+  geom_hline(yintercept = 8.5, colour = "purple")+
+  geom_text(aes(8,8.5,label = 6.5, vjust = +1, colour = "turquoise"), 
+            label = "ECA. Cat1-A1 - Limite Superior", show.legend = FALSE)+
+  geom_text(aes(label = Codigo_Corto), data = AC_final[AC_final$pH >= 8.5, ],
+            hjust = 0, nudge_x = 0.12, nudge_y = 0.05)+
+  geom_text(aes(label = Codigo_Corto), data = AC_final[AC_final$pH <= 6.5, ], 
+            hjust = 0, nudge_x = 0.12, nudge_y = 0.05)+
+  theme(panel.background = element_rect(fill = "white", colour = "grey50"),
+        #axis.title.x = element_blank(),
+        axis.text.x  = element_blank(),
+        axis.ticks.x = element_blank())
+ggplotly(RR)
+library(ggrepel)
+####CE:####
+PP <- ggplot(data = AC_final,aes(x = reorder(Codigo_Corto, desc(Cota)), y = CE_uS_cm, color = Temporada))+
+  geom_point(size=2.5)+
+  theme(axis.text.x = element_text(angle = 90))+
+  ggtitle(label = "Conductividad Eléctrica en el Alto Camaná")+
+  xlab(label = "Codigo de Muestra")+ ylab(label = "Conductividad Eléctrica (uS/cm)")+
+  geom_hline(yintercept = 1500, colour = "purple")+
+  geom_text_repel(aes(label = Codigo_Corto), data = AC_final[AC_final$CE_uS_cm >= 1500, ],
+             size = 3)+
+  theme(panel.background = element_rect(fill = "white", colour = "grey50"),
+        #axis.title.x = element_blank(),
+        axis.text.x  = element_blank(),
+        axis.ticks.x = element_blank())
+PP
+ggplotly(PP)
+
+####log(CE) Vs Salinidad:####
+ggplot(data = AC_final[AC_final$Salinidad_PSU <= 100, ])+
+  geom_point(aes(x = Salinidad_PSU, y = log(CE_uS_cm), color = Uso))+
+  ggtitle(label = "log(CE) Vs. Salinidad Alto Camaná")+
+  xlab(label = "Salinidad (psu)")+ ylab(label = "log(CE) (uS/cm)")
+```
+
+# Diagramas de Piper, Gibss y Stiff.
+
+## El Diagrama de Piper para el Análisis Hidroquímico:
+
+```{r}
+toPercent <- function (data_input) {
+  totalCations <- rowSums(data_input[ ,c("Ca","Mg","Na","K")], na.rm=TRUE)
+  data_input$Ca <- 100 * (data_input$Ca/totalCations)
+  data_input$Mg <- 100 * (data_input$Mg/totalCations)
+  data_input$Na <- 100 * (data_input$Na/totalCations)
+  data_input$K <- 100 * (data_input$K/totalCations)
+  totalAnions <- rowSums(data_input[ ,c("Cl","SO4","CO3","HCO3")], na.rm=TRUE)
+  data_input$Cl <- 100 * (data_input$Cl/totalAnions)
+  data_input$SO4 <- 100 * (data_input$SO4/totalAnions)
+  data_input$CO3 <- 100 * (data_input$CO3/totalAnions)
+  data_input$HCO3 <- 100 * (data_input$HCO3/totalAnions)
+  return(data_input)
+}
+transform_piper_data <- function(toPercent){
+  Codigo<-toPercent$Codigo
+  y1 <- toPercent$Mg * 0.86603
+  x1 <- 100*(1-(toPercent$Ca/100) - (toPercent$Mg/200))
+  y2 <- toPercent$SO4 * 0.86603
+  x2 <-120+(100*toPercent$Cl/100 + 0.5 * 100*toPercent$SO4/100)
+  new_point <- function(x1, x2, y1, y2, grad=1.73206){
+    b1 <- y1-(grad*x1)
+    b2 <- y2-(-grad*x2)
+    M <- matrix(c(grad, -grad, -1,-1), ncol=2)
+    intercepts <- as.matrix(c(b1,b2))
+    t_mat <- -solve(M) %*% intercepts
+    data.frame(x=t_mat[1,1], y=t_mat[2,1])
+  }
+  np_list <- lapply(1:length(x1), function(i) new_point(x1[i], x2[i], y1[i], y2[i]))
+  npoints <- do.call("rbind",np_list)
+  data.frame(observation=Codigo,x=c(x1, x2, npoints$x), y=c(y=y1, y2, npoints$y))
+}
+ggplot_piper <- function(piper.data,output = c("ggplot","plotly")) {
+  grid1p1 <<- data.frame(x1 = c(20,40,60,80), x2= c(10,20,30,40),y1 = c(0,0,0,0), y2 = c(17.3206,34.6412,51.9618, 69.2824))
+  grid1p2 <<- data.frame(x1 = c(20,40,60,80), x2= c(60,70,80,90),y1 = c(0,0,0,0), y2 = c(69.2824, 51.9618,34.6412,17.3206))
+  grid1p3 <<- data.frame(x1 = c(10,20,30,40), x2= c(90,80,70,60),y1 = c(17.3206,34.6412,51.9618, 69.2824), y2 = c(17.3206,34.6412,51.9618, 69.2824))
+  grid2p1 <<- grid1p1
+  grid2p1$x1 <- grid2p1$x1+120
+  grid2p1$x2 <- grid2p1$x2+120
+  grid2p2 <<- grid1p2
+  grid2p2$x1 <- grid2p2$x1+120
+  grid2p2$x2 <- grid2p2$x2+120
+  grid2p3 <<- grid1p3
+  grid2p3$x1 <- grid2p3$x1+120
+  grid2p3$x2 <- grid2p3$x2+120
+  grid3p1 <<- data.frame(x1=c(100,90, 80, 70),y1=c(34.6412, 51.9618, 69.2824, 86.603), x2=c(150, 140, 130, 120), y2=c(121.2442,138.5648,155.8854,173.2060))
+  grid3p2 <<- data.frame(x1=c(70, 80, 90, 100),y1=c(121.2442,138.5648,155.8854,173.2060), x2=c(120, 130, 140, 150), y2=c(34.6412, 51.9618, 69.2824, 86.603))
+  
+  p <- ggplot2::ggplot() +
+    ## left hand ternary plot
+    ggplot2::geom_segment(ggplot2::aes(x=0,y=0, xend=100, yend=0)) +
+    ggplot2::geom_segment(ggplot2::aes(x=0,y=0, xend=50, yend=86.603)) +
+    ggplot2::geom_segment(ggplot2::aes(x=50,y=86.603, xend=100, yend=0)) +
+    ## right hand ternary plot
+    ggplot2::geom_segment(ggplot2::aes(x=120,y=0, xend=220, yend=0)) +
+    ggplot2::geom_segment(ggplot2::aes(x=120,y=0, xend=170, yend=86.603)) +
+    ggplot2::geom_segment(ggplot2::aes(x=170,y=86.603, xend=220, yend=0)) +
+    ## Upper diamond
+    ggplot2::geom_segment(ggplot2::aes(x=110,y=190.5266, xend=60, yend=103.9236)) +
+    ggplot2::geom_segment(ggplot2::aes(x=110,y=190.5266, xend=160, yend=103.9236)) +
+    ggplot2::geom_segment(ggplot2::aes(x=110,y=17.3206, xend=160, yend=103.9236)) +
+    ggplot2::geom_segment(ggplot2::aes(x=110,y=17.3206, xend=60, yend=103.9236)) +
+    ## Add grid lines to the plots
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid1p1, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid1p2, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid1p3, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid2p1, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid2p2, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid2p3, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid3p1, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid3p2, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ### Labels and grid values
+    
+    ggplot2::geom_text(ggplot2::aes(c(20,40,60,80),c(-5,-5,-5,-5), label=c(80, 60, 40, 20)), size=3) +
+    ggplot2::geom_text(ggplot2::aes(c(35,25,15,5),grid1p2$y2, label=c(80, 60, 40, 20)), size=3) +
+    ggplot2::coord_equal(ratio=1) +  
+    ggplot2::geom_text(ggplot2::aes(c(215,205,195,185),grid2p3$y2, label=c(20, 40, 60, 80)), size=3) +
+    ggplot2::geom_text(ggplot2::aes(c(140,160,180,200),c(-5,-5,-5,-5), label=c(20, 40, 60, 80)), size=3) +
+    ggplot2::geom_text(ggplot2::aes(grid3p1$x1-5,grid3p1$y1, label=c(80, 60, 40, 20)), size=3) +
+    ggplot2::geom_text(ggplot2::aes(grid3p1$x2+5,grid3p1$y2, label=c(20, 40, 60, 80)), size=3) +
+    ggplot2::geom_text(ggplot2::aes(grid3p2$x1-5,grid3p2$y1, label=c(20, 40, 60, 80)), size=3) +
+    ggplot2::geom_text(ggplot2::aes(grid3p2$x2+5,grid3p2$y2, label=c(80, 60, 40, 20)), size=3) +
+    ggplot2::theme_bw() +
+    ggplot2::theme(panel.grid.major = ggplot2::element_blank(), panel.grid.minor = ggplot2::element_blank(),
+                   panel.border = ggplot2::element_blank(), axis.ticks = ggplot2::element_blank(),
+                   axis.text.x = ggplot2::element_blank(), axis.text.y = ggplot2::element_blank(),
+                   axis.title.x = ggplot2::element_blank(), axis.title.y = ggplot2::element_blank(),
+                   legend.title = element_blank()) +
+    ggplot2::geom_point(ggplot2::aes(x,y, colour=factor(Microcuenca), #PARTE CRITICA A USAR
+                                     shape = Tipo_Fuente, 
+                                     text = paste(observation,
+                                                  '</br></br>Tipo_Fuente: ',Tipo_Fuente,
+                                                  '</br></br>Clase_Fuente: ',Clase_Fuente,
+                                                  '</br></br>Ca: ',Ca,
+                                                  '</br></br>K: ',K,
+                                                  '</br></br>Na: ',Na,
+                                                  '</br></br>Cl: ',Cl,
+                                                  '</br></br>SO4: ',SO4,
+                                                  '</br></br>HCO3: ',HCO3,
+                                                  '</br></br>CO3: ',CO3
+                                     )), data=piper.data)+
+    ggplot2::scale_color_manual(values=c("green","red","blue"))
+  
+  if (output == "ggplot"){
+    p <- p + 
+      ggplot2::geom_text(ggplot2::aes(17,50, label="Mg^'2+'"), angle=60, size=4, parse=TRUE) +  
+      ggplot2::geom_text(ggplot2::aes(77.5,50, label="Na^'+'~+~K^'+'"), angle=-60, size=4,parse=TRUE) +
+      ggplot2::geom_text(ggplot2::aes(50,-10, label="Ca^'2+'"), size=4, parse=TRUE) +
+      ggplot2::geom_text(ggplot2::aes(170,-10, label="Cl^'-'"), size=4, parse=TRUE) +
+      ggplot2::geom_text(ggplot2::aes(205,50, label="SO[4]^'-'"), angle=-60, size=4, parse=TRUE) +
+      ggplot2::geom_text(ggplot2::aes(142,50, label="Alkalinity~as~HCO[3]^'-'"), angle=60, size=4, parse=TRUE) +
+      ggplot2::geom_text(ggplot2::aes(72.5,150, label="SO[4]^'-'~+~Cl^'-'"), angle=60, size=4, parse=TRUE) +
+      ggplot2::geom_text(ggplot2::aes(147.5,150, label="Ca^'2+'~+~Mg^'2+'"), angle=-60, size=4, parse=TRUE)
+  }
+  
+  if (output == "plotly"){
+    #this fixes an issue that plotly can't render geom_text() with the  angle option set properly
+    p <- plotly::ggplotly(p,
+                          tooltip = c("text")
+    )
+    p <- p  %>% plotly::layout(
+      annotations=list(text=c("Mg<sup>2+</sup>",
+                              "Na<sup>+</sup> + K<sup>+</sup>",
+                              "Ca<sup>2+</sup>",
+                              "Cl<sup>-</sup>",
+                              "SO<sub>4</sub><sup>-</sup>",
+                              "Alkalinity as HCO<sub>3</sub><sup>-</sup>",
+                              "SO<sub>4</sub><sup>-2</sup> + Cl<sup>-</sup>",
+                              "Ca<sup>2+</sup> + Mg<sup>2+</sup>"),
+                       x = c(17,77.5,50,170,205,142.5,72.5,147.5),
+                       y = c(50,50,-10,-10,50,50,150,150),
+                       textangle = c(-60,60,0,0,60,-60,-60,60),
+                       "showarrow"=F, font=list(size = 12, color = "black")
+      ))
+    
+  }
+  
+  return(p)
+}
+```
+
+```{r}
+####Generando Diagrama de Piper (Creación Propia)####
+AC_piper <- AC_final %>% dplyr::rename(Ca = "Ca_dis", Mg = "Mg_dis", Na = "Na_dis", K = "K_dis", Cl = "Cl", SO4 = "SO4_menos_2", CO3 = "CO3_menos_2_mg_L", HCO3 = "HCO3_menos")
+AC_piper$CO3 <- as.numeric(AC_piper$CO3)
+a <- toPercent(AC_piper)
+ppdata <- transform_piper_data(toPercent = a )
+piper_data <- merge(ppdata,
+                        AC_piper[ ,c("Codigo","Temporada","Microcuenca","Tipo_Fuente","Clase_Fuente",
+                              "Ca","K","Mg","Na","Cl","SO4","HCO3","CO3")],
+                        by.x = "observation",
+                        by.y = "Codigo")
+#piper_data
+ggplot_piper(piper.data = piper_data, output = "plotly")
+
+```
+
+## El Diagrama de Gibss para el Análisis Hidroquímico:
+
+```{r}
+####Generando Diagrama de Gibss (Creación Propia)####
+library(scales)
+AC_Gibss <- AC_piper %>%
+  mutate(Gibss01 = (Na_tot+K_tot)/(Na_tot+K_tot+Ca_tot)) 
+rr <- ggplot(data = AC_Gibss)+
+  geom_point(aes(x = Gibss01, y = TDS_mg_L, shape = Temporada, color = Microcuenca))+
+  scale_x_continuous(name = "Na+K/Na+K+Ca", breaks = seq(0,1, by=0.2))+
+  scale_y_continuous(name = "Total Dissolved Salts (ppm)",trans=log_trans(), breaks = c(1,10,100,1000,10000,100000))+
+  expand_limits(y = c(0, 100000))+
+  annotate("text", x = 0.2, y = 1000, label = "Rock Dominance")+
+  annotate("text", x = 0.8, y = 10000, label = "Sea Water")+
+  annotate("text", x = 0.8, y = 20, label = "Precipitation Dominance")+
+  annotate("segment", x = 0, xend = 1, y = 110, yend = 3,  colour = "blue")+
+  annotate("segment", x = 0, xend = 0.9, y = 600, yend = 100000,  colour = "blue")+
+  annotate("segment", x = 1, xend = 0.5, y = 8000, yend = 300,  colour = "blue")+
+  annotate("segment", x = 0.5, xend = 1, y = 300, yend = 30,  colour = "blue")+
+   annotation_logticks(sides = "lr")  +
+     theme_bw() 
+library(plotly)
+ggplotly(rr)
+```
+
+
+## El Diagrama de Stiff para el Análisis Hidroquímico:
+
+Probar ustedes.
+
+```{r, eval=FALSE, echo = TRUE}
+#paquete smwrGraphs USGS:
+remotes::install_github("USGS-R/smwrBase") #dependencias
+remotes::install_github("USGS-R/smwrData")
+remotes::install_github("USGS-R/smwrGraphs")
+library(smwrGraphs)
+PD <- smwrData::MiscGW
+# Transform the data. This example will ignore potassium, fluoride, and nitrate
+# (carbonate is either 0 or missing and will also be ignored).
+PD <- transform(PD, Ca.meq = conc2meq(Calcium, "calcium"),
+                     Mg.meq = conc2meq(Magnesium, "magnesium"),
+                     Na.meq = conc2meq(Sodium, "sodium"),
+                     Cl.meq = conc2meq(Chloride, "chloride"),
+                     SO4.meq = conc2meq(Sulfate, "sulfate"),
+                     HCO3.meq = conc2meq(Bicarbonate, "bicarb"))
+PD$SS <- row.names(PD)
+setPDF(layout = "portrait", basename = "USGS", multiplefiles = FALSE)
+AA.lo <- setLayout(height=2.0, explanation=list(bottom=1.1))
+setGraph(1, AA.lo)
+AA.pl <- with(PD, stiffPlot(cbind(Ca.meq, Mg.meq, Na.meq),
+setGraph("explanation", AA.lo)
+addExplanation(AA.pl)
+graphics.off()
+```
+
+
+# Estándares de Calidad Ambiental Aguas
+
+Los estándares de Calidad Ambiental son establecidos mediante **Decreto Supremo** que establece *niveles de concentración de los elementos, sustancias, parámetros físicos y químicos y biológicos, presentes en el agua en su condición de cuerpo receptor y componente básico de los ecosistemas acuáticos que no represente riesgo significativo para la salud de las personas ni para el ambiente*. En este caso usaremos el [DS-004-2017](https://sinia.minam.gob.pe/normas/aprueban-estandares-calidad-ambiental-eca-agua-establecen-disposiciones)
+
+
+```{r}
+####Compartir data entre paneles####
+library(crosstable)
+library(crosstalk)
+library(flexdashboard)
+sd <- crosstalk::SharedData$new(AC_final)
+```
+
+* As_com:
+
+```{r}
+plot1 <- ggplot(sd, aes(x = pH, y = As_com, color = Temporada, shape = Microcuenca,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE_uS_cm
+                                                  ))) + geom_point(size=5)+
+  geom_hline(yintercept = 0.01, colour = "red")+ #ECA A2
+  geom_hline(yintercept = 0.10, colour = "green")+ #ECA D1
+  geom_hline(yintercept = 0.20, colour = "purple") #ECA D2 
+
+ggplotly(plot1) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+* Fe_com:
+
+```{r}
+plot2 <- ggplot(sd, aes(x = pH, y = Fe_com, color = Temporada, shape = Microcuenca,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE_uS_cm
+                                                  ))) + geom_point(size=5)+
+  geom_hline(yintercept = 1.00, colour = "red")+ #ECA A2
+  geom_hline(yintercept = 5.00, colour = "green")
+
+ggplotly(plot2) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+* Cu_tot:
+
+```{r}
+plot3 <- ggplot(sd, aes(x = pH, y = Cu_com, color = Temporada, shape = Microcuenca,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE_uS_cm
+                                                  ))) + geom_point(size=5)+
+  geom_hline(yintercept = 2.00, colour = "red")+ #ECA A2
+  geom_hline(yintercept = 0.20, colour = "green")+ #ECA D1
+  geom_hline(yintercept = 0.50, colour = "purple") #ECA D2
+
+
+ggplotly(plot3) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+# Previa Spatial Data:
+
+Más adelante se realizará la introducción a Spatial Data Análisis en R y al final se presentará algunos desarrollos del `multiverse geocientífico` para análisis interactivo multitarea en R.
+
+
