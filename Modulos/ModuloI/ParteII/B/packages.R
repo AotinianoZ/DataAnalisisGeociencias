@@ -25,7 +25,6 @@ loadlibs <- function(x =0){
   require(hrbrthemes)
 
 }
-
 loadlibs()
 cat(" R libraries loaded for Tratamiento","\n", " written by A. Otiniano.",'\n')
 

@@ -50,7 +50,7 @@ Peligros2$Dpto <- as.factor(Peligros2$Dpto)
 Peligros2$Prov <- as.factor(Peligros2$Prov)
 Peligros2$T.Peligro <- as.factor(Peligros2$T.Peligro)
 Peligros2$N.Esp <- as.factor(Peligros2$N.Esp)
-Peligros2$m <- as.factor(Peligros2$m)
+Peligros2$m <- as.factor(Peligros2$m)dat
 Peligros2$Ab.Fm <- as.factor(Peligros2$Ab.Fm)
 Peligros2$SubCuenca <- as.factor(Peligros2$SubCuenca)
 Peligros2$Cuenca <- as.factor(Peligros2$Cuenca)
