@@ -106,7 +106,7 @@ sample(1:6,size=10,replace=TRUE)
 #Asumir que 10000 personas se les pregunta
 #si les gusta comer pollo o no y 6200 dicen si.
 #Luego si elegimos una muestra de 10:
-sample(rep(0:1,c(3200,6800)),size=10,replace=TRUE)
+sample(rep(0:1,c(3800,6200)),size=10,replace=TRUE)
 sample(0:1, size=10, replace=T, prob=c(1-.62,.62))
 
 #Familia de distribuciones:
@@ -196,7 +196,6 @@ rbinom(n = 10, size = 6, prob = 0.5)
 
 TD <- rbinom(n = 24, size = 15, prob = 0.1)
 TD
-
 which(TD > 4)
 help(any)
 any(TD>4)
@@ -467,7 +466,7 @@ data <- data.frame(x = seq(x_min, x_max, length.out = 1000))
 data$weibull_density <-
   dweibull(data$x, shape = shape_param, scale = scale_param)
 
-
+library(tidyverse)
 # Generate and plot the Weibull distribution using ggplot2
 ggplot(data, aes(x = x, y = weibull_density)) +
   geom_line(color = "blue", size = 1) +
@@ -536,9 +535,7 @@ qf(.95, df1=5, df2=2)
 #### Trabajo: ####
 
 # Hacer una lista de todas las distribuciones usadas y sus aplicacioes en las geociencias:
-
 # ejemplo: 
-
 # lognormal: General distribucion de elementos metalicos en aguas ... y seguir listando.
 
 
