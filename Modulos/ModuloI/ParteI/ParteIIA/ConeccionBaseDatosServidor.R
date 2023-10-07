@@ -8,18 +8,11 @@
 # Servidor con MySQL version 
 
 mycon <- dbConnect(RMySQL::MySQL(),
-                 dbname = "branext_sabado",
-                 host = "dallas166.arvixeshared.com",
-                 port = 3306,
-                 user = "branext_users",
-                 password = "g?Y_3s3FUYB6")
-
-mycon <- dbConnect(RMySQL::MySQL(),
-                   dbname = "branext_test",
-                   host = "dallas166.arvixeshared.com",
-                   port = 3306,
-                   user = "branext_alonso",
-                   password = "@lonso12345")
+                 dbname = "DAGC_1",
+                 host = "208.109.16.231",
+                 port = 	3306,
+                 user = "CDAG1",
+                 password = ".,z0dd8~v#DSP")
 
 mycon
 
@@ -56,7 +49,7 @@ DBI::dbGetQuery(con, "EXEC  [Employee Sales by Country]
 
 # Conexion a base de datos:
 
-sdf <- DBI::dbReadTable(mycon, "gq_colca_corregido2")
+sdf <- DBI::dbReadTable(mycon, "bd1")
 
 sdf <- readxl::read_xlsx(path="Modulos/ModuloI/ParteI/ParteIIA/GQ_Colca_corregido2.xlsx", col_names = TRUE)
 

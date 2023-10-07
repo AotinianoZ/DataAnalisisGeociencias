@@ -5,7 +5,7 @@
 # Parte I: Analisis Numerico Estadistico Basico
 # 1.Estructura de la data:
 getwd()
-muestras_cu<-read.csv(file="data//muestras_cu.csv", sep=";",header = TRUE)
+muestras_cu<-read.csv(file="MaterialExtra/ejercicios_auxiliares/data/muestras_cu.csv", sep=";",header = TRUE)
 str(muestras_cu)
 
 #Comentario: Tenemos un dataframe de 6 variables y 2380 instancias (filas).
@@ -162,6 +162,17 @@ ggplot(muestras_cu2,aes(sample=Z))+
 qplot(sample=Cu,data=muestras_cu,color=Tipo_Roca)
 car::qqPlot(muestras_cu$Cu)
 
+muestras_cu$Tipo_Roca
+
+par(mfrow=c(4,2))
+
+for (i in 1:7) {
+  muestras <- muestras_cu %>% filter(Tipo_Roca == i)
+  plot(ecdf(muestras$Cu))
+  
+}
+
+
 #Identify (buscar)
 ggqqplot(muestras_cu,x="Cu",
          color="Tipo_Roca", 
@@ -251,7 +262,7 @@ ggscatterhist(muestras_cu, x="Cu",y="Au",color="Tipo_Roca",
 
 #Polynomial regression. Sow equation and adjusted R2. (descubranlo)
 library(ggpmisc)
-formula2<-Au~poly(Cu,3,raw = TRUE)
+formula2<- Au~poly(Cu,3,raw = TRUE)
 p<-ggplot(muestras_cu, aes(Cu,Au,color=Tipo_Roca))+
   geom_point()+
   geom_smooth(aes(fill=Tipo_Roca),method="lm",formula=formula2)+
