@@ -88,9 +88,49 @@ Agenda
 
 `Modulo I` (24h):
 
-1. **Joseps Andrade** Tema I-IA: Base de Datos Geoespacial y evolución.
+1. **Alonso Otiniano** Tema I-IA: Base de Datos Geoespacial y evolución.
+
+    * Base de Datos
+    * Lenguaje de Consulta Estructurado (SQL)
+    * Evolución de Base de Datos
+    * Base de Datos y Hojas de Cálculo?
+    * Big Data
+    * Open Geoespacial Consortium
+    * Base de Datos Espaciales
+    * Librerías sf-terra
+    * Data Geoespacial Core PostGis.
+    
 2. **Alonso Otiniano** Tema I-IIA: Conexión - importar y exportar base de datos geoespacial.
+
+    * Conexión a base de datos sql y carga de data al Rstudio.
+    * Revisión de conexión y test de pruebas.
+    * Importar y exportar tablas desde el Rstudio.
+
 3. **Alonso Otiniano** Tema II-A: R y Rstudio.
+
+    * Rstudio.
+    * Paquetes y Librerías.
+    * Mi primer Script:
+      *  R como calculadora científica (funciones de calculadora).
+      *  Tipos de variable y Operadores en R.
+    * Definición de Vectores en R:
+      * Generación de vectores usando números aleatorios.
+      * Funciones Básicas.
+      * Datos  Especiales (NA´s,Inf ,NaN´s  & “caracteres especiales”).
+    * Matrices
+    * Otras funciones básicas (sort(), seq(),rep()).
+    * Data frame.
+    * Estructuras de decisión y repetición:
+      * if, else, else if.
+      * for (loop).
+      * while, next, break.
+    * Factores en R.
+    * Listas en R.
+    * Paquetería de Funciones
+      * Definición de Funciones.
+      * Aplicación de Funciones.
+    * Instalación de paquetes CRAN, GitHub, Bioconductor u otros.
+    
 4. **Alonso Otiniano** Tema II-B
 
 `Tema II-B Detallado:`
