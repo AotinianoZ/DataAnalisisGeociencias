@@ -141,7 +141,7 @@ Agenda
     * Tidyverse y ggplot en el IDE Rstudio.
     * Limpieza de Data – Filtros,  Transformación.
     * Introducción a la estadística descriptiva en R.
-    * Análisis Estadísticos de Datos*:
+    * Análisis Estadísticos de Datos:
       * Distribución de variables aleatorias- Funciones de probabilidad – Distribución Normal
       * Inferencia, Estimación y Pruebas Estadísticas
       * Pruebas Paramétricas – Semiparamétricas y No paramétricas (ROS) (Teórico – Práctico):
@@ -188,6 +188,30 @@ Agenda
       * Modelado usando Krigging.
 
 `Modulo III` (12h):
+
+8. **Alonso Otiniano** Módulo III-A (Opcional): 
+
+Ver en el siguiente [link](https://aozweb.com/Poster/Temas.pdf).
+
+9. **Alonso Otiniano** Módulo III-B: 
+
+    * Generación de Mapas Dinámicos 
+      * Uso Transformación de coordenadas
+      * Análisis de shapefiles y ráster.
+      * Filtros y análisis de shapefiles y tablas de datos con visualización en mapa.
+      * Mapas Interactivos Dinámicos.
+
+    * Creación de dashboard para análisis geoambiental – zona Cusco – zona Tumbes
+      * Carga de paquetes y configuración
+      * Carga de data (formato .csv, .xlsx, .xls, .dat, .txt, .shp, .gdb, .tiff)
+      * Transformación a data espacial y revisión de estructura.
+      * Generación de sumario general.
+      * Generación de sumario de parámetros físico-químicos.
+      * Generación de mapa de burbujas para facies hidroquímicas.
+      * Scatter, Piper y otros gráficos con filtros de datos espaciales y generación de tablas automáticas exportables en diferentes formatos.
+      * Generación del Dashboard final.
+
+10. **Alonso Otiniano** Módulo IV-C: Desarrollos
 
 
 Descansos Oficiales
