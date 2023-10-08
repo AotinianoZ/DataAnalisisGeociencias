@@ -137,10 +137,10 @@ Agenda
     
 4. **Alonso Otiniano** Tema II-B: Explorando datos.
 
-    * Conectarse desde internet o base de datos -Importar y Exportar Data en R.*
-    * Tidyverse y ggplot en el IDE Rstudio.*
-    * Limpieza de Data – Filtros,  Transformación.*
-    * Introducción a la estadística descriptiva en R.*
+    * Conectarse desde internet o base de datos -Importar y Exportar Data en R.
+    * Tidyverse y ggplot en el IDE Rstudio.
+    * Limpieza de Data – Filtros,  Transformación.
+    * Introducción a la estadística descriptiva en R.
     * Análisis Estadísticos de Datos*:
       * Distribución de variables aleatorias- Funciones de probabilidad – Distribución Normal
       * Inferencia, Estimación y Pruebas Estadísticas
@@ -149,6 +149,45 @@ Agenda
       * Correlación Pearson, Spearman, Kendall.
       * Regresión Lineal, Logística, Polinomial y Poisson
       * Introducción series de tiempo
+
+`Modulo II` (24h):
+
+5. **Alonso Otiniano** Módulo II-A: AED recurso hídricos
+
+    * Análisis de Base de Datos (estructura y revisión general).
+    * Balance Iónico.
+    * Imputación de Datos debajo del límite de detección (<L.D.) - General
+    * Análisis Exploratorio mediante estadísticos descriptivos.
+    * Diagramas generales (parámetros FICO – concentración de elementos).
+    * Diagramas de Piper, Gibss y Stiff.
+    * Estándares de Calidad Ambiental.
+
+6. **Alonso Otiniano** Módulo II-A (Opcional): Modelado de Datos
+
+    * Carga de base de datos ECA.
+    * Revisión General de la Información.
+    * Creación de nuevas variables para análisis ROS.
+    * Análisis Exploratorio de unidades hidrográficas elegidas.
+    * Revisión espacio temporales y sumarios claves para la información.
+    * Análisis univariante para elementos completos, elementos debajo del límite de detección.
+    * Detección de anómalos (outliers y faroutliers).
+    * Generación de cuantiles para clasificación en categorías y filtrado.
+
+7. **Alonso Otiniano** Módulo II-B: AED suelos
+
+    * Análisis de Base de Datos (estructura y revisión general).
+    * Análisis Exploratorio mediante estadísticos descriptivos.
+    * Análisis Gráfico Univariante y Bivariante.
+    * Estándares de Calidad Ambiental para Suelo (ECAs).
+    * Análisis Bivariantes Numéricos (Boxplot Multivariante por Clasificación, Corrplot)
+    * Análisis Multivariable (Biplot – PCA).
+    * Mapa Geoestadístico de distribución Catiónica.
+      * Crear Grilla con tamaño de celda. 
+      * Modelado usando Inverso a la distancia (idw).
+      * Variograma.
+      * Modelado usando Krigging.
+
+`Modulo III` (12h):
 
 
 Descansos Oficiales
