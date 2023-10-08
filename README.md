@@ -135,13 +135,13 @@ Agenda
       * Aplicación de Funciones.
     * Instalación de paquetes CRAN, GitHub, Bioconductor u otros.
     
-4. **Alonso Otiniano** Tema II-B: Explorando datos
+4. **Alonso Otiniano** Tema II-B: Explorando datos.
 
-    *Conectarse desde internet o base de datos -Importar y Exportar Data en R.*
-    *Tidyverse y ggplot en el IDE Rstudio.*
-    *Limpieza de Data – Filtros,  Transformación.*
-    *Introducción a la estadística descriptiva en R.*
-    *Análisis Estadísticos de Datos*:
+    * Conectarse desde internet o base de datos -Importar y Exportar Data en R.*
+    * Tidyverse y ggplot en el IDE Rstudio.*
+    * Limpieza de Data – Filtros,  Transformación.*
+    * Introducción a la estadística descriptiva en R.*
+    * Análisis Estadísticos de Datos*:
       * Distribución de variables aleatorias- Funciones de probabilidad – Distribución Normal
       * Inferencia, Estimación y Pruebas Estadísticas
       * Pruebas Paramétricas – Semiparamétricas y No paramétricas (ROS) (Teórico – Práctico):
