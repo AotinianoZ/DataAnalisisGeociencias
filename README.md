@@ -135,7 +135,7 @@ Agenda
       * Aplicación de Funciones.
     * Instalación de paquetes CRAN, GitHub, Bioconductor u otros.
     
-4. **Alonso Otiniano** Tema II-B
+4. **Alonso Otiniano** Tema II-B: Explorando datos
 
     *Conectarse desde internet o base de datos -Importar y Exportar Data en R.*
     *Tidyverse y ggplot en el IDE Rstudio.*
