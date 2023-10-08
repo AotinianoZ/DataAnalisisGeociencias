@@ -88,6 +88,8 @@ Agenda
 
 `Modulo I` (24h):
 
+`Tema I`:
+
 1. **Alonso Otiniano** Tema I-IA: Base de Datos Geoespacial y evolución.
 
     * Base de Datos
@@ -105,6 +107,8 @@ Agenda
     * Conexión a base de datos sql y carga de data al Rstudio.
     * Revisión de conexión y test de pruebas.
     * Importar y exportar tablas desde el Rstudio.
+
+`Tema II`:
 
 3. **Alonso Otiniano** Tema II-A: R y Rstudio.
 
@@ -133,21 +137,18 @@ Agenda
     
 4. **Alonso Otiniano** Tema II-B
 
-`Tema II-B Detallado:`
-
-41. **Conectarse desde internet o base de datos -Importar y Exportar Data en R.**
-42. **Tidyverse y ggplot en el IDE Rstudio.**
-43. **Limpieza de Data – Filtros,  Transformación.**
-44. **Introducción a la estadística descriptiva en R.**
-45. **Análisis Estadísticos de Datos**:
-    
-    * Distribución de variables aleatorias- Funciones de probabilidad – Distribución Normal
-    * Inferencia, Estimación y Pruebas Estadísticas
-    * Pruebas Paramétricas – Semiparamétricas y No paramétricas (ROS) (Teórico – Práctico):
-    * Teoría de Correlación y Regresión (Teórico – Práctico)
-    * Correlación Pearson, Spearman, Kendall.
-    * Regresión Lineal, Logística, Polinomial y Poisson
-    * Introducción series de tiempo
+    *Conectarse desde internet o base de datos -Importar y Exportar Data en R.*
+    *Tidyverse y ggplot en el IDE Rstudio.*
+    *Limpieza de Data – Filtros,  Transformación.*
+    *Introducción a la estadística descriptiva en R.*
+    *Análisis Estadísticos de Datos*:
+      * Distribución de variables aleatorias- Funciones de probabilidad – Distribución Normal
+      * Inferencia, Estimación y Pruebas Estadísticas
+      * Pruebas Paramétricas – Semiparamétricas y No paramétricas (ROS) (Teórico – Práctico):
+      * Teoría de Correlación y Regresión (Teórico – Práctico)
+      * Correlación Pearson, Spearman, Kendall.
+      * Regresión Lineal, Logística, Polinomial y Poisson
+      * Introducción series de tiempo
 
 
 Descansos Oficiales
