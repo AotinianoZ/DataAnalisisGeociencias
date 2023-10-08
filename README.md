@@ -86,7 +86,7 @@ Agenda
 
 0. Introducción: Instalación de softwares (1 semana antes).
 
-`Modulo I` (18h):
+`Modulo I` (24h):
 
 1. **Joseps Andrade** Tema I-IA: Base de Datos Geoespacial y evolución.
 2. **Alonso Otiniano** Tema I-IIA: Conexión - importar y exportar base de datos geoespacial.
