@@ -56,7 +56,7 @@ El curso desarrolla desde los conceptos básicos de geodatabase (base de datos g
 
 Durante el curso corto necesitaremos herramientas como:
 
-* SQL, R, Rstudio, QGis.
+* SQL, R, Rstudio, QGis - Python.
 
 La instalación de paquetes para Rstudio en máquina local:
 
@@ -73,7 +73,7 @@ Práctica: Desarrollada Exhaustivamente.
 ```
 Toda la información estará como PDFs en los folderes adjuntos, además de formatos *.html* para que lo entregado no pierda interactividad y sea cual se ha desarrollado cada clase. Se puede descargar todo el material desde este github.
 
-<img src="http://red.unal.edu.co/cursos/dnia/un2020-02/moduloN_03.svg" width="400px" />
+<img src="https://aozweb.com/MaterialCurso/image_teaching.png" width="400px" />
 
 ## Logueo y registro por primera vez
 
