@@ -1,0 +1,285 @@
+---
+title: "Caracterización Hidroquímica"
+author: "Desarrolladores: A.Otiniano & J.Andrade - Expositor:M.Ccopa"
+output:
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    theme: lumen
+    source_code: embed
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(readxl);library(flexdashboard) ; library(crosstalk) ; library(tidyverse) ; library(plotly); library(sf); library(mapview); library(DT); library(readxl); library(tmap); library(linemap); library(rgdal);library(leaflet.extras); library(crosstable);
+library(psych); library(data.table); library(leaflet.providers); library(leafem)
+library(leafsync)
+Sys.setenv('MAPBOX_TOKEN' = 'pk.eyJ1IjoiYWxvbnNvMjUiLCJhIjoiY2tveGJseXJpMGNmcDJ3cDhicmZwYmY3MiJ9.SbThU_R8YGE1Zll-nNrZKA')
+```
+
+```{r}
+Cusco <- read_xlsx(path="BD/BD_Cusco.xlsx", col_names = TRUE)
+data01<-Cusco[ ,c("NORTE","ESTE")]
+data01<-data01[ ,order(c(names(data01)))]
+sputm <- SpatialPoints(data01, proj4string=CRS("+proj=utm +zone=19 +south +datum=WGS84")) 
+spgeo <- spTransform(sputm, CRS("+proj=longlat +datum=WGS84"))
+spgeo <- as.data.frame(spgeo)
+colnames(spgeo)<-c("long","lat")
+Cusco<-cbind(Cusco,spgeo)
+Cusco$CODIGO <- as.factor(Cusco$CODIGO)
+Cusco$NOMBRE_FUENTE <- as.factor(Cusco$NOMBRE_FUENTE)
+Cusco$DISTRITO <- as.factor(Cusco$DISTRITO)
+Cusco$TIPO_FUENTE <- as.factor(Cusco$TIPO_FUENTE)
+Cusco$USO_FUENTE <- as.factor(Cusco$USO_FUENTE)
+Cusco$Lito1 <- as.factor(Cusco$Lito1)
+Cusco$Lito2 <- as.factor(Cusco$Lito2)
+Cusco$Lito3 <- as.factor(Cusco$Lito3)
+Cusco$COLOR <- as.factor(Cusco$COLOR)
+Cusco$OLOR <- as.factor(Cusco$OLOR)
+Cusco$FLUJO <- as.factor(Cusco$FLUJO)
+Cusco$HIDROTIPO <- as.factor(Cusco$HIDROTIPO)
+Cusco$SIMBOLO <- as.factor(Cusco$SIMBOLO)
+Cusco$RANGO_DUREZA <- as.factor(Cusco$RANGO_DUREZA)
+```
+
+Análisis Geoespacial Hidroquímico
+=======================================================================
+
+Column {data-width=400}
+-------------------------------------
+    
+```{r}
+Cusco_pip <- Cusco %>% select("CODIGO","NOMBRE_FUENTE","COTA","Lito1",
+                             "Ca_dis","Mg_dis","Na_dis","K_dis",
+                             "Cl_dis","SO4_dis","CO3_dis","HCO3_dis",
+                           "USO_FUENTE","TEMPERATURA","pH","CE",
+                           "TDS", "Salinidad","Resistividad",
+                           "RDO","OD",
+                           "Cu_dis","Zn_dis",
+                           "HIDROTIPO","FLUJO",
+                           "long", "lat")
+Cusco_pip <- Cusco_pip %>% rename(Codigo = CODIGO, Ca = Ca_dis, Mg = Mg_dis, Na = Na_dis,
+                                  K=K_dis,
+                                  Cl=Cl_dis, SO4=SO4_dis, CO3=CO3_dis, HCO3=HCO3_dis)
+
+Cusco_pip$K <- as.numeric(replace(Cusco_pip$K, Cusco_pip$K=="<0.2", 0.1))
+Cusco_pip$SO4 <- as.numeric(replace(Cusco_pip$SO4, Cusco_pip$SO4=="<0.1", 0.05))
+Cusco_pip$Cl <- as.numeric(replace(Cusco_pip$Cl, Cusco_pip$Cl=="<0.2", 0.1))
+Cusco_pip$CO3 <- as.numeric(replace(Cusco_pip$CO3, Cusco_pip$CO3=="<1", 0.5))
+Cusco_pip$colors <- factor(Cusco_pip$HIDROTIPO, levels = unique(Cusco_pip$HIDROTIPO))
+cols <- c(rgb(255,255,0,maxColorValue = 255),
+                                  rgb(50,74,178,maxColorValue = 255),
+                                  rgb(0,176,242,maxColorValue = 255))
+
+toPercent <- function (data_input) {
+  totalCations <- rowSums(data_input[ ,c("Ca","Mg","Na","K")], na.rm=TRUE)
+  data_input$Ca <- 100 * (data_input$Ca/totalCations)
+  data_input$Mg <- 100 * (data_input$Mg/totalCations)
+  data_input$Na <- 100 * (data_input$Na/totalCations)
+  data_input$K <- 100 * (data_input$K/totalCations)
+  totalAnions <- rowSums(data_input[ ,c("Cl","SO4","CO3","HCO3")], na.rm=TRUE)
+  data_input$Cl <- 100 * (data_input$Cl/totalAnions)
+  data_input$SO4 <- 100 * (data_input$SO4/totalAnions)
+  data_input$CO3 <- 100 * (data_input$CO3/totalAnions)
+  data_input$HCO3 <- 100 * (data_input$HCO3/totalAnions)
+  return(data_input)
+}
+transform_piper_data <- function(toPercent){
+  Codigo<-toPercent$Codigo
+  y1 <- toPercent$Mg * 0.86603
+  x1 <- 100*(1-(toPercent$Ca/100) - (toPercent$Mg/200))
+  y2 <- toPercent$SO4 * 0.86603
+  x2 <-120+(100*toPercent$Cl/100 + 0.5 * 100*toPercent$SO4/100)
+  new_point <- function(x1, x2, y1, y2, grad=1.73206){
+    b1 <- y1-(grad*x1)
+    b2 <- y2-(-grad*x2)
+    M <- matrix(c(grad, -grad, -1,-1), ncol=2)
+    intercepts <- as.matrix(c(b1,b2))
+    t_mat <- -solve(M) %*% intercepts
+    data.frame(x=t_mat[1,1], y=t_mat[2,1])
+  }
+  np_list <- lapply(1:length(x1), function(i) new_point(x1[i], x2[i], y1[i], y2[i]))
+  npoints <- do.call("rbind",np_list)
+  data.frame(observation=Codigo,x=c(x1, x2, npoints$x), y=c(y=y1, y2, npoints$y))
+}
+ggplot_piper <- function(piper.data,output = c("ggplot","plotly")) {
+  grid1p1 <<- data.frame(x1 = c(20,40,60,80), x2= c(10,20,30,40),y1 = c(0,0,0,0), y2 = c(17.3206,34.6412,51.9618, 69.2824))
+  grid1p2 <<- data.frame(x1 = c(20,40,60,80), x2= c(60,70,80,90),y1 = c(0,0,0,0), y2 = c(69.2824, 51.9618,34.6412,17.3206))
+  grid1p3 <<- data.frame(x1 = c(10,20,30,40), x2= c(90,80,70,60),y1 = c(17.3206,34.6412,51.9618, 69.2824), y2 = c(17.3206,34.6412,51.9618, 69.2824))
+  grid2p1 <<- grid1p1
+  grid2p1$x1 <- grid2p1$x1+120
+  grid2p1$x2 <- grid2p1$x2+120
+  grid2p2 <<- grid1p2
+  grid2p2$x1 <- grid2p2$x1+120
+  grid2p2$x2 <- grid2p2$x2+120
+  grid2p3 <<- grid1p3
+  grid2p3$x1 <- grid2p3$x1+120
+  grid2p3$x2 <- grid2p3$x2+120
+  grid3p1 <<- data.frame(x1=c(100,90, 80, 70),y1=c(34.6412, 51.9618, 69.2824, 86.603), x2=c(150, 140, 130, 120), y2=c(121.2442,138.5648,155.8854,173.2060))
+  grid3p2 <<- data.frame(x1=c(70, 80, 90, 100),y1=c(121.2442,138.5648,155.8854,173.2060), x2=c(120, 130, 140, 150), y2=c(34.6412, 51.9618, 69.2824, 86.603))
+  
+  p <- ggplot2::ggplot() +
+    ## left hand ternary plot
+    ggplot2::geom_segment(ggplot2::aes(x=0,y=0, xend=100, yend=0)) +
+    ggplot2::geom_segment(ggplot2::aes(x=0,y=0, xend=50, yend=86.603)) +
+    ggplot2::geom_segment(ggplot2::aes(x=50,y=86.603, xend=100, yend=0)) +
+    ## right hand ternary plot
+    ggplot2::geom_segment(ggplot2::aes(x=120,y=0, xend=220, yend=0)) +
+    ggplot2::geom_segment(ggplot2::aes(x=120,y=0, xend=170, yend=86.603)) +
+    ggplot2::geom_segment(ggplot2::aes(x=170,y=86.603, xend=220, yend=0)) +
+    ## Upper diamond
+    ggplot2::geom_segment(ggplot2::aes(x=110,y=190.5266, xend=60, yend=103.9236)) +
+    ggplot2::geom_segment(ggplot2::aes(x=110,y=190.5266, xend=160, yend=103.9236)) +
+    ggplot2::geom_segment(ggplot2::aes(x=110,y=17.3206, xend=160, yend=103.9236)) +
+    ggplot2::geom_segment(ggplot2::aes(x=110,y=17.3206, xend=60, yend=103.9236)) +
+    ## Add grid lines to the plots
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid1p1, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid1p2, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid1p3, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid2p1, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid2p2, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid2p3, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid3p1, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ggplot2::geom_segment(ggplot2::aes(x=x1, y=y1, yend=y2, xend=x2), data=grid3p2, linetype = "dashed", size = 0.25, colour = "grey50") +
+    ### Labels and grid values
+    
+    ggplot2::geom_text(ggplot2::aes(c(20,40,60,80),c(-5,-5,-5,-5), label=c(80, 60, 40, 20)), size=3) +
+    ggplot2::geom_text(ggplot2::aes(c(35,25,15,5),grid1p2$y2, label=c(80, 60, 40, 20)), size=3) +
+    ggplot2::coord_equal(ratio=1) +  
+    ggplot2::geom_text(ggplot2::aes(c(215,205,195,185),grid2p3$y2, label=c(20, 40, 60, 80)), size=3) +
+    ggplot2::geom_text(ggplot2::aes(c(140,160,180,200),c(-5,-5,-5,-5), label=c(20, 40, 60, 80)), size=3) +
+    ggplot2::geom_text(ggplot2::aes(grid3p1$x1-5,grid3p1$y1, label=c(80, 60, 40, 20)), size=3) +
+    ggplot2::geom_text(ggplot2::aes(grid3p1$x2+5,grid3p1$y2, label=c(20, 40, 60, 80)), size=3) +
+    ggplot2::geom_text(ggplot2::aes(grid3p2$x1-5,grid3p2$y1, label=c(20, 40, 60, 80)), size=3) +
+    ggplot2::geom_text(ggplot2::aes(grid3p2$x2+5,grid3p2$y2, label=c(80, 60, 40, 20)), size=3) +
+    ggplot2::theme_bw() +
+    ggplot2::theme(panel.grid.major = ggplot2::element_blank(), panel.grid.minor = ggplot2::element_blank(),
+                   panel.border = ggplot2::element_blank(), axis.ticks = ggplot2::element_blank(),
+                   axis.text.x = ggplot2::element_blank(), axis.text.y = ggplot2::element_blank(),
+                   axis.title.x = ggplot2::element_blank(), axis.title.y = ggplot2::element_blank(),
+                   legend.title = element_blank()) +
+    ggplot2::geom_point(ggplot2::aes(x,y, colour=factor(HIDROTIPO),
+                                     shape = FLUJO, 
+                                     text = paste(observation,
+                                                  '</br></br>Facie: ',HIDROTIPO,
+                                                  '</br></br>CE: ',CE,
+                                                  '</br></br>Composicion:',Lito1,
+                                                  '</br></br>Ca: ',Ca,
+                                                  '</br></br>K: ',K,
+                                                  '</br></br>Na: ',Na,
+                                                  '</br></br>Cl: ',Cl,
+                                                  '</br></br>SO4: ',SO4,
+                                                  '</br></br>HCO3: ',HCO3,
+                                                  '</br></br>CO3: ',CO3
+                                     )), data=piper.data)+
+    ggplot2::scale_color_manual(values=c(rgb(0,176,242,maxColorValue = 255),
+                                  rgb(50,74,178,maxColorValue = 255),
+                                  rgb(255,255,0,maxColorValue = 255)))
+  
+  if (output == "ggplot"){
+    p <- p + 
+      ggplot2::geom_text(ggplot2::aes(17,50, label="Mg^'2+'"), angle=60, size=4, parse=TRUE) +  
+      ggplot2::geom_text(ggplot2::aes(77.5,50, label="Na^'+'~+~K^'+'"), angle=-60, size=4,parse=TRUE) +
+      ggplot2::geom_text(ggplot2::aes(50,-10, label="Ca^'2+'"), size=4, parse=TRUE) +
+      ggplot2::geom_text(ggplot2::aes(170,-10, label="Cl^'-'"), size=4, parse=TRUE) +
+      ggplot2::geom_text(ggplot2::aes(205,50, label="SO[4]^'-'"), angle=-60, size=4, parse=TRUE) +
+      ggplot2::geom_text(ggplot2::aes(142,50, label="Alkalinity~as~{HCO[3]^'-'"), angle=60, size=4, parse=TRUE) +
+      ggplot2::geom_text(ggplot2::aes(72.5,150, label="SO[4]^'-'~+~Cl^'-'"), angle=60, size=4, parse=TRUE) +
+      ggplot2::geom_text(ggplot2::aes(147.5,150, label="Ca^'2+'~+~Mg^'2+'"), angle=-60, size=4, parse=TRUE)
+  }
+  
+  if (output == "plotly"){
+    #this fixes an issue that plotly can't render geom_text() with the  angle option set properly
+    p <- plotly::ggplotly(p,
+                          tooltip = c("text")
+    )
+    p <- p  %>% plotly::layout(
+      annotations=list(text=c("Mg<sup>2+</sup>",
+                              "Na<sup>+</sup> + K<sup>+</sup>",
+                              "Ca<sup>2+</sup>",
+                              "Cl<sup>-</sup>",
+                              "SO<sub>4</sub><sup>-</sup>",
+                              "Alkalinity as HCO<sub>3</sub><sup>-</sup>",
+                              "SO<sub>4</sub><sup>-2</sup> + Cl<sup>-</sup>",
+                              "Ca<sup>2+</sup> + Mg<sup>2+</sup>"),
+                       x = c(17,77.5,50,170,205,142.5,72.5,147.5),
+                       y = c(50,50,-10,-10,50,50,150,150),
+                       textangle = c(-60,60,0,0,60,-60,-60,60),
+                       "showarrow"=F, font=list(size = 12, color = "black")
+      ))
+    
+  }
+  
+  return(p)
+}
+```
+   
+```{r}
+dt <- toPercent(Cusco_pip)
+dt1 <- transform_piper_data(dt)
+
+piper_data <- merge(dt1,  dt[,c("Codigo","NOMBRE_FUENTE","HIDROTIPO","COTA","Lito1","FLUJO","CE","colors","pH",
+                                "Cu_dis","Zn_dis",
+                              "Ca","K","Mg","Na","Cl","SO4","HCO3","CO3","lat","long")],
+                        by.x = "observation",
+                        by.y = "Codigo")
+sd <- SharedData$new(piper_data)
+
+```
+
+### Mapa de Facies
+
+```{r}
+plot_mapbox(sd, x = ~long, y = ~lat) %>%
+  add_markers(
+            split = ~HIDROTIPO, color = ~colors, colors = cols , 
+            marker = list(size = 15),
+            text = ~paste(paste("Codigo:", observation), paste("Nombre:", NOMBRE_FUENTE),
+                          paste("Cota(m):", COTA), paste("FLUJO:", FLUJO),
+                          paste("Composicion:", Lito1), paste("HIDROTIPO:", HIDROTIPO),
+                          paste("CE (uS/cm):", CE), sep = "<br />"),
+                
+            mode = "scattermapbox", hoverinfo = "text") %>%
+   layout(title = 'Analisis Hidroquímico',
+         font = list(color='white'),
+         plot_bgcolor = '#191A1A', paper_bgcolor = '#191A1A',
+         legend = list(orientation = 'h',
+                       font = list(size = 8)),
+    mapbox= list(
+      style = "mapbox://styles/alonso25/ckppwz4o617pf17pn6iibpsku",
+      sourcetype = 'vector',
+      zoom = 9,
+      showleyend = TRUE,
+      center = list(lat = ~median(lat), lon = ~median(long))))%>% 
+  highlight(on = "plotly_selected",off = "plotly_deselect", dynamic = FALSE, color = "red")
+```   
+ 
+
+Column {.tabset}
+-------------------------------------
+   
+
+### Diagrama de Piper
+    
+```{r}
+ggplot_piper(piper.data = sd, output = "plotly") %>%
+  highlight(on = "plotly_selected",off = "plotly_deselect", dynamic = FALSE, color = "red")
+```
+
+### CE Vs. pH
+
+```{r}
+plot <- ggplot(sd, aes(x = CE, y = pH, color = Lito1, shape=FLUJO,
+                       text =    paste("Codigo", observation,
+                                                  "</br>Nombre",NOMBRE_FUENTE,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+
+
+
+

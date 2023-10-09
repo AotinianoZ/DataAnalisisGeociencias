@@ -1,0 +1,226 @@
+---
+title: "Hidro_Cusco"
+author: "M.Ccopa & A.Otiniano"
+date: "10/8/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(readxl);library(flexdashboard) ; library(crosstalk) ; library(tidyverse) ; library(plotly); library(sf); library(mapview); library(DT); library(readxl); library(tmap); library(linemap); library(rgdal);library(leaflet.extras); library(crosstable);
+library(psych); library(data.table); library(leaflet.providers); library(leafem)
+library(leafsync)
+Sys.setenv('MAPBOX_TOKEN' = 'pk.eyJ1IjoiYWxvbnNvMjUiLCJhIjoiY2tveGJseXJpMGNmcDJ3cDhicmZwYmY3MiJ9.SbThU_R8YGE1Zll-nNrZKA')
+```
+
+```{r}
+Cusco <- read_xlsx(path="BD/BD_Cusco.xlsx", col_names = TRUE)
+colnames(Cusco)
+```
+
+```{r}
+data01<-Cusco[ ,c("NORTE","ESTE")]
+data01<-data01[ ,order(c(names(data01)))]
+sputm <- SpatialPoints(data01, proj4string=CRS("+proj=utm +zone=19 +south +datum=WGS84")) 
+spgeo <- spTransform(sputm, CRS("+proj=longlat +datum=WGS84"))
+spgeo <- as.data.frame(spgeo)
+colnames(spgeo)<-c("long","lat")
+Cusco<-cbind(Cusco,spgeo)
+```
+
+```{r}
+Cusco$CODIGO <- as.factor(Cusco$CODIGO)
+Cusco$NOMBRE_FUENTE <- as.factor(Cusco$NOMBRE_FUENTE)
+Cusco$DISTRITO <- as.factor(Cusco$DISTRITO)
+Cusco$TIPO_FUENTE <- as.factor(Cusco$TIPO_FUENTE)
+Cusco$USO_FUENTE <- as.factor(Cusco$USO_FUENTE)
+Cusco$Lito1 <- as.factor(Cusco$Lito1)
+Cusco$Lito2 <- as.factor(Cusco$Lito2)
+Cusco$Lito3 <- as.factor(Cusco$Lito3)
+Cusco$COLOR <- as.factor(Cusco$COLOR)
+Cusco$OLOR <- as.factor(Cusco$OLOR)
+Cusco$FLUJO <- as.factor(Cusco$FLUJO)
+Cusco$HIDROTIPO <- as.factor(Cusco$HIDROTIPO)
+Cusco$SIMBOLO <- as.factor(Cusco$SIMBOLO)
+Cusco$RANGO_DUREZA <- as.factor(Cusco$RANGO_DUREZA)
+```
+
+```{r}
+summary(Cusco)
+
+```
+
+# Dureza-Hidrotipos-Litologia
+
+```{r}
+Filtro1 <- Cusco %>% 
+  group_by(Lito1, HIDROTIPO) %>% 
+  summarise(
+    n = n(),
+    min.d = round(min(Dureza, na.rm = FALSE),1),
+    mean.d = round(mean(Dureza, na.rm = FALSE), 1),
+    d.50    = quantile(Dureza, probs = 0.50, na.rm =FALSE),
+    d.75    = quantile(Dureza, probs = 0.75, na.rm =FALSE),
+    max.d = max(Dureza, na.rm = FALSE)
+  ) %>%
+  arrange(desc(min.d))
+datatable(Filtro1, filter = "top")
+```
+
+```{r}
+Cusco_d <- Cusco %>% select("CODIGO","NOMBRE_FUENTE","COTA",
+                           "USO_FUENTE","Dureza","HIDROTIPO","FLUJO","RANGO_DUREZA",
+                           "long", "lat")
+summary(Cusco_d)
+```
+
+```{r}
+Cusco_d_map <- st_as_sf(Cusco_d, coords = c("long", "lat"), remove = FALSE, 
+    crs = 4326, agr = "constant")
+mapviewOptions(vector.palette = c(rgb(255,255,0,maxColorValue = 255),
+                                  rgb(50,74,178,maxColorValue = 255),
+                                  rgb(0,176,242,maxColorValue = 255)))
+a <- mapview(Cusco_d_map, zcol="HIDROTIPO", burst = TRUE)
+mapviewOptions(vector.palette = c("red","yellow","green"))
+b <- mapview(Cusco_d_map, zcol="RANGO_DUREZA", burst=TRUE)
+mapviewOptions(vector.palette = c("darkblue","skyblue"))
+d <- mapview(Cusco_d_map, zcol="FLUJO", burst=TRUE)
+sync(a,b, ncol = 2)
+```
+
+
+# Parametros Físico-Químicos
+
+```{r}
+Cusco_fq <- Cusco %>% select("CODIGO","NOMBRE_FUENTE","COTA","Lito1",
+                           "USO_FUENTE","TEMPERATURA","pH","CE",
+                           "TDS", "Salinidad","Resistividad",
+                           "RDO","OD",
+                           "HIDROTIPO","FLUJO",
+                           "long", "lat")
+summary(Cusco_fq)
+
+estadisticos <- function(col){
+  
+  norm_test <- shapiro.test(col)
+  value <- c(round(length(col),3),round(sum(is.na(col))),round(min(col,na.rm=TRUE),3),
+             round(quantile(col, 0.05,na.rm=TRUE),3),
+               round(quantile(col, 0.25,na.rm=TRUE),3), round(mean(col,na.rm=TRUE),3), round(median(col,na.rm=TRUE),3),
+               round(mean(col,trim = 0.10,na.rm=TRUE),3),
+               round(quantile(col, 0.75,na.rm=TRUE),3), 
+             round(quantile(col, 0.95,na.rm=TRUE),3),round(max(col,na.rm=TRUE),3),
+             round(IQR(col,na.rm=TRUE),3),
+               round(mad(col,na.rm=TRUE),3),
+               round(sd(col,na.rm=TRUE),3),round(skew(col,na.rm=TRUE),3), round(kurtosi(col,na.rm=TRUE),3), 
+               round((sd(col,na.rm=TRUE)/mean(col,na.rm=TRUE))*100,3),
+               norm_test$statistic, norm_test$p.value)
+
+}
+statistic <- c("N","Nulos","Minimo","P5 (5%)","Q1 (25%)","Media Aritmetica","Mediana",
+                   "Trimmed mean (10%)","Q3 (75%)","P95 (95%)","Maximo", "RIQ","MAD","Sd","As","K","CV",
+                   "Shapiro statistic", "Shapiro p-valor")
+T2PRO <- sapply(Cusco_fq[ ,c("TEMPERATURA","pH","CE",
+                           "TDS", "Salinidad","Resistividad",
+                           "RDO","OD")], estadisticos)
+rownames(T2PRO) <- statistic
+
+datatable(T2PRO, filter = "top")
+```
+
+
+```{r}
+Filtro2 <- Cusco %>% 
+  group_by(HIDROTIPO) %>% 
+  summarise(
+    n = n(),
+    min.ce = round(min(CE, na.rm = FALSE),1),
+    mean.ce = round(mean(CE, na.rm = FALSE), 1),
+    ce.50    = quantile(CE, probs = 0.50, na.rm =FALSE),
+    ce.75    = quantile(CE, probs = 0.75, na.rm =FALSE),
+    max.ce = max(CE, na.rm = FALSE)
+  ) %>%
+  arrange(desc(min.ce))
+datatable(Filtro2, filter = "top")
+```
+
+```{r}
+Filtro3 <- Cusco %>% 
+  group_by(Lito1) %>% 
+  summarise(
+    n = n(),
+    min.ce = round(min(CE, na.rm = FALSE),1),
+    mean.ce = round(mean(CE, na.rm = FALSE), 1),
+    ce.50    = quantile(CE, probs = 0.50, na.rm =FALSE),
+    ce.75    = quantile(CE, probs = 0.75, na.rm =FALSE),
+    max.ce = max(CE, na.rm = FALSE)
+  ) %>%
+  arrange(desc(min.ce))
+datatable(Filtro3, filter = "top")
+```
+
+```{r}
+Filtro4 <- Cusco %>% 
+  group_by(Lito1,HIDROTIPO) %>% 
+  summarise(
+    n = n(),
+    min.ce = round(min(CE, na.rm = FALSE),1),
+    mean.ce = round(mean(CE, na.rm = FALSE), 1),
+    ce.50    = quantile(CE, probs = 0.50, na.rm =FALSE),
+    ce.75    = quantile(CE, probs = 0.75, na.rm =FALSE),
+    max.ce = max(CE, na.rm = FALSE)
+  ) %>%
+  arrange(desc(min.ce))
+datatable(Filtro4, filter = "top")
+```
+
+
+```{r}
+Cusco_fq$colors <- factor(Cusco_fq$HIDROTIPO, levels = unique(Cusco_fq$HIDROTIPO))
+cols <- c(rgb(255,255,0,maxColorValue = 255),
+                                  rgb(50,74,178,maxColorValue = 255),
+                                  rgb(0,176,242,maxColorValue = 255))
+sd <- SharedData$new(Cusco_fq)
+filter_slider("TEMPERATURA", "T(ºC)", sd, ~TEMPERATURA)
+filter_slider("pH", "Distrito", sd, ~pH)
+filter_slider("CE", "Conductividad Eléctrica (uS/cm)", sd, ~CE)
+filter_slider("TDS", "TDS", sd, ~TDS)
+filter_slider("Salinidad", "Salinidad (psu)", sd, ~Salinidad)
+filter_select("HIDROTIPO", "Facie Hidroquimica", sd, ~HIDROTIPO)
+filter_checkbox("Lito1", "Composición Geológica", sd, ~Lito1)
+
+
+plot_mapbox(sd, x = ~long, y = ~lat) %>%
+  add_markers(
+            split = ~HIDROTIPO, color = ~colors, colors = cols , 
+            marker = list(size = 15),
+            text = ~paste(paste("Codigo:", CODIGO), paste("Nombre:", NOMBRE_FUENTE),
+                          paste("Cota(m):", COTA), paste("FLUJO:", FLUJO),
+                          paste("Composicion:", Lito1), paste("HIDROTIPO:", HIDROTIPO),
+                          paste("CE (uS/cm):", CE), sep = "<br />"),
+                
+            mode = "scattermapbox", hoverinfo = "text") %>%
+   layout(title = 'Analisis Hidrogeologico',
+         font = list(color='white'),
+         plot_bgcolor = '#191A1A', paper_bgcolor = '#191A1A',
+         legend = list(orientation = 'h',
+                       font = list(size = 8)),
+    mapbox= list(
+      style = "mapbox://styles/alonso25/ckppwz4o617pf17pn6iibpsku",
+      sourcetype = 'vector',
+      zoom = 9,
+      showleyend = TRUE,
+      center = list(lat = ~median(lat), lon = ~median(long)))) %>%
+  highlight(on = "plotly_selected",off = "plotly_deselect", dynamic = FALSE, color = "red") 
+```
+
+
+
+
+
+
+
+
+
+
+
+

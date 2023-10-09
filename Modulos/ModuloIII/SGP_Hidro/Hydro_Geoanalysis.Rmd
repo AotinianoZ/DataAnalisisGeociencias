@@ -1,0 +1,490 @@
+---
+title: "Hydro-Geospatial Analysis"
+author: "Developers: A.Otiniano & J.Andrade"
+output:
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    theme: lumen
+    source_code: embed
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(readxl);library(flexdashboard) ; library(crosstalk) ; library(tidyverse) ; library(plotly); library(sf); library(mapview); library(DT); library(readxl); library(tmap); library(linemap); library(rgdal);library(leaflet.extras); library(crosstable);
+library(psych); library(data.table); library(leaflet.providers); library(leafem)
+library(leafsync);library(scales)
+Sys.setenv('MAPBOX_TOKEN' = 'pk.eyJ1IjoiYWxvbnNvMjUiLCJhIjoiY2tveGJseXJpMGNmcDJ3cDhicmZwYmY3MiJ9.SbThU_R8YGE1Zll-nNrZKA')
+```
+
+```{r}
+Cusco <- read_xlsx(path="BD/BD_Cusco.xlsx", col_names = TRUE)
+data01<-Cusco[ ,c("NORTE","ESTE")]
+data01<-data01[ ,order(c(names(data01)))]
+sputm <- SpatialPoints(data01, proj4string=CRS("+proj=utm +zone=19 +south +datum=WGS84")) 
+spgeo <- spTransform(sputm, CRS("+proj=longlat +datum=WGS84"))
+spgeo <- as.data.frame(spgeo)
+colnames(spgeo)<-c("long","lat")
+Cusco<-cbind(Cusco,spgeo)
+Cusco$CODIGO <- as.factor(Cusco$CODIGO)
+Cusco$NOMBRE_FUENTE <- as.factor(Cusco$NOMBRE_FUENTE)
+Cusco$DISTRITO <- as.factor(Cusco$DISTRITO)
+Cusco$TIPO_FUENTE <- as.factor(Cusco$TIPO_FUENTE)
+Cusco$USO_FUENTE <- as.factor(Cusco$USO_FUENTE)
+Cusco$Lito1 <- as.factor(Cusco$Lito1)
+Cusco$Lito2 <- as.factor(Cusco$Lito2)
+Cusco$Lito3 <- as.factor(Cusco$Lito3)
+Cusco$COLOR <- as.factor(Cusco$COLOR)
+Cusco$OLOR <- as.factor(Cusco$OLOR)
+Cusco$FLUJO <- as.factor(Cusco$FLUJO)
+Cusco$HIDROTIPO <- as.factor(Cusco$HIDROTIPO)
+Cusco$SIMBOLO <- as.factor(Cusco$SIMBOLO)
+Cusco$RANGO_DUREZA <- as.factor(Cusco$RANGO_DUREZA)
+
+Cusco_ma <- Cusco %>% select("CODIGO","NOMBRE_FUENTE","COTA","Lito1",
+                             "Ca_dis","Mg_dis","Na_dis","K_dis",
+                             "Cl_dis","SO4_dis","CO3_dis","HCO3_dis",
+                           "USO_FUENTE","TEMPERATURA","pH","CE",
+                           "TDS", "Salinidad","Resistividad",
+                           "RDO","OD","CAUDAL",
+                           "Cu_dis","Zn_dis",
+                           "HIDROTIPO","FLUJO",
+                           "long", "lat")
+Cusco_ma <- Cusco_ma %>% rename(Codigo = CODIGO, Ca = Ca_dis, Mg = Mg_dis, Na = Na_dis,
+                                  K=K_dis,
+                                  Cl=Cl_dis, SO4=SO4_dis, CO3=CO3_dis, HCO3=HCO3_dis)
+```
+
+Maps
+=======================================================================
+
+Column {.tabset}
+-------------------------------------
+
+```{r}
+Cusco_ma$K <- as.numeric(replace(Cusco_ma$K, Cusco_ma$K=="<0.2", 0.1))
+Cusco_ma$SO4 <- as.numeric(replace(Cusco_ma$SO4, Cusco_ma$SO4=="<1.0", 0.50))
+Cusco_ma$Cl <- as.numeric(replace(Cusco_ma$Cl, Cusco_ma$Cl=="<0.2", 0.1))
+Cusco_ma$CO3 <- as.numeric(replace(Cusco_ma$CO3, Cusco_ma$CO3=="<1", 0.5))
+Cusco_ma$colors <- factor(Cusco_ma$HIDROTIPO, levels = unique(Cusco_ma$HIDROTIPO))
+cols <- c(rgb(255,255,0,maxColorValue = 255),
+                                  rgb(50,74,178,maxColorValue = 255),
+                                  rgb(0,176,242,maxColorValue = 255))
+#Sodio
+Cusco_ma$Na_cla <- ifelse(Cusco_ma$Na<=quantile(probs=0.25, Cusco_ma$Na, na.rm = TRUE),"Bajo",
+                    ifelse(Cusco_ma$Na>quantile(probs=0.25, Cusco_ma$Na, na.rm = TRUE) & Cusco_ma$Na<=quantile(probs=0.75, Cusco_ma$Na, na.rm = TRUE),"Intermedio","Alto"))
+Cusco_ma$Na_cla <- factor(Cusco_ma$Na_cla, levels = c("Bajo","Intermedio","Alto"), ordered = TRUE)
+
+#Calcio
+Cusco_ma$Ca_cla <- ifelse(Cusco_ma$Ca<=quantile(probs=0.25, Cusco_ma$Ca, na.rm = TRUE),"Bajo",
+                    ifelse(Cusco_ma$Ca>quantile(probs=0.25, Cusco_ma$Ca, na.rm = TRUE) & Cusco_ma$Ca<=quantile(probs=0.75, Cusco_ma$Ca, na.rm = TRUE),"Intermedio","Alto"))
+Cusco_ma$Ca_cla <- factor(Cusco_ma$Ca_cla, levels = c("Bajo","Intermedio","Alto"), ordered = TRUE)
+
+#Magnesio
+Cusco_ma$Mg_cla <- ifelse(Cusco_ma$Mg<=quantile(probs=0.25, Cusco_ma$Mg, na.rm = TRUE),"Bajo",
+                    ifelse(Cusco_ma$Mg>quantile(probs=0.25, Cusco_ma$Mg, na.rm = TRUE) & Cusco_ma$Mg<=quantile(probs=0.75, Cusco_ma$Mg, na.rm = TRUE),"Intermedio","Alto"))
+Cusco_ma$Mg_cla <- factor(Cusco_ma$Mg_cla, levels = c("Bajo","Intermedio","Alto"), ordered = TRUE)
+
+#Potasio
+Cusco_ma$K_cla <- ifelse(Cusco_ma$K<=quantile(probs=0.25, Cusco_ma$K, na.rm = TRUE),"Bajo",
+                    ifelse(Cusco_ma$K>quantile(probs=0.25, Cusco_ma$K, na.rm = TRUE) & Cusco_ma$K<=quantile(probs=0.75, Cusco_ma$K, na.rm = TRUE),"Intermedio","Alto"))
+Cusco_ma$K_cla <- factor(Cusco_ma$K_cla, levels = c("Bajo","Intermedio","Alto"), ordered = TRUE)
+
+#Sulfato
+Cusco_ma$SO4_cla <- ifelse(Cusco_ma$SO4<=quantile(probs=0.25, Cusco_ma$SO4, na.rm = TRUE),"Bajo",
+                    ifelse(Cusco_ma$SO4>quantile(probs=0.25, Cusco_ma$SO4, na.rm = TRUE) & Cusco_ma$SO4<=quantile(probs=0.75, Cusco_ma$SO4, na.rm = TRUE),"Intermedio","Alto"))
+Cusco_ma$SO4_cla <- factor(Cusco_ma$SO4_cla, levels = c("Bajo","Intermedio","Alto"), ordered = TRUE)
+
+#Cloruros
+Cusco_ma$Cl_cla <- ifelse(Cusco_ma$Cl<=quantile(probs=0.25, Cusco_ma$Cl, na.rm = TRUE),"Bajo",
+                    ifelse(Cusco_ma$Cl>quantile(probs=0.25, Cusco_ma$Cl, na.rm = TRUE) & Cusco_ma$Cl<=quantile(probs=0.75, Cusco_ma$Cl, na.rm = TRUE),"Intermedio","Alto"))
+Cusco_ma$Cl_cla <- factor(Cusco_ma$Cl_cla, levels = c("Bajo","Intermedio","Alto"), ordered = TRUE)
+
+#Bicarbonato
+Cusco_ma$HCO3_cla <- ifelse(Cusco_ma$HCO3<=quantile(probs=0.25, Cusco_ma$HCO3, na.rm = TRUE),"Bajo",
+                    ifelse(Cusco_ma$HCO3>quantile(probs=0.25, Cusco_ma$HCO3, na.rm = TRUE) & Cusco_ma$HCO3<=quantile(probs=0.75, Cusco_ma$HCO3, na.rm = TRUE),"Intermedio","Alto"))
+Cusco_ma$HCO3_cla <- factor(Cusco_ma$HCO3_cla, levels = c("Bajo","Intermedio","Alto"), ordered = TRUE)
+
+
+Cusco_ma$Na_meql<-Cusco_ma$Na*0.0435
+Cusco_ma$K_meql<-Cusco_ma$K*0.0256
+
+Cusco_ma$Cl_meql<-Cusco_ma$Cl*0.0282
+Cusco_ma$SO4_meql<-Cusco_ma$SO4*0.0208
+
+Cusco_ma <- Cusco_ma %>%
+  mutate(Cl_SO4 = Cl_meql+SO4_meql) %>%
+  mutate(Na_K = Na_meql+K_meql)
+
+cols <- c("green","yellow","red")
+Cusco_ma$Na_size <- ifelse(Cusco_ma$Na_cla=="Bajo",10,
+                    ifelse(Cusco_ma$Na_cla=="Intermedio",20,30))
+
+Cusco_ma$Ca_size <- ifelse(Cusco_ma$Ca_cla=="Bajo",20,
+                    ifelse(Cusco_ma$Ca_cla=="Intermedio",30,40))
+
+Cusco_ma$Mg_size <- ifelse(Cusco_ma$Mg_cla=="Bajo",20,
+                    ifelse(Cusco_ma$Mg_cla=="Intermedio",30,40))
+
+Cusco_ma$K_size <- ifelse(Cusco_ma$K_cla=="Bajo",20,
+                    ifelse(Cusco_ma$K_cla=="Intermedio",30,40))
+
+Cusco_ma$SO4_size <- ifelse(Cusco_ma$SO4_cla=="Bajo",20,
+                    ifelse(Cusco_ma$SO4_cla=="Intermedio",30,40))
+
+Cusco_ma$Cl_size <- ifelse(Cusco_ma$Cl_cla=="Bajo",20,
+                    ifelse(Cusco_ma$Cl_cla=="Intermedio",30,40))
+
+Cusco_ma$HCO3_size <- ifelse(Cusco_ma$HCO3_cla=="Bajo",20,
+                    ifelse(Cusco_ma$HCO3_cla=="Intermedio",30,40))
+
+sd <- SharedData$new(Cusco_ma)
+```
+
+### Sodium Map
+
+```{r}
+plot_mapbox(sd, x = ~long, y = ~lat) %>%
+  add_markers(
+            split = ~Na_cla, color = ~Na_cla, colors = cols, size = ~Na_size,
+            marker = list(sizeref=0.07),
+            text = ~paste(paste("Na:", Na),
+                          paste("Codigo:", Codigo), paste("Nombre:", NOMBRE_FUENTE),
+                          paste("Cota(m):", COTA), paste("FLUJO:", FLUJO),
+                          paste("Composicion:", Lito1), paste("HIDROTIPO:", HIDROTIPO),
+                          paste("CE (uS/cm):", CE), sep = "<br />"),
+                
+            mode = "scattermapbox", hoverinfo = "text") %>%
+   layout(title = 'Mapa de Concentración de Sodio',
+         font = list(color='white'),
+         plot_bgcolor = '#191A1A', paper_bgcolor = '#191A1A',
+         legend = list(orientation = 'h',
+                       font = list(size = 8)),
+    mapbox= list(
+      style = "mapbox://styles/alonso25/ckppwz4o617pf17pn6iibpsku",
+      sourcetype = 'vector',
+      zoom = 11,
+      showleyend = TRUE,
+      center = list(lat = ~median(lat), lon = ~median(long)))) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE, color = "red")
+```
+
+### Calcium Map
+
+```{r}
+plot_mapbox(sd, x = ~long, y = ~lat) %>%
+  add_markers(
+            split = ~Ca_cla, color = ~Ca_cla, colors = cols, size = ~Ca_size,
+            marker = list(sizeref=0.07),
+            text = ~paste(paste("Ca:", Ca),
+                          paste("Codigo:", Codigo), paste("Nombre:", NOMBRE_FUENTE),
+                          paste("Cota(m):", COTA), paste("FLUJO:", FLUJO),
+                          paste("Composicion:", Lito1), paste("HIDROTIPO:", HIDROTIPO),
+                          paste("CE (uS/cm):", CE), sep = "<br />"),
+                
+            mode = "scattermapbox", hoverinfo = "text") %>%
+   layout(title = 'Mapa de Concentración de Calcio',
+         font = list(color='white'),
+         plot_bgcolor = '#191A1A', paper_bgcolor = '#191A1A',
+         legend = list(orientation = 'h',
+                       font = list(size = 8)),
+    mapbox= list(
+      style = "mapbox://styles/alonso25/ckppwz4o617pf17pn6iibpsku",
+      sourcetype = 'vector',
+      zoom = 11,
+      showleyend = TRUE,
+      center = list(lat = ~median(lat), lon = ~median(long)))) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE, color = "red")
+```
+
+
+### Magnesium Map
+
+```{r}
+plot_mapbox(sd, x = ~long, y = ~lat) %>%
+  add_markers(
+            split = ~Mg_cla, color = ~Mg_cla, colors = cols, size = ~Mg_size,
+            marker = list(sizeref=0.07),
+            text = ~paste(paste("Mg:", Mg),
+                          paste("Codigo:", Codigo), paste("Nombre:", NOMBRE_FUENTE),
+                          paste("Cota(m):", COTA), paste("FLUJO:", FLUJO),
+                          paste("Composicion:", Lito1), paste("HIDROTIPO:", HIDROTIPO),
+                          paste("CE (uS/cm):", CE), sep = "<br />"),
+                
+            mode = "scattermapbox", hoverinfo = "text") %>%
+   layout(title = 'Mapa de Concentración de Magenesio',
+         font = list(color='white'),
+         plot_bgcolor = '#191A1A', paper_bgcolor = '#191A1A',
+         legend = list(orientation = 'h',
+                       font = list(size = 8)),
+    mapbox= list(
+      style = "mapbox://styles/alonso25/ckppwz4o617pf17pn6iibpsku",
+      sourcetype = 'vector',
+      zoom = 11,
+      showleyend = TRUE,
+      center = list(lat = ~median(lat), lon = ~median(long)))) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE, color = "red")
+```
+
+
+### Potassium Map
+
+```{r}
+plot_mapbox(sd, x = ~long, y = ~lat) %>%
+  add_markers(
+            split = ~K_cla, color = ~K_cla, colors = cols, size = ~K_size,
+            marker = list(sizeref=0.07),
+            text = ~paste(paste("K:", K),
+                          paste("Codigo:", Codigo), paste("Nombre:", NOMBRE_FUENTE),
+                          paste("Cota(m):", COTA), paste("FLUJO:", FLUJO),
+                          paste("Composicion:", Lito1), paste("HIDROTIPO:", HIDROTIPO),
+                          paste("CE (uS/cm):", CE), sep = "<br />"),
+                
+            mode = "scattermapbox", hoverinfo = "text") %>%
+   layout(title = 'Mapa de Concentración de Potasio',
+         font = list(color='white'),
+         plot_bgcolor = '#191A1A', paper_bgcolor = '#191A1A',
+         legend = list(orientation = 'h',
+                       font = list(size = 8)),
+    mapbox= list(
+      style = "mapbox://styles/alonso25/ckppwz4o617pf17pn6iibpsku",
+      sourcetype = 'vector',
+      zoom = 11,
+      showleyend = TRUE,
+      center = list(lat = ~median(lat), lon = ~median(long)))) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE, color = "red")
+```
+
+### Sulfates Map
+
+```{r}
+plot_mapbox(sd, x = ~long, y = ~lat) %>%
+  add_markers(
+            split = ~SO4_cla, color = ~SO4_cla, colors = cols, size = ~SO4_size,
+            marker = list(sizeref=0.07),
+            text = ~paste(paste("SO4:", SO4),
+                          paste("Codigo:", Codigo), paste("Nombre:", NOMBRE_FUENTE),
+                          paste("Cota(m):", COTA), paste("FLUJO:", FLUJO),
+                          paste("Composicion:", Lito1), paste("HIDROTIPO:", HIDROTIPO),
+                          paste("CE (uS/cm):", CE), sep = "<br />"),
+                
+            mode = "scattermapbox", hoverinfo = "text") %>%
+   layout(title = 'Mapa de Concentración de Sulfatos',
+         font = list(color='white'),
+         plot_bgcolor = '#191A1A', paper_bgcolor = '#191A1A',
+         legend = list(orientation = 'h',
+                       font = list(size = 8)),
+    mapbox= list(
+      style = "mapbox://styles/alonso25/ckppwz4o617pf17pn6iibpsku",
+      sourcetype = 'vector',
+      zoom = 11,
+      showleyend = TRUE,
+      center = list(lat = ~median(lat), lon = ~median(long)))) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE, color = "red")
+```
+
+### Chlorides Map
+
+```{r}
+plot_mapbox(sd, x = ~long, y = ~lat) %>%
+  add_markers(
+            split = ~Cl_cla, color = ~Cl_cla, colors = cols, size = ~Cl_size,
+            marker = list(sizeref=0.07),
+            text = ~paste(paste("Cl:", Cl),
+                          paste("Codigo:", Codigo), paste("Nombre:", NOMBRE_FUENTE),
+                          paste("Cota(m):", COTA), paste("FLUJO:", FLUJO),
+                          paste("Composicion:", Lito1), paste("HIDROTIPO:", HIDROTIPO),
+                          paste("CE (uS/cm):", CE), sep = "<br />"),
+                
+            mode = "scattermapbox", hoverinfo = "text") %>%
+   layout(title = 'Mapa de Concentración de Cloruros',
+         font = list(color='white'),
+         plot_bgcolor = '#191A1A', paper_bgcolor = '#191A1A',
+         legend = list(orientation = 'h',
+                       font = list(size = 8)),
+    mapbox= list(
+      style = "mapbox://styles/alonso25/ckppwz4o617pf17pn6iibpsku",
+      sourcetype = 'vector',
+      zoom = 11,
+      showleyend = TRUE,
+      center = list(lat = ~median(lat), lon = ~median(long)))) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE, color = "red")
+```
+
+### Bicarbonates Map
+
+```{r}
+plot_mapbox(sd, x = ~long, y = ~lat) %>%
+  add_markers(
+            split = ~HCO3_cla, color = ~HCO3_cla, colors = cols, size = ~HCO3_size,
+            marker = list(sizeref=0.07),
+            text = ~paste(paste("HCO3:", HCO3),
+                          paste("Codigo:", Codigo), paste("Nombre:", NOMBRE_FUENTE),
+                          paste("Cota(m):", COTA), paste("FLUJO:", FLUJO),
+                          paste("Composicion:", Lito1), paste("HIDROTIPO:", HIDROTIPO),
+                          paste("CE (uS/cm):", CE), sep = "<br />"),
+                
+            mode = "scattermapbox", hoverinfo = "text") %>%
+   layout(title = 'Mapa de Concentración de Bicarbonatos',
+         font = list(color='white'),
+         plot_bgcolor = '#191A1A', paper_bgcolor = '#191A1A',
+         legend = list(orientation = 'h',
+                       font = list(size = 8)),
+    mapbox= list(
+      style = "mapbox://styles/alonso25/ckppwz4o617pf17pn6iibpsku",
+      sourcetype = 'vector',
+      zoom = 11,
+      showleyend = TRUE,
+      center = list(lat = ~median(lat), lon = ~median(long)))) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE, color = "red")
+```
+
+Hydro-Geospatial Analysis
+=======================================================================
+
+Row
+-------------------------------------
+
+### Burble Map by Hydrochemical Facies
+
+```{r}
+plot_mapbox(sd, x = ~long, y = ~lat) %>%
+  add_markers(
+            split = ~HIDROTIPO, color = ~HIDROTIPO, colors = cols , 
+            marker = list(size = 15),
+            text = ~paste(paste("Codigo:", Codigo), paste("Nombre:", NOMBRE_FUENTE),
+                          paste("Cota(m):", COTA), paste("FLUJO:", FLUJO),
+                          paste("Composicion:", Lito1), paste("HIDROTIPO:", HIDROTIPO),
+                          paste("CE (uS/cm):", CE), sep = "<br />"),
+                
+            mode = "scattermapbox", hoverinfo = "text") %>%
+   layout(title = 'Analisis Hidrogeologico',
+         font = list(color='white'),
+         plot_bgcolor = '#191A1A', paper_bgcolor = '#191A1A',
+         legend = list(orientation = 'h',
+                       font = list(size = 8)),
+    mapbox= list(
+      style = "mapbox://styles/alonso25/ckppwz4o617pf17pn6iibpsku",
+      sourcetype = 'vector',
+      zoom = 9,
+      showleyend = TRUE,
+      center = list(lat = ~median(lat), lon = ~median(long)))) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE, color = "red")
+```
+
+
+Row {.tabset .tabset-fade}
+-------------------------------------
+
+### Scatter to Determine Flow Type
+
+```{r}
+rr <- ggplot(data = sd)+
+  geom_point(aes(x = Cl_SO4, y = Na_K , shape = FLUJO, color = Lito1))+
+  
+  scale_x_continuous(name = "Cl+SO4 (meq/l)",trans=log_trans(), breaks = c(0.1,1,10,100))+
+  scale_y_continuous(name = "Na+K (meq/l)",trans=log_trans(), breaks = c(0.1,1,10,100))+
+  expand_limits(y = c(0, 100), x=c(0,100))+
+   annotation_logticks(sides = "lr")+
+    annotate("text", x = 0.1, y = 1, label = "Flujo Local")+
+  annotate("text", x = 5, y = 5, label = "Flujo Intermedio")+
+  annotate("text", x = 30, y = 30, label = "Flujo Regional")+
+  annotate("segment", x = 1, xend = 100, y = 100, yend = 1,  colour = "blue")+
+  annotate("segment", x = 0.1, xend = 100, y = 100, yend = 0.1,  colour = "blue")+
+     theme_bw() 
+ggplotly(rr) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE, color = "red")
+```
+
+### Data Filter
+
+```{r}
+sd %>% 
+  DT::datatable(
+    filter = "top",  # allows filtering on each column
+    extensions = c(
+      "Buttons",  # add download buttons, etc
+      "Scroller"  # for scrolling down the rows rather than pagination
+    ),
+    rownames = FALSE,  # remove rownames
+    style = "bootstrap",
+    class = "compact",
+    width = "100%",
+    options = list(
+      dom = "Blrtip",  # specify content (search box, etc)
+      deferRender = TRUE,
+      scrollY = 300,
+      scroller = TRUE,
+      columnDefs = list(
+        list(
+          visible = FALSE,
+          targets = c(2, 3, 6:33)
+        )
+      ), 
+      buttons = list(
+        I("colvis"),  # turn columns on and off
+        "csv",  # download as .csv
+        "excel"  # download as .xlsx
+       )
+    )
+  )
+```
+
+
+Geospatial Flow rates
+=======================================================================
+
+Row
+-------------------------------------
+
+### Flow Rates Point Values
+
+```{r}
+plot_mapbox(sd, x = ~long, y = ~lat) %>%
+  add_markers(
+            split = ~HIDROTIPO, color = ~HIDROTIPO, colors = cols , size=~CAUDAL,
+            marker = list(sizeref=0.07),
+            text = ~paste(paste("Caudal (L/s):", CAUDAL),
+                          paste("Codigo:", Codigo), paste("Nombre:", NOMBRE_FUENTE),
+                          paste("Cota(m):", COTA), paste("FLUJO:", FLUJO),
+                          paste("Composicion:", Lito1), paste("HIDROTIPO:", HIDROTIPO),
+                          paste("CE (uS/cm):", CE), sep = "<br />"),
+                
+            mode = "scattermapbox", hoverinfo = "text") %>%
+   layout(title = 'Analisis Hidrogeologico',
+         font = list(color='white'),
+         plot_bgcolor = '#191A1A', paper_bgcolor = '#191A1A',
+         legend = list(orientation = 'h',
+                       font = list(size = 8)),
+    mapbox= list(
+      style = "mapbox://styles/alonso25/ckppwz4o617pf17pn6iibpsku",
+      sourcetype = 'vector',
+      zoom = 9,
+      showleyend = TRUE,
+      center = list(lat = ~median(lat), lon = ~median(long)))) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE, color = "red")
+```
+
+Row {.tabset .tabset-fade}
+-------------------------------------
+
+### Biplot CE Vs. Flow Rate (Q)
+
+```{r}
+plot <- ggplot(sd, aes(x = CAUDAL, y = CE, color = Lito1,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Nombre",NOMBRE_FUENTE,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)
+
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+
+
+
+
+
+
