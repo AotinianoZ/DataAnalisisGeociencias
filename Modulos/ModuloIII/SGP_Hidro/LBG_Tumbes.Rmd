@@ -1,0 +1,491 @@
+---
+title: "Linea Base Geoambiental"
+output:
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    theme: lumen
+    source_code: embed
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard) ; library(crosstalk) ; library(tidyverse) ; library(plotly); library(sf); library(mapview); library(DT); library(readxl); library(tmap); library(linemap); library(rgdal);library(leaflet.extras); library(summarywidget); library(crosstable);
+library(psych); library(data.table); library(leaflet.providers); library(leafem)
+
+#remotes::install_github("kent37/summarywidget")
+
+Tumbes <- read_xlsx(path = "BD.xlsx", col_names = TRUE)
+colnames(Tumbes)
+Tumbes <- Tumbes %>% select("Código Corto", "Nombre completo", "Norte", "Este",
+                            "Cota", "Lugar", "Distrito", "Provincia","Cuenca",
+                            "Clase de fuente","Aspecto Geológico",
+                            "Color", "Olor", "pH", "CE_uS/cm", "TDS_mg/L", "Salinidad_PSU","Precipitados",
+                            "Presencia de basurales", "Pasivos Ambientales", "Población",
+                            "Aluminio Disuelto (Al)", "Aluminio (Al)",
+                            "Arsénico Disuelto (As)","Arsénico (As)",
+                            "Cobre Disuelto (Cu)", "Cobre (Cu)",
+                            "Cadmio (Cd)",
+                            "Mercurio Disuelto (Hg)", "Mercurio (Hg)",
+                            "Hierro Disuelto (Fe)", "Hierro (Fe)",
+                            "Manganeso Disuelto (Mn)", "Manganeso (Mn)",
+                            "Magnesio Disuelto (Mg)", "Magnesio (Mg)",
+                            "Plomo Disuelto (Pb)", "Plomo (Pb)",
+                            "Antimonio Disuelto (Sb)","Antimonio (Sb)",
+                            "Zinc Disuelto (Zn)", "Zinc (Zn)","Hidrotipo","Color")
+Tumbes <- Tumbes %>% 
+  rename(Codigo = "Código Corto", Nombre = "Nombre completo", Este = "Este",Norte = "Norte",
+         Cota = "Cota", Lugar = "Lugar", Distrito ="Distrito", Provincia = "Provincia", Cuenca = "Cuenca", 
+         Clase_Fuente = "Clase de fuente", Geologia = "Aspecto Geológico",
+         Color = "Color", Olor = "Olor", ph = "pH", CE = "CE_uS/cm", TDS ="TDS_mg/L", Salinidad = "Salinidad_PSU",
+         Precipitados = "Precipitados", Basurales = "Presencia de basurales", Pasivos = "Pasivos Ambientales",
+         Poblacion = "Población", 
+         Al_dis = "Aluminio Disuelto (Al)", Al_com = "Aluminio (Al)",
+         As_dis = "Arsénico Disuelto (As)", As_com = "Arsénico (As)",
+         Cu_dis = "Cobre Disuelto (Cu)", Cu_com = "Cobre (Cu)",
+         Cd_com = "Cadmio (Cd)",
+         Hg_dis = "Mercurio Disuelto (Hg)", Hg_com = "Mercurio (Hg)",
+         Fe_dis = "Hierro Disuelto (Fe)", Fe_com = "Hierro (Fe)",
+         Mn_dis = "Manganeso Disuelto (Mn)", Mn_com = "Manganeso (Mn)",
+         Mg_dis = "Magnesio Disuelto (Mg)", Mg_com = "Magnesio (Mg)",
+         Pb_dis = "Plomo Disuelto (Pb)", Pb_com = "Plomo (Pb)",
+         Sb_dis = "Antimonio Disuelto (Sb)", Sb_com = "Antimonio (Sb)",
+         Zn_dis = "Zinc Disuelto (Zn)", Zn_com = "Zinc (Zn)",
+         Hidrotipo = "Hidrotipo", Color = "Color")
+
+Tumbes$Zonal <- rep("Tumbes", nrow(Tumbes))
+data01<-Tumbes[ ,c("Norte","Este")]
+data01<-data01[ ,order(c(names(data01)))]
+sputm <- SpatialPoints(data01, proj4string=CRS("+proj=utm +zone=17 +south +datum=WGS84")) 
+spgeo <- spTransform(sputm, CRS("+proj=longlat +datum=WGS84"))
+spgeo <- as.data.frame(spgeo)
+colnames(spgeo)<-c("long","lat")
+Tumbes<-cbind(Tumbes,spgeo)
+
+Tumbes$colors <- factor(Tumbes$Hidrotipo, levels = unique(Tumbes$Hidrotipo))
+cols <- c("#6666FF","#33CC33","#FF00FF","#FF6600")
+
+colnames(Tumbes)
+str(Tumbes)
+Tumbes <- Tumbes%>%mutate_if(is.character, as.factor)
+str(Tumbes)
+summary(Tumbes[ ,-c(9,12,44,45,46,47)])
+sd <- SharedData$new(Tumbes)
+Sys.setenv('MAPBOX_TOKEN' = 'pk.eyJ1IjoiYWxvbnNvMjUiLCJhIjoiY2tveGJseXJpMGNmcDJ3cDhicmZwYmY3MiJ9.SbThU_R8YGE1Zll-nNrZKA')
+```
+
+LINEA SUMARIO DE INFORMACION
+=======================================================================
+
+Column {.tabset}
+-------------------------------------
+
+### Subset Data: Tabla
+
+```{r}
+datatable(Tumbes)
+```
+
+### Sumario Variables Cuantiativas
+```{r}
+
+T2 <- Tumbes[ ,c(14,15,22:25)]
+
+estadisticos <- function(col){
+  
+  norm_test <- shapiro.test(col)
+  value <- c(round(length(col),3),round(sum(is.na(col))),round(min(col,na.rm=TRUE),3),round(quantile(col, 0.05,na.rm=TRUE),3),
+               round(quantile(col, 0.25,na.rm=TRUE),3), round(mean(col,na.rm=TRUE),3), round(median(col,na.rm=TRUE),3),
+               round(mean(col,trim = 0.10,na.rm=TRUE),3),
+               round(quantile(col, 0.75,na.rm=TRUE),3), round(quantile(col, 0.95,na.rm=TRUE),3), round(IQR(col,na.rm=TRUE),3),
+               round(mad(col,na.rm=TRUE),3),
+               round(sd(col,na.rm=TRUE),3),round(skew(col,na.rm=TRUE),3), round(kurtosi(col,na.rm=TRUE),3), 
+               round((sd(col,na.rm=TRUE)/mean(col,na.rm=TRUE))*100,3),
+               norm_test$statistic, norm_test$p.value)
+
+}
+statistic <- c("N","Nulos","Minimo","P5 (5%)","Q1 (25%)","Media Aritmetica","Mediana",
+                   "Trimmed mean (10%)","Q3 (75%)","P95 (95%)", "RIQ","MAD","Sd","As","K","CV",
+                   "Shapiro statistic", "Shapiro p-valor")
+T2PRO <- sapply(T2, estadisticos)
+df <- data.table(statistic, T2PRO, keep.rownames=FALSE)
+DT::datatable(df,
+      # allows filtering on each column
+    extensions = c(
+      "Buttons",  # add download buttons, etc
+      "Scroller"  # for scrolling down the rows rather than pagination
+    ),
+    rownames = FALSE,  # remove rownames
+    style = "bootstrap",
+    class = "compact",
+    width = "100%",
+    options = list(
+      dom = "Blrtip",  # specify content (search box, etc)
+      deferRender = TRUE,
+      scrollY = 300,
+      scroller = TRUE,
+      columnDefs = list(
+        list(
+          visible = FALSE,
+          targets = c(0,1)
+        )
+      ), 
+      buttons = list(I("colvis"),'copy', 'csv', 'excel', 'pdf', 'print')
+        
+      )
+    ) %>%
+  formatStyle('statistic',  color = 'black', backgroundColor = 'lightgreen', fontWeight = 'bold')
+
+```
+
+ANALISIS LINEA BASE GEOAMBIENTAL
+=======================================================================
+
+<!-- Inputs {.sidebar} -->
+<!-- ----------------------------------------------------------------------- -->
+
+```{r}
+# filter_slider("h", "Altitud (metros)", sd, ~Cota)
+# filter_select("Dpto", "Distrito", sd, ~Distrito)
+# filter_select("Provincia", "Provincia", sd, ~Provincia)
+# filter_select("Cuenca", "Cuenca", sd, ~Cuenca)
+# filter_slider("ph", "Potencial de Hidrogeno", sd, ~ph)
+# filter_slider("CE", "Conductividad Eléctrica", sd, ~CE)
+```
+
+<!-- Este documento se ha realizado con la data de la _Inspeccion Tecnica en Tumbes_ del proyecto **Linea Base Geoambietal** obtenidas de la *base de datos Direccion de Geologia Ambiental y Riesgo Geologico** - INGEMMET. -->
+
+<!-- **Creditos:** -->
+<!-- Los siguientes paquetes fueron usados [flexdashboard](https://cran.r-project.org/web/packages/flexdashboard/index.html), [mapview](https://cran.r-project.org/web/packages/mapview/index.html), [crosstalk](https://cran.r-project.org/web/packages/crosstalk/index.html), [plotly](https://cran.r-project.org/web/packages/plotly/index.html), [tidyverse](https://cran.r-project.org/web/packages/tidyverse/index.html), [sf](https://cran.r-project.org/web/packages/sf/index.html) y [DT](https://cran.r-project.org/web/packages/DT/index.html). -->
+
+Column {data-width=550}
+-------------------------------------
+
+###
+
+```{r}
+limite <- sf::st_read("shp_data/LIMITE_CUENCA.shp", quiet = TRUE)
+drenaje <- sf::st_read("shp_data/Drenaje_Tumbes_Total.shp", quiet = TRUE)
+fig <- plot_mapbox(drenaje)
+plot_mapbox(sd, x = ~long, y = ~lat) %>%
+  add_markers(
+            split = ~Hidrotipo, color = ~colors, colors = cols , marker = list(size = 15),
+            text = ~paste(paste("Codigo:", Codigo), paste("Nombre:", Nombre),
+                          paste("Distrito:", Distrito), paste("Provincia:", Provincia),
+                          paste("Lugar:", Lugar), paste("ph:", ph),
+                          paste("CE (uS/cm):", CE), sep = "<br />"),
+                
+            mode = "scattermapbox", hoverinfo = "text") %>%
+   layout(title = 'Analisis Geoambiental',
+         font = list(color='white'),
+         plot_bgcolor = '#191A1A', paper_bgcolor = '#191A1A',
+    mapbox= list(
+      style = "mapbox://styles/alonso25/ckppwz4o617pf17pn6iibpsku",
+      sourcetype = 'vector',
+      zoom = 9,
+      showleyend = TRUE,
+      center = list(lat = ~median(lat), lon = ~median(long)))) %>%
+  highlight(on = "plotly_selected",off = "plotly_deselect", dynamic = FALSE, color = "red") 
+```
+
+Column {.tabset}
+-------------------------------------
+
+### Al_dis
+
+```{r}
+plot <- ggplot(sd, aes(x = ph, y = Al_dis, color = Clase_Fuente,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)+
+  geom_hline(yintercept = mean(Tumbes$Al_dis)+2*sd(Tumbes$Al_dis), colour = "red")
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+### Al_tot
+
+```{r}
+plot <- ggplot(sd, aes(x = ph, y = Al_com, color = Clase_Fuente,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)+
+  geom_hline(yintercept = 0.01, colour = "red")+ #ECA A2
+  geom_hline(yintercept = 0.10, colour = "green")+ #ECA D1
+  geom_hline(yintercept = 0.20, colour = "purple") #ECA D2
+
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+### Al_BP
+
+```{r}
+plot2 <- ggplot(sd, aes(x = Zonal , y = As_dis)) + geom_boxplot()
+plot3 <- ggplot(sd, aes(x = Zonal , As_com)) + geom_boxplot()
+plot2 <- ggplotly(plot2)
+plot3 <- ggplotly(plot3)
+subplot(plot2, plot3, nrows = 1)%>% layout(yaxis = list(title = "Al_dis(mg/l) / Al_tot(mg/l)"))
+
+```
+
+### Cu_dis
+
+```{r}
+plot <- ggplot(sd, aes(x = ph, y = Cu_dis, color = Clase_Fuente,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)+
+  geom_hline(yintercept = mean(Tumbes$Cu_dis)+2*sd(Tumbes$Cu_dis), colour = "red")
+
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+
+### Hg_dis
+
+```{r}
+plot <- ggplot(sd, aes(x = ph, y = Hg_dis, color = Clase_Fuente,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)+
+  geom_hline(yintercept = mean(Tumbes$Hg_dis)+2*sd(Tumbes$Hg_dis), colour = "red")
+
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+
+### Pb_dis
+
+```{r}
+plot <- ggplot(sd, aes(x = ph, y = Pb_dis, color = Clase_Fuente,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)+
+  geom_hline(yintercept = mean(Tumbes$Pb_dis)+2*sd(Tumbes$Pb_dis), colour = "red")
+
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+
+### Al_tot
+
+```{r}
+plot <- ggplot(sd, aes(x = ph, y = Al_com, color = Clase_Fuente,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)+
+    geom_hline(yintercept = 5, colour = "red")+ #ECA A2
+  geom_hline(yintercept = 5, colour = "green")+ #ECA D1
+  geom_hline(yintercept = 5, colour = "purple") #ECA D2
+
+
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+### Sb_tot
+
+```{r}
+plot <- ggplot(sd, aes(x = ph, y = Sb_com, color = Clase_Fuente,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)+
+      geom_hline(yintercept = 0.02, colour = "red") #ECA A2
+
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+### As_tot
+
+```{r}
+plot <- ggplot(sd, aes(x = ph, y = As_com, color = Clase_Fuente,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)+
+  geom_hline(yintercept = 0.01, colour = "red")+ #ECA A2
+  geom_hline(yintercept = 0.10, colour = "green")+ #ECA D1
+  geom_hline(yintercept = 0.20, colour = "purple") #ECA D2
+  
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+### Cd_tot
+
+```{r}
+plot <- ggplot(sd, aes(x = ph, y = Cd_com, color = Clase_Fuente,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)+
+  geom_hline(yintercept = 0.005, colour = "red")+ #ECA A2
+  geom_hline(yintercept = 0.010, colour = "green")+ #ECA D1
+  geom_hline(yintercept = 0.050, colour = "purple") #ECA D2
+
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+### Cu_tot
+
+```{r}
+plot <- ggplot(sd, aes(x = ph, y = Cu_com, color = Clase_Fuente,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)+
+  geom_hline(yintercept = 2.00, colour = "red")+ #ECA A2
+  geom_hline(yintercept = 0.20, colour = "green")+ #ECA D1
+  geom_hline(yintercept = 0.50, colour = "purple") #ECA D2
+
+
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+### Fe_tot
+
+```{r}
+plot <- ggplot(sd, aes(x = ph, y = Fe_com, color = Clase_Fuente,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)+
+  geom_hline(yintercept = 1.00, colour = "red")+ #ECA A2
+  geom_hline(yintercept = 5.00, colour = "green")
+
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+### Mn_tot
+
+```{r}
+plot <- ggplot(sd, aes(x = ph, y = Mn_com, color = Clase_Fuente,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)+
+  geom_hline(yintercept = 0.04, colour = "red")+ #ECA A2
+  geom_hline(yintercept = 0.02, colour = "green")+ #ECA D1
+  geom_hline(yintercept = 0.02, colour = "purple") #ECA D2
+
+
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+### Hg_tot
+
+```{r}
+plot <- ggplot(sd, aes(x = ph, y = Hg_com, color = Clase_Fuente,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)+
+    geom_hline(yintercept = 0.002, colour = "red")+ #ECA A2
+  geom_hline(yintercept = 0.001, colour = "green")+ #ECA D1
+  geom_hline(yintercept = 0.010, colour = "purple") #ECA D2
+  
+
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+### Pb_tot
+
+```{r}
+plot <- ggplot(sd, aes(x = ph, y = Pb_com, color = Clase_Fuente,
+                       text =    paste("Codigo", Codigo,
+                                                  "</br>Codigo",Nombre,
+                                                  "</br>CE (uS/cm):",CE
+                                                  ))) + geom_point(size=5)+
+      geom_hline(yintercept = 0.05, colour = "red")+ #ECA A2
+  geom_hline(yintercept = 0.05, colour = "green")+ #ECA D1
+  geom_hline(yintercept = 0.05, colour = "purple") #ECA D2
+
+ggplotly(plot) %>%
+  highlight(on = "plotly_selected", off = "plotly_deselect", dynamic = FALSE , color = "red")
+```
+
+### Tabla
+
+El **promedio** de los datos de As es: 
+
+```{r}
+summarywidget(sd, statistic = "mean", column = "As_dis", digits = 3)
+```
+
+La **cantidad** de datos selecccionados es:
+
+```{r}
+summarywidget(sd, statistic = "count", column = "As_dis", digits = 0)
+```
+
+La tabla **filtrada** de datos selecccionados:
+
+```{r}
+sd %>% 
+  DT::datatable(
+    filter = "top",  # allows filtering on each column
+    extensions = c(
+      "Buttons",  # add download buttons, etc
+      "Scroller"  # for scrolling down the rows rather than pagination
+    ),
+    rownames = FALSE,  # remove rownames
+    style = "bootstrap",
+    class = "compact",
+    width = "100%",
+    options = list(
+      dom = "Blrtip",  # specify content (search box, etc)
+      deferRender = TRUE,
+      scrollY = 300,
+      scroller = TRUE,
+      columnDefs = list(
+        list(
+          visible = FALSE,
+          targets = c(2, 3, 6:33)
+        )
+      ), 
+      buttons = list(
+        I("colvis"),  # turn columns on and off
+        "csv",  # download as .csv
+        "excel"  # download as .xlsx
+       )
+    )
+  )
+
+```
+
+Filtro Interactivo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
