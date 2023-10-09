@@ -18,7 +18,7 @@ loadlibs <- function(x =0){
   require(mapview)
   
   # tratamiento de rasters
-  require(raster)
+  require(terra)
   
   # adicionales
   require(htmltools)
