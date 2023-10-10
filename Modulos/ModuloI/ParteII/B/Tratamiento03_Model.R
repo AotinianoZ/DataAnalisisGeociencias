@@ -62,7 +62,7 @@ library(terra)
 library(sf)
 library(tidyverse)
 
-Elevation <- terra::rast(x = "Modulos/ModuloI/ParteII/B/RasterBase/DEM.tif")
+Elevation <- terra::rast(x = "RasterBase/DEM.tif")
 Elevation
 str(Elevation)
 summary(Elevation)
@@ -96,7 +96,7 @@ summary(lm1)
 
 # crear directorios
 
-dir.create(path="Modulos/ModuloI/ParteII/B/Correlacion")
+dir.create(path="Correlacion")
 
 x <- terra::rast(tratamiento, 1) # elevacion
 values(x) <- 1:ncell(tratamiento) # ajuste de celda (precaucion)
@@ -113,12 +113,12 @@ focal_cor <- terra::focal(
         use = "na.or.complete")
   },
   
-  filename = file.path("Modulos/ModuloI/ParteII/B/Correlacion/focal_spearman.tif"),
+  filename = file.path("Correlacion/focal_spearman.tif"),
   overwrite = TRUE
 )
 
-cor_map_pearson <-  raster::raster(x = "Modulos/ModuloI/ParteII/B/Correlacion/focal_pearson.tif")
-cor_map_spearman <- raster::raster(x = "Modulos/ModuloI/ParteII/B/Correlacion/focal_spearman.tif")
+cor_map_pearson <-  raster::raster(x = "Correlacion/focal_pearson.tif")
+cor_map_spearman <- raster::raster(x = "Correlacion/focal_spearman.tif")
 a <- mapview::mapview(cor_map_pearson, maxpixels =  4155072) 
 b <- mapview::mapview(cor_map_spearman, maxpixels =  4155072)
 
@@ -127,7 +127,7 @@ leafsync::sync(a, b)
 # Continuacion
 
 # Cargar raster data:
-Elevation <- terra::rast(x = "Modulos/ModuloI/ParteII/B/RasterBase/DEM.tif")
+Elevation <- terra::rast(x = "RasterBase/DEM.tif")
 Slope <- terra::terrain(x = Elevation, v="slope", neighbors=8, unit="degrees")
 Aspect <- terra::terrain(x = Elevation, v="aspect", neighbors=8, unit="degrees")
 Rugosidad <- terra::terrain(x = Elevation, v="roughness", neighbors=8) 
@@ -158,14 +158,14 @@ Slope_r <- Slope
 terra::ext(Elevation_r)
 terra::ext(Slope_r)
 
-terra::writeRaster(x = Elevation_r, filename = "Modulos/ModuloI/ParteII/B/RasterBase/Resample/Elevacion.tif", overwrite=TRUE)
-terra::writeRaster(x = Aspect_r, filename = "Modulos/ModuloI/ParteII/B/RasterBase/Resample/Aspect.tif", overwrite=TRUE)
-terra::writeRaster(x = Rugosidad_r, filename = "Modulos/ModuloI/ParteII/B/RasterBase/Resample/Rugosidad.tif", overwrite=TRUE)
-terra::writeRaster(x = Slope_r, filename = "Modulos/ModuloI/ParteII/B/RasterBase/Resample/Slope.tif", overwrite=TRUE)
+terra::writeRaster(x = Elevation_r, filename = "RasterBase/Resample/Elevacion.tif", overwrite=TRUE)
+terra::writeRaster(x = Aspect_r, filename = "RasterBase/Resample/Aspect.tif", overwrite=TRUE)
+terra::writeRaster(x = Rugosidad_r, filename = "RasterBase/Resample/Rugosidad.tif", overwrite=TRUE)
+terra::writeRaster(x = Slope_r, filename = "RasterBase/Resample/Slope.tif", overwrite=TRUE)
 
 # cargamos la informacion
 
-Stack_list <- list.files(path="Modulos/ModuloI/ParteII/B/RasterBase/Resample/", pattern = "tif$", full.names = TRUE)
+Stack_list <- list.files(path="RasterBase/Resample/", pattern = "tif$", full.names = TRUE)
 Rasters <- stack(Stack_list)
 Rasters
 
