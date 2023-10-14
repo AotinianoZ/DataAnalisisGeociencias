@@ -1,7 +1,7 @@
 
 #Lectura y estructura de data
 
-data_base <- read_xlsx(path = "BD_GA47D_TUMBES_CONSOLIDADA_05_2023.xlsx",sheet = "BD_PROCESAMIENTO", col_names = TRUE)
+data_base <- read_xlsx(path = "Data_Agua/csv_xlsx_txt/BD_FINAL_PUNO_CONSOLIDADO_GA47D.xlsx", col_names = TRUE)
 str(data_base, list.len=ncol(data_base))
 
 
@@ -34,7 +34,8 @@ pfq <- c("T_fuente",#"Q",
 
 data_base <- data_base %>% filter(!is.na(Tip_fuente)) # criterio para eliminar controles (QA/QC)
 sapply(data_base, function(x) sum(is.na(x))) #verificar nulos
-data_base <- data_base %>% filter(!is.na(Ca_tot)) # se elimina porque es Seco o no se tomo!
+data_base <- data_base %>% filter(!is.na(Ph)) # se elimina porque es Seco o no se tomo!
+data_base <- data_base %>% filter(!is.na(Ca_tot))
 
 # Revisas la estructura correctamente escrita:
 summary(data_base) # Dar una ojeada a cada variable
@@ -73,9 +74,6 @@ elementos <- colnames(data_base[ ,n:180])
 sum_ele <- data_base %>% select(any_of(elementos))
 summary(sum_ele)
 
-
-
-data_base
 
 
 
