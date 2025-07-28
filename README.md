@@ -9,10 +9,10 @@ Este repositorio es la base para el desarrollo del curso Geodatabase, Geo-Statis
 
 -----
 
-:spiral_calendar: Noviembre - Diciembre, 2023 
-:camera: Comienza Sábado, 03 de Noviembre :jack_o_lantern:
+:spiral_calendar: Setiembre - Octubre, 2025 
+:camera: Comienza Sábado, 06 de Setiembre :jack_o_lantern:
 :green_book: Sabados - Domingos
-:alarm_clock:    18:00 - 21:00  
+:alarm_clock:    09>00 - 12:00  
 
 -----
 
@@ -20,8 +20,7 @@ Este repositorio es la base para el desarrollo del curso Geodatabase, Geo-Statis
 
 * No se requiere preparación :clap:
 * Usaremos *github* y *html* para desarrollar el curso.
-* Más detalles acerca del curso. Sí tienen alguna duda contacten a <alonso.otiniano.z@uni.pe>
-
+* Más detalles acerca del curso. Sí tienen alguna duda contacten a <alonso.otiniano.z@uni.pe> o <alonsootinianozavala@gmail.com>
 
 ## Instructores
 
@@ -31,8 +30,7 @@ Este repositorio es la base para el desarrollo del curso Geodatabase, Geo-Statis
 
 **Co-instructor**
 
-* Joseps Andrade [@jacxter666 ](https://twitter.com/jacxter666)
-
+* En proceso...
 
 ## Panorama
 
@@ -79,12 +77,11 @@ Toda la información estará como PDFs en los folderes adjuntos, además de form
 
 [Sesion Desarrollada](https://github.com/AotinianoZ/Geoscience_Multiverse) !!Esto solo funcionará la tarde-noche del curso corto!!
 
-
 ## Cronograma
 
 Agenda
 
-0. Introducción: Instalación de softwares (1 semana antes).
+0. Introducción: Instalación de softwares (1 semana antes) - 2h
 
 `Modulo I` (24h):
 
@@ -218,8 +215,8 @@ Descansos Oficiales
 
 | Time          | Activity         |
 | :------------ | :--------------- |
-| 19:30 - 19:40 | *Coffee break*   |
-| 20:30 - 20:35 | *Coffee break*    |
+| 10:30 - 10:40 | *Coffee break*   |
+| 11:30 - 11:35 | *Coffee break*    |
 
 
 ## Instructores
