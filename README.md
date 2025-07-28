@@ -12,7 +12,7 @@ Este repositorio es la base para el desarrollo del curso Geodatabase, Geo-Statis
 :spiral_calendar: Setiembre - Octubre, 2025 
 :camera: Comienza Sábado, 06 de Setiembre :jack_o_lantern:
 :green_book: Sabados - Domingos
-:alarm_clock:    09>00 - 12:00  
+:alarm_clock:    09:00 - 12:00  
 
 -----
 
