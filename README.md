@@ -54,7 +54,7 @@ El curso desarrolla desde los conceptos básicos de geodatabase (base de datos g
 
 Durante el curso corto necesitaremos herramientas como:
 
-* SQL, R, Rstudio, QGis - Python.
+* SQL, R, Python, Rstudio, VS Code - QGis.
 
 La instalación de paquetes para Rstudio en máquina local:
 
