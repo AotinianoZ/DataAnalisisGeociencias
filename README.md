@@ -1,7 +1,7 @@
 Geoscience Multiverse
 ================
 
-### geology::conf 2023 workshop
+### geology::conf 2025 workshop
 
 by A.Otiniano
 
